@@ -1,4 +1,4 @@
-# weave-wego
+# vue-front
 
 ## Project setup
 ```
