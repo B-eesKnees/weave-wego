@@ -16,6 +16,21 @@ const routes = [
     path: '/mypage',
     name: 'myPage',
     component: () => import(/* webpackChunkName: "mypage" */ '../views/myPage.vue')
+  },
+  {
+    path: '/mainpage',
+    name: 'MainPage',
+    component: () => import(/* webpackChunkName: "mainpage" */ '../views/MainPage.vue')
+  },
+  {
+    path: '/userjoin',
+    name: 'userJoin',
+    component: () => import(/* webpackChunkName: "userjoin" */ '../views/userJoin.vue')
+  },
+  {
+    path: '/userlogin',
+    name: 'userLogin',
+    component: () => import(/* webpackChunkName: "userjoin" */ '../views/userLogin.vue')
   }
 ]
 
