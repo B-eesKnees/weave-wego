@@ -1,40 +1,45 @@
 const express = require('express');
-const app = express();
+const cors = require('cors');
 
 const bcrypt = require('bcrypt');
 const morgan = require('morgan');
+const dotenv = require('dotenv');
 
 const session = require('express-session');
 const fs = require('fs');
-const morgan = require('morgan');
 
-app.use(session({
-    secret: 'secret code', 
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: false,
-        maxAge: 1000*60*60
-    }
-}));
+dotenv.config();
 
 
-
+const app = express();
+let corsOption = {
+    origin: 'http://localhost:8080',
+    credentials: true,
+}
+app.use(cors(corsOption));
 app.set('port', process.env.PORT || 3000); //포트 3000번으로 설정
-
-const db = { //디비연결
-    database: 'weavewego', //
-    connectionLimit: 10,
-    host: '127.0.0.1',
-    user: 'root',
-    password: '12345678'
-};
-const dbPool = require('mysql').createPool(db);
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+app.use(session({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+    },
+}));
 
-app.listen(app.get('port'),()=>{
+const authRouter = require('./routes/auth'); //routes폴더
+const mainRouter = require('./routes/main');
+
+app.use('/auth', authRouter); // /autu 로그인 관련 라우터 
+app.use('/', mainRouter); // 메인페이지 관련 라우터
+
+
+
+app.listen(app.get('port'),()=>{ //서버 연결
     console.log(app.get('port'),'번 대기중');
 });

@@ -1,0 +1,12 @@
+* {
+  font-family: "Noto Sans", "Noto Sans KR" sans-serif;
+  line-height: 1.7;
+  padding: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+.logo > img {
+  width: 200px;
+  position: relative;
+  position: relative;
+}

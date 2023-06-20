@@ -1,0 +1,49 @@
+.mypage_profile_set{
+position: relative;
+top: 20vh;
+width: 50vw;
+}
+.mypage_title{
+    position: relative;
+    text-align: left;
+    color: #000;
+    font-size: 3vh;
+    width: 30vw;
+    height: 5vh;
+    left: 10vw;
+
+}
+
+.profileimg{
+    position: relative;
+    width: 80px;
+    height: 80px;
+    left: 10vw;
+    top: 50px;
+}
+
+.profile {
+  position: relative;
+  text-align: left;
+  width: 70px;
+
+}
+
+.setting_icon{
+  position: absolute;
+  text-align: left;
+  width: 3vw;
+  right: 0;
+  bottom: 0;
+}
+
+
+
+.nickname_email {
+    position: relative;
+    width: 50vw;
+    height: 80px;
+    left: 20vw;
+    top: 0;
+    text-align: left;
+}
