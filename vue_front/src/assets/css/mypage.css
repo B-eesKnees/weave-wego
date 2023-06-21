@@ -9,7 +9,7 @@
   top: 20vh;
   left: 10vw;
   width: 50vw;
-  border: solid 1px #000;
+  /* border: solid 1px #000; */
 }
 .mypage_title {
   position: relative;
@@ -21,7 +21,7 @@
 }
 
 .myprofile {
-  border: solid 1px #000;
+  /* border: solid 1px #000; */
   align-content: start;
   position: relative;
   top: 5vh;
@@ -32,7 +32,7 @@
   width: 80px;
   height: 80px;
   top: 0;
-  border: solid 1px #000;
+  /* border: solid 1px #000; */
   margin: 0;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .nickname_email {
-  border: solid 1px #000;
+  /* border: solid 1px #000; */
   position: absolute;
   width: 30vw;
   height: 80px;
@@ -73,4 +73,7 @@
   font-size: 1em;
   margin-top: 10px;
   color: #aaa;
+}
+
+.brd_open {
 }

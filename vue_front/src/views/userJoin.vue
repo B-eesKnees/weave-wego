@@ -3,39 +3,54 @@
     <div class="join">
         <div class="title-bar">
             <h5>회원가입</h5>
-            <a href="#"><img src="../assets/img/profileExample.png" alt="">
-                <div class="title-bar-btn">+</div>
-            </a>
-        </div>
+            <form @submit.prevent="joinForm">
+                <label class="title-bar-label" for="file">
+                    <div class="title-bar-btn">+</div>
+                    <img v-if="type" class="img_style" :src="imageUploaded" alt="올린 이미지" />
+                    <img v-else id="img_style" src="../assets/img/profileExample.png" alt="올린 이미지" />
+                    <br />
+                </label>
 
+                <input id="file" type="file" ref="image" @change="upload" />
+            </form>
+
+
+        </div>
         <div class="wrap">
             <form @submit.prevent="joinForm">
                 <label for="email">아이디</label>
                 <input v-model="email" type="text" id="email" placeholder="이메일 입력" class="width">
-                <input type="submit" id="email_check" class="username_submit"><br />
+                <button type="submit" id="email_check" class="username_submit">중복확인</button>
+                <p id="error" v-if="email_check">이메일주소를 정확히 입력해주세요. 예)abcd@naver.com</p>
                 <label for="password">비밀번호</label>
                 <input v-model="password" type="password" id="password" placeholder="비밀번호 입력"><br />
+                <p id="error" v-if="password_check">비밀번호 정확히 입력해주세요. 예)abcd@naver.com</p>
                 <label for="password_check">비밀번호 확인</label>
                 <input v-model="password_check" type="password" id="password_check" placeholder="비밀번호 확인 입력"><br />
+                <p id="error" v-if="password_check">비밀번호를 정확히 입력해주세요. 예)abcd@naver.com</p>  
                 <label for="nickname">별명</label>
                 <input v-model="nickname" type="text" id="nickname" placeholder="활동명 입력" class="width">
-                <input v-model="nickname_check" type="submit" id="nickname_check" class="username_submit"><br />
+                <button type="submit" id="nickname_check" class="username_submit">중복확인</button>
+                <p id="error" v-if="email_check">이메일주소를 정확히 입력해주세요. 예)abcd@naver.com</p>
                 <div class="gender">
                     <label for="sex">성별</label>
-                    <input type='radio' name='gender' value='male' class="input_sex" />남자
-                    <input type='radio' name='gender' value='female' class="input_sex" />여자
+                    <input v-model="sex" type='radio' name='gender' value='male' class="input_sex" />남자
+                    <input v-model="sex" type='radio' name='gender' value='female' class="input_sex" />여자
                 </div>
+                <p id="error" v-if="email_check">이메일주소를 정확히 입력해주세요. 예)abcd@naver.com</p>
                 <div class="age_range">
                     <label for="age_range">나이대</label>
-                    <input type='radio' name='age_range' value='male' class="input_sex" />10대
-                    <input type='radio' name='age_range' value='female' class="input_sex" />20대
-                    <input type='radio' name='age_range' value='male' class="input_sex" />30대
-                    <input type='radio' name='age_range' value='female' class="input_sex" />40대
-                    <input type='radio' name='age_range' value='male' class="input_sex" />50대
-                    <input type='radio' name='age_range' value='female' class="input_sex" />60세 이상
+                    <input v-model="age_range" type='radio' name='age_range' value='ten' class="input_sex" />10대
+                    <input v-model="age_range" type='radio' name='age_range' value='20' class="input_sex" />20대
+                    <input v-model="age_range" type='radio' name='age_range' value='30' class="input_sex" />30대
+                    <input v-model="age_range" type='radio' name='age_range' value='40' class="input_sex" />40대
+                    <input v-model="age_range" type='radio' name='age_range' value='50' class="input_sex" />50대
+                    <input v-model="age_range" type='radio' name='age_range' value='60' class="input_sex" />60세 이상
                 </div>
+                <p id="error" v-if="email_check">이메일주소를 정확히 입력해주세요. 예)abcd@naver.com</p>
                 <label for="phone_num">전화번호</label>
-                <input v-model="phone" type="tel" id="phone_num" placeholder="전화번호 입력"><br />
+                <input v-model="phone" type="text" id="phone_num" placeholder="전화번호 입력"><br />
+                <p id="error" v-if="email_check">이메일주소를 정확히 입력해주세요. 예)abcd@naver.com</p>
                 <a href="/auth/join"><input type="submit" class="submit" id="login" value="가입하기"></a>
 
             </form>
@@ -55,17 +70,77 @@ export default {
     components: { gnbBar },
     data() {
         return {
+
             email: '',
             password: '',
             nickname: '',
-            phone: ''
+            phone: '',
+            sex: '',
+            age_range: '',
+            image: '',
+            imageUploaded: null,
+            type: false,
+
+            email_check: false,
+            password_check: false,
+            error_border_check: false,
+
+
         };
+    },
+    watch: {
+        'email': function () {
+            this.checkEmail()
+        },
+        'password': function () {
+            this.checkPassword()
+        }
     },
     methods: {
         movetomain() {
             window.location.href = '/';
         },
-        joinForm() {
+        checkEmail() {
+            // 이메일 형식 검사
+            const validateEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+            
+            if(this.email === '' || !validateEmail.test(this.email) || !this.email) {
+                console.log('이메일 제대로 입력');
+                this.email_check = true;      
+                this.error_border_check = true;
+            } else {
+                this.email_check = false;               
+                this.error_border_check = false;
+            }
+        },
+        checkPassword() {
+            // 숫자와 문자 포함 형태의 6~12자리 이내의 암호 정규식
+            const validatePassword = /^[A-Za-z0-9]{6,12}$/;
+            
+            if(this.password === '' || !validatePassword.test(this.password) || !this.password) {
+                console.log('비밀번호 제대로 입력');
+                this.password_check = true;
+                this.error_border_check = true;
+            } else {
+                this.password_check = false;
+                this.error_border_check = false;
+            }
+        },
+        upload() {
+            this.type = true
+            this.image = this.$refs.image.files[0] // 사용자가 올린 이미지
+
+            console.log(this.image)
+            // URL.createObjectURL로 사용자가 올린 이미지를 URL로 만들어서 화면에 표시할 수 있게 한다. img 태그의 src값에 바인딩해준다
+            this.imageUploaded = URL.createObjectURL(this.image)
+        },
+        joinForm() { //백엔드로 회원가입 정보 전달
+            if(this.sex === 'female') {
+                this.sex = 'f';
+            } else {
+                this.sex = 'm';
+            }
+            console.log(this.age_range);
 
             axios({
                 url: "http://localhost:3000/auth/join",
@@ -74,13 +149,16 @@ export default {
                     email: this.email,
                     password: this.password,
                     nickname: this.nickname,
-                    phone: this.phone
-                }
+                    sex: this.sex,
+                    age_range: this.age_range,
+                    phone: this.phone,
+                    
+                },
             }).then(res => {
                 alert(res.data.message);
                 window.location.href = '/';
-            }).catch(err => {
-                alert(err);
+            }).catch(error => {
+                alert(error);
             })
         }
     }
@@ -100,6 +178,34 @@ export default {
     -moz-osx-font-smoothing: grayscale;
 }
 
+#file {
+    display: none;
+}
+
+.title-bar-label {
+    width: 1%;
+}
+
+.img_style {
+    border: 2px solid black;
+    border-radius: 50%;
+}
+
+input[type="file"] {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 50%;
+    top: 70%;
+    line-height: 24px;
+    border: 2px solid black;
+    color: white;
+    font-size: 22px;
+
+    background-color: #388265;
+    border-radius: 50%;
+}
+
 .title-bar {
     margin-top: 6%;
     text-align: center;
@@ -114,7 +220,8 @@ export default {
     width: 22px;
     height: 22px;
     left: 50%;
-    top: 72%;
+    top: 70%;
+    text-align: center;
     line-height: 24px;
     border: 2px solid black;
     color: white;
@@ -175,6 +282,8 @@ input {
     color: white;
     width: 15%;
     margin-left: 5%;
+    border-radius: 4px;
+    border: none;
 }
 
 input:focus {
@@ -234,5 +343,16 @@ input.submit:hover {
     -webkit-transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
+}
+
+#error {
+    color: red;
+    margin-top: -1%;
+    margin-left: 24%;
+    font-size: 12px;
+}
+.error_border:focus {
+    border-color: red;
+    box-shadow: none;
 }
 </style>

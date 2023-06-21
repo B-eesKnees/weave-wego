@@ -27,7 +27,21 @@
   </section>
   <section>
     <TabsWrapper>
-      <TabItem title="내코스"> </TabItem>
+      <TabItem title="내코스">
+        <button class="edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
+        <div class="course">
+          <div class="hashtag">
+            #서울시 서초구 #서울시 강남구 #카페 #쇼룸,편집샵
+          </div>
+          <div class="brd_title">제목제목제목</div>
+          <div class="brd_created_at">2023.06.13</div>
+          <div class="like">
+            <img src="../assets/img/like_on.png" alt="like" />111
+          </div>
+          <div class="viewer">2222</div>
+          <div class="brd_open">공개</div>
+        </div>
+      </TabItem>
       <TabItem title="최근에 본 코스"
         >Content from Tab 2 Lorem ipsum dolor sit amet.</TabItem
       >
@@ -55,17 +69,3 @@ export default {
   },
 };
 </script>
-
-<!-- <style>
-* {
-  box-sizing: border-box;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style> -->

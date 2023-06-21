@@ -36,7 +36,7 @@ router.post('/join', async(req, res)=> {
     })
 });
 //-----------------이메일 중복 확인--------------------------
-router.post('/checkEmail', async(req, res)=> {
+router.post('/checkemail', async(req, res)=> {
     const email = req.body.email; //확인하려는 이메일
 
     db.query('select * from weavewego.user where USER_EMAIL= ? ', email, (err, results, fields)=> {
@@ -62,7 +62,7 @@ router.post('/checkEmail', async(req, res)=> {
     })
 });
 //-----------------닉네임 중복 확인--------------------------
-router.post('/checkNick', async(req, res)=>{
+router.post('/checknick', async(req, res)=>{
     const nick = req.body.nickname;
 
     db.query('select * from weavewego.user where USER_NICKNAME=?', nick, (err, results, fields)=> {
@@ -87,6 +87,48 @@ router.post('/checkNick', async(req, res)=>{
         }
     
     })
+});
+//---------------로그인 처리-------------
+router.post("/login", async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password; //받아오는 데이터
+  
+    db.query(`select * from weavewego.user where USER_EMAIL = ?`, email, async(error, results, fields) => { //이메일이 존재하는지 확인
+        if(error) {
+            res.send({ //에러발생시
+                'code': 400,
+                'failed': 'error occurred',
+                'error': error
+            })
+        } else {
+            if(results.length > 0) { //이메일이 존재하면 비밀번호 bcrypt이용해서 확인
+                const comparison = await bcrypt.compare(password, results[0].USER_PW)
+
+                if(comparison) { //확인한게 성공이면
+                    res.send({
+                        'code': 200,
+                        'success' : '로그인 성공',
+                        'email' : results[0].USER_EMAIL,
+                        'nick' : results[0].USER_NICKNAME,
+                        'img_path' : results[0].USER_IMAGE
+
+                    }) 
+                } else { //실패하면
+                    res.send({
+                        'code' : 204,
+                        'error' : '비밀번호 오류',
+                        'message' : "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."
+                    })
+                } 
+            } else { //이메일이 존재하지않으면
+                res.send({
+                    'code' : 206,
+                    'error': '존재하지 않는 이메일',
+                    'message' : "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."
+                });
+            }
+        }
+    });
 });
 
 

@@ -1,7 +1,8 @@
 .tabs {
   position: relative;
-  max-width: 60vw;
-  margin-top: 300px;
+  max-width: 70vw;
+  top: 30vh;
+  left: 15vw;
 }
 
 .tabs__header {
@@ -10,28 +11,68 @@
   margin: 0;
   display: flex;
   justify-content: space-between;
-  gap: 5px;
+  text-align: center;
+  /* gap: 5px; */
+  
 }
 
 .tabs__item {
   flex: 1;
-  background-color: #eee;
-  padding: 5px 0;
+  /* background-color: #eee; */
+  padding: 25px 0;
   border-radius: 5px 5px 0 0;
   transition: 0.4s all ease-out;
   cursor: pointer;
   user-select: none;
+  border: solid 1px #eee;
 }
 
 .tabs__item.selected {
-  background-color: #6969ff;
+  background-color: #388265;
+  color: #fff;
 }
 
+
+
 .tabs__content {
-  background-color: #bfbfbf;
-  min-height: 300px;
-  display: grid;
-  place-items: center;
+  /* background-color: #eee; */
+  min-height: 400px;
+  position: relative;
+  align-items: start;
   border-radius: 0 0 5px 5px;
+  display: inline;
+}
+.edit{
+  position: absolute;
+  right: 0;
+  top: -5vh;
+  width: 100px;
+  background: #fafafa;
+  border: none;
   padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+
+  /* padding: 5px 20px; */
+}
+
+.course{
+  position: relative;
+  /* border: solid 1px #000; */
+  height: 250px;
+  background-color: #eee;
+  margin-top: 7vh;
+
+}
+
+.like > img {
+  width: 15px;
+  margin-right: 10px;
+}
+
+.hashtag {
+  position: relative;
+  left: 0;
+  color: #BEBEBE;
 }

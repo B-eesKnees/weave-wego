@@ -38,7 +38,18 @@ const mainRouter = require('./routes/main');
 app.use('/auth', authRouter); // /autu 로그인 관련 라우터 
 app.use('/', mainRouter); // 메인페이지 관련 라우터
 
-
+app.get('/download/:userEmail/:fileName', (req, res) => {
+    const {
+      userEmail,
+      fileName
+    } = req.params;
+    const filepath = `${__dirname}/userProfile/${userEmail}/${fileName}`;
+    res.header('Content-Type', `image/${fileName.substring(fileName.lastIndexOf("."))}`);
+    if (!fs.existsSync(filepath)) res.send(404, {
+      error: 'Can not found file.'
+    });
+    else fs.createReadStream(filepath).pipe(res);
+  });
 
 app.listen(app.get('port'),()=>{ //서버 연결
     console.log(app.get('port'),'번 대기중');
