@@ -7,8 +7,8 @@
         </h2>
       </div>
       <div class="gnb_bar_user">
-        <p><a href="/login">로그인</a></p>
-        <p><a href="/join">회원가입</a></p>
+        <p><a href="/userlogin">로그인</a></p>
+        <p><a href="/userjoin">회원가입</a></p>
       </div>
     </div>
   </div>
