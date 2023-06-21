@@ -56,6 +56,7 @@ a {
   margin-right: 10%;
 }
 .gnb_bar_user a {
+  position: relative;
 }
 .gnb_bar_user a > img {
   width: 40px;

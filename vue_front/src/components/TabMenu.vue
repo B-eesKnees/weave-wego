@@ -1,20 +1,4 @@
-<template>
-  <div class="tab-menu">
-    <ul>
-      <li
-        v-for="tab in tabs"
-        :key="tab.id"
-        :class="{ active: tab.isActive }"
-        @click="selectTab(tab)"
-      >
-        {{ tab.title }}
-      </li>
-    </ul>
-    <div class="tab-content">
-      <router-view></router-view>
-    </div>
-  </div>
-</template>
+<template></template>
 
 <script>
 export default {
@@ -37,19 +21,4 @@ export default {
 };
 </script>
 
-<style>
-/* .tab-menu {
-  }
-  
-  .tab-menu ul {
-  }
-  
-  .tab-menu ul li {
-  }
-  
-  .tab-menu ul li.active {
-  }
-  
-  .tab-content {
-  }  */
-</style>
+<style></style>
