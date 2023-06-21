@@ -1,49 +1,76 @@
-.mypage_profile_set{
-position: relative;
-top: 20vh;
-width: 50vw;
-}
-.mypage_title{
-    position: relative;
-    text-align: left;
-    color: #000;
-    font-size: 3vh;
-    width: 30vw;
-    height: 5vh;
-    left: 10vw;
-
+@media screen and (max-width: 1920px) {
+  body {
+    background-color: rgba(250, 250, 250, 1);
+  }
 }
 
-.profileimg{
-    position: relative;
-    width: 80px;
-    height: 80px;
-    left: 10vw;
-    top: 50px;
+.mypage_profile_set {
+  position: relative;
+  top: 20vh;
+  left: 10vw;
+  width: 50vw;
+  border: solid 1px #000;
+}
+.mypage_title {
+  position: relative;
+  text-align: left;
+  color: #000;
+  font-size: 3vh;
+  width: 30vw;
+  height: 5vh;
+}
+
+.myprofile {
+  border: solid 1px #000;
+  align-content: start;
+  position: relative;
+  top: 5vh;
+}
+
+.profileimg {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  top: 0;
+  border: solid 1px #000;
+  margin: 0;
 }
 
 .profile {
   position: relative;
   text-align: left;
   width: 70px;
-
 }
 
-.setting_icon{
+.setting_icon {
   position: absolute;
   text-align: left;
-  width: 3vw;
+  width: 35px;
   right: 0;
   bottom: 0;
 }
 
-
-
 .nickname_email {
-    position: relative;
-    width: 50vw;
-    height: 80px;
-    left: 20vw;
-    top: 0;
-    text-align: left;
+  border: solid 1px #000;
+  position: absolute;
+  width: 30vw;
+  height: 80px;
+  left: 10vw;
+  top: 0;
+  text-align: left;
+  justify-content: start;
+}
+
+.nickname {
+  position: relative;
+  font-size: 1.3em;
+  color: #000;
+  margin-top: 10px;
+}
+
+.email {
+  position: relative;
+  font-size: 1em;
+  margin-top: 10px;
+  color: #aaa;
 }
