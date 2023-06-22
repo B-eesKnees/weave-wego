@@ -29,7 +29,6 @@ const props = defineProps({
   height: 4rem;
   border-bottom: 1px solid black;
   justify-content: space-between;
-  background-color: skyblue;
   width: 20rem;
 }
 
@@ -48,11 +47,9 @@ const props = defineProps({
   margin-bottom: 1rem;
   text-align: end;
   margin-right: 0.25rem;
-  background-color: pink;
 }
 .location-location {
   text-align: end;
   margin-right: 0.25rem;
-  background-color: greenyellow;
 }
 </style>

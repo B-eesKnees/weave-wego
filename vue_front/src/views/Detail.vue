@@ -1,21 +1,34 @@
 <script setup>
 import { ref } from "vue";
-import Comment from "../components/Comment.vue";
-import Location from "../components/Location.vue";
+import Comment from "@/components/Comment.vue";
+import Location from "@/components/Location.vue";
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+import KakaoMap from "@/components/KakaoMap.vue";
+
+const images = ref([
+  "https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg",
+  "https://cdn.pixabay.com/photo/2016/02/17/23/03/usa-1206240_1280.jpg",
+  "https://cdn.pixabay.com/photo/2016/12/04/19/30/berlin-cathedral-1882397_1280.jpg",
+]);
 
 const comment = ref([
+  // 댓글 더미데이터
   { id: 0, nickname: "짱구", content: "바보바보", date: "2022-12-14" },
   { id: 1, nickname: "맹구", content: "바보", date: "2022-12-15" },
   { id: 2, nickname: "바보", content: "짱구바보", date: "2022-12-16" },
 ]);
 
 const location = ref([
+  // 장소 더미데이터
   {
     id: 0,
     name: "국립미술박물관",
     location: "서울 그 어딘가 어쩌고저쩌고",
     number: 1,
     comment: "여기 너무 좋아요",
+    Lat: 37.577607,
+    Lng: 126.976894,
   },
   {
     id: 1,
@@ -23,6 +36,8 @@ const location = ref([
     location: "서울 그 어딘가 어쩌고저쩌고",
     number: 2,
     comment: "여기 너무 좋아요",
+    Lat: 37.578621,
+    Lng: 126.980098,
   },
   {
     id: 2,
@@ -30,6 +45,17 @@ const location = ref([
     location: "서울 그 어딘가 어쩌고저쩌고",
     number: 3,
     comment: "여기 너무 좋아요",
+    Lat: 37.569882,
+    Lng: 126.986035,
+  },
+  {
+    id: 3,
+    name: "서울특별시청",
+    location: "서울 그 어딘가 어쩌고저쩌고",
+    number: 3,
+    comment: "여기 너무 좋아요",
+    Lat: 37.566815,
+    Lng: 126.978658,
   },
 ]);
 </script>
@@ -49,14 +75,32 @@ const location = ref([
         <div>더보기</div>
       </div>
     </div>
+    <!-- 본문 구역 -->
     <div class="content-main">
       <div class="map-wrapper">
-        <div class="map">지도 구역</div>
+        <div class="map">
+          <kakao-map :locations="location" />
+        </div>
       </div>
       <!-- 장소 컴포넌트 -->
       <location v-for="item in location" :location="item" :key="item.id">
       </location>
+      <!-- 이미지 슬라이드 -->
+      <div class="imageslider">
+        <carousel :items-to-show="1" :wrapAround="true">
+          <slide v-for="image in images" :key="image">
+            <div class="carousel_item">
+              <img :src="image" />
+            </div>
+          </slide>
 
+          <template #addons>
+            <navigation />
+          </template>
+        </carousel>
+      </div>
+      <!-- 본문 본문 본문 -->
+      <div>본문 본문 본문</div>
       <div>
         <!-- 댓글 구역 시작 -->
         <div>
@@ -88,7 +132,6 @@ const location = ref([
   display: flex;
   flex-direction: column;
   text-align: left;
-  margin: 0 15rem;
 }
 
 .hashtag {
@@ -135,7 +178,7 @@ const location = ref([
 }
 
 .map {
-  width: 300px;
+  width: 600px;
   height: 300px;
   border: 1px solid black;
   background-color: bisque;
@@ -145,5 +188,14 @@ const location = ref([
   display: flex;
   justify-content: center;
   background-color: aqua;
+}
+.carousel,
+.carousel_item {
+  width: 500px;
+  height: 350px;
+}
+.imageslider {
+  display: flex;
+  justify-content: center;
 }
 </style>
