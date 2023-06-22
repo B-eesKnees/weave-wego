@@ -37,7 +37,8 @@ const props = defineProps({
   display: flex;
   font-size: 1.5rem;
   padding-left: 0.25rem;
-  align-items: end;
+  align-items: flex-end;
+  /* 이거 오류나서 end에서 flex-end로 수정함 */
 }
 .location-info {
   display: flex;
