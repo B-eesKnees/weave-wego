@@ -7,8 +7,8 @@
         </h2>
       </div>
       <div class="gnb_bar_user">
-        <p><a href="/userlogin">로그인</a></p>
-        <p><a href="/userjoin">회원가입</a></p>
+        <p><a href="/login">로그인</a></p>
+        <p><a href="/join">회원가입</a></p>
       </div>
     </div>
   </div>
@@ -23,6 +23,9 @@ a {
   text-decoration: none;
   color: black;
 }
+.gnb {
+  z-index: 100;
+}
 .gnb_bar {
   width: 100%;
   height: 7%;
@@ -35,7 +38,7 @@ a {
   text-align: center;
   position: fixed;
   top: 0;
-  background-color: white;
+  background-color: #fafafa;
 }
 .gnb_bar_logo {
   position: absolute;

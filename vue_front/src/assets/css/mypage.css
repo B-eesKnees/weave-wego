@@ -3,7 +3,10 @@
     background-color: rgba(250, 250, 250, 1);
   }
 }
-
+a {
+  text-decoration: none;
+  color: inherit;
+}
 .mypage_profile_set {
   position: relative;
   top: 20vh;
@@ -75,5 +78,149 @@
   color: #aaa;
 }
 
+.tabs {
+  position: relative;
+  max-width: 80vw;
+  top: 30vh;
+  left: 10vw;
+}
+
+.tabs__header {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  /* gap: 5px; */
+}
+
+.tabs__item {
+  flex: 1;
+  /* background-color: #eee; */
+  padding: 25px 0;
+  border-radius: 5px 5px 0 0;
+  transition: 0.4s all ease-out;
+  cursor: pointer;
+  user-select: none;
+  border: solid 1px #eee;
+}
+
+.tabs__item.selected {
+  background-color: #388265;
+  color: #fff;
+}
+
+/* tab css ------------------------------------------------------------- */
+.course {
+  margin-top: 7vh;
+  
+}
+.tabs__content {
+  /* background-color: #eee; */
+  min-height: 400px;
+  position: relative;
+  align-items: start;
+  border-radius: 0 0 5px 5px;
+  display: inline;
+}
+.edit {
+  position: absolute;
+  right: 0;
+  top: -5vh;
+  width: 100px;
+  background: #fafafa;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+
+  /* padding: 5px 20px; */
+}
+
+.board-list {
+  position: relative;
+  /* border: solid 1px #000; */
+  height: 250px;
+  width: 100%;
+  background-color: #eee;
+  margin-top: 3.5vh;
+}
+
+.board_content {
+  width: 60%;
+  position: absolute;
+  padding: 60px 45px;
+  /* border: solid 1px #000; */
+  /* background-color: #9696ff; */
+  
+}
+
+
+
+.hashtag {
+  position: relative;
+  display: inline-block;
+  color: #bebebe;
+  font-size: 1.5em;
+  font-weight: 300;
+  margin-bottom: 15px;
+}
+
+.brd_created_at {
+  position: absolute;
+  display: inline-block;
+  right: 0;
+  font-size: 1.1em;
+  font-weight: 300;
+
+}
+.brd_title{
+  position: relative;
+  display: block;
+  /* width: 70px; */
+  /* border: solid 1px #000; */
+  font-size: 1.8em;
+  font-weight: 350;
+  margin-bottom: 60px;
+  
+}
+
+.like > img,
+.viewer > img {
+  width: 20px;
+  margin-right: 5px;
+}
+
+.like, .viewer{
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1.3em;
+  font-weight: 300;
+  color: #808080;
+}
+
 .brd_open {
+  position: absolute;
+  right: 0;
+  display: inline-block;
+  font-size: 1.3em;
+  font-weight: 300;
+}
+
+
+
+.mypage_img {
+  position: absolute;
+  right: 0;
+  width: 40%;
+  max-width: 450px;
+  height: 250px;
+  background-image: url(../img/mypage_img.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
 }

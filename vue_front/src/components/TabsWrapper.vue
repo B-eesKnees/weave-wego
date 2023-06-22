@@ -1,4 +1,3 @@
-<style src="../assets/css/tabwrapper.css"></style>
 <script setup>
 import { useSlots, ref, provide } from "vue";
 

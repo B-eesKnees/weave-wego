@@ -29,22 +29,25 @@
     <TabsWrapper>
       <TabItem title="내코스">
         <button class="edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
-        <div class="course">
-          <div class="hashtag">
-            #서울시 서초구 #서울시 강남구 #카페 #쇼룸,편집샵
+        <a href="/detail">
+          <div class="course">
+            <boardList
+              v-for="item in boardList"
+              :boardList="item"
+              :key="item.id"
+            />
           </div>
-          <div class="brd_title">제목제목제목</div>
-          <div class="brd_created_at">2023.06.13</div>
-          <div class="like">
-            <img src="../assets/img/like_on.png" alt="like" />111
-          </div>
-          <div class="viewer">2222</div>
-          <div class="brd_open">공개</div>
-        </div>
+        </a>
       </TabItem>
-      <TabItem title="최근에 본 코스"
-        >Content from Tab 2 Lorem ipsum dolor sit amet.</TabItem
-      >
+      <TabItem title="최근에 본 코스">
+        <a href="/detail">
+          <div class="course">
+            <boardList
+              v-for="item in boardList"
+              :boardList="item"
+              :key="item.id"
+            /></div></a
+      ></TabItem>
       <TabItem title="좋아요 리스트"
         >Content from Tab 3 Lorem ipsum dolor sit amet consectetur, adipisicing
         elit. Voluptates, ipsa.</TabItem
@@ -57,15 +60,53 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import gnbBarLogin from "../components/gnbBarLogin.vue";
 import TabsWrapper from "../components/TabsWrapper.vue";
 import TabItem from "../components/TabItem.vue";
+import boardList from "@/components/boardList.vue";
+import boardListNoOpen from "@/components/boardListNoOpen.vue";
 
 export default {
   components: {
     gnbBarLogin,
     TabsWrapper,
     TabItem,
+    boardList,
+    boardListNoOpen,
+  },
+  setup() {
+    const boardListData = ref([
+      {
+        BRD_ID: 0,
+        BRD_HASHTAG: "#종로구 #중구 #식사 #전시",
+        BRD_TITLE: "서울 실내 데이트 코스 추천!",
+        BRD_CREATED_AT: "2023-06-22",
+        likecount: 10,
+        BRD_VIEWCOUNT: 100,
+        BRD_OPEN: "공개",
+      },
+      {
+        BRD_ID: 1,
+        BRD_HASHTAG: "#서초구 #강남구 #카페 #쇼룸,편집샵",
+        BRD_TITLE: "테스트 제목2",
+        BRD_CREATED_AT: "2023-06-22",
+        likecount: 20,
+        BRD_VIEWCOUNT: 200,
+        BRD_OPEN: "비공개",
+      },
+      {
+        BRD_ID: 2,
+        BRD_HASHTAG: "#마포구 #식사 #전시",
+        BRD_TITLE: "테스트 제목3",
+        BRD_CREATED_AT: "2023-06-22",
+        likecount: 30,
+        BRD_VIEWCOUNT: 300,
+        BRD_OPEN: "공개",
+      },
+    ]);
+
+    return { boardList: boardListData };
   },
 };
 </script>

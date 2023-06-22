@@ -5,7 +5,7 @@ const router = express.Router();
 //좋아요 수 상위 코스 4개 가져오기
 router.post('/getBestCourse', async(req, res)=>{
     db.query(`SELECT board.BRD_ID, board.BRD_WRITER, board.BRD_HASHTAG, board.BRD_NICK, board.BRD_TITLE, (SELECT IMG_PATH FROM weavewego.image 
-            WHERE weavewego.image.IMG_NUM = weavewego.board.BRD_ID LIMIT 1) AS IMG_PATH, COUNT(likelist.LL_ID)
+            WHERE weavewego.image.IMG_NUM = weavewego.board.BRD_ID LIMIT 1) AS IMG_PATH, COUNT(likelist.LL_ID) as 좋아요수
             FROM weavewego.board left JOIN weavewego.likelist ON board.BRD_ID = likelist.LL_NUM 
             GROUP BY board.BRD_ID, board.BRD_WRITER, board.BRD_HASHTAG, board.BRD_NICK, board.BRD_TITLE` 
             , (err, results, fields)=>{
@@ -86,6 +86,6 @@ router.post('/increase', async(req, res)=> {
                     })
                 }
             })
-})
+});
 
 module.exports = router;

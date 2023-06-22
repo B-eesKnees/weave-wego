@@ -11,9 +11,10 @@
                 <p id="error" v-if="email_check">이메일주소를 정확히 입력해주세요. 예)abcd@naver.com</p>
 
                 <input v-model="password" type="password" id="password" :class="{error_border:error_border_check}" placeholder="비밀번호">
-                <p id="error" v-if="password_check">비밀번호를 정확히 입력해주세요. 숫자와 문자 포함 형태의 6~12자리</p>
+                <p id="error" v-if="password_check">비밀번호를 정확히 입력해주세요.<br/> *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상</p>
                 <div class="user_login_btns">
-                    <input type="submit" class="submit" id="login" value="로그인">
+                    <input :class="{ 'error_submit': allcheck, 'submit': !allcheck }"
+                        :disabled="allcheck" type="submit" id="login" value="로그인">
                     <a class="join_btn" href="/join">회원가입</a>
                 </div>
 
@@ -44,10 +45,14 @@ export default {
         return {
             email: '',
             password: '',
-            
+
             email_check: false,
             password_check: false,
             error_border_check: false,
+
+            allcheck: true,
+            allcheck1: true,
+            allcheck2: true,
         }
     },
     components: { gnbBar },
@@ -55,36 +60,49 @@ export default {
     watch: {
         'email': function () {
             this.checkEmail()
+            this.inputAllCheck()
         },
         'password': function () {
             this.checkPassword()
+            this.inputAllCheck()
         }
     },
     methods: {
         checkEmail() {
             // 이메일 형식 검사
             const validateEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-            
-            if(this.email === '' || !validateEmail.test(this.email) || !this.email) {
-                console.log('이메일 제대로 입력');
-                this.email_check = true;      
+
+            if (this.email === '' || !validateEmail.test(this.email) || !this.email) {
+                this.email_check = true;
                 this.error_border_check = true;
+                this.allcheck1 = true; //입력조건 안맞을시 true
             } else {
-                this.email_check = false;               
+                this.email_check = false;
                 this.error_border_check = false;
+                this.allcheck1 = false;
             }
         },
         checkPassword() {
-            // 숫자와 문자 포함 형태의 6~12자리 이내의 암호 정규식
-            const validatePassword = /^[A-Za-z0-9]{6,12}$/;
-            
-            if(this.password === '' || !validatePassword.test(this.password) || !this.password) {
-                console.log('비밀번호 제대로 입력');
+            // 최소 8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
+            const validatePassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/
+
+            if (this.password === '' || !validatePassword.test(this.password) || !this.password) {
                 this.password_check = true;
                 this.error_border_check = true;
+                this.allcheck2 = true;
             } else {
                 this.password_check = false;
                 this.error_border_check = false;
+                this.allcheck2 = false;
+            }
+        },
+        inputAllCheck() {
+            if (this.allcheck1 || this.allcheck2) { //하나라도 입력조건이 안맞을시
+                this.allcheck = true; //버튼 비활성
+
+            } else {
+                this.allcheck = false;
+
             }
         },
         joinForm() { //백엔드로 로그인정보 전달
@@ -294,5 +312,19 @@ input.submit2:hover {
 .error_border:focus {
     border-color: red;
     box-shadow: none;
+}
+.error_submit {
+    width: 100%;
+    padding: 3%;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border: 1px solid gray;
+    font-size: 15px;
+    background-color: grey;
+    color: darkgray;
+    margin-top: 25px;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
 }
 </style>
