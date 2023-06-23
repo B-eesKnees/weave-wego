@@ -1,11 +1,13 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
+import Detail from "../views/Detail.vue";
 
 const routes = [
   {
-    path: '/mypage',
-    name: 'myPage',
-    component: () => import(/* webpackChunkName: "mypage" */ '../views/myPage.vue')
+    path: "/mainpage",
+    name: "MainPage",
+    component: () =>
+      import(/* webpackChunkName: "mainpage" */ "../views/MainPage.vue"),
   },
   {
     path: '/',
@@ -31,7 +33,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
