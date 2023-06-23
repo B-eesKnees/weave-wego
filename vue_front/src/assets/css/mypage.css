@@ -150,6 +150,7 @@ a {
 
 .board_content {
   width: 60%;
+  height: 100%;
   position: absolute;
   padding: 60px 45px;
   /* border: solid 1px #000; */

@@ -29,15 +29,14 @@
     <TabsWrapper>
       <TabItem title="내코스">
         <button class="edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
-        <a href="/detail">
-          <div class="course">
-            <boardList
-              v-for="item in boardList"
-              :boardList="item"
-              :key="item.id"
-            />
-          </div>
-        </a>
+
+        <div class="course">
+          <boardList
+            v-for="item in boardList"
+            :boardList="item"
+            :key="item.id"
+          />
+        </div>
       </TabItem>
       <TabItem title="최근에 본 코스">
         <a href="/detail">
