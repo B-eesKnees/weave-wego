@@ -32,7 +32,7 @@ a {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-top: 3vh;
+  padding-top: 35px;
   padding-bottom: 3vh;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   text-align: center;

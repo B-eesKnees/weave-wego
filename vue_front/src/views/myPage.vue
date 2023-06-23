@@ -46,15 +46,30 @@
               v-for="item in boardList"
               :boardList="item"
               :key="item.id"
+              :hideBrdOpen="true"
             /></div></a
       ></TabItem>
       <TabItem title="좋아요 리스트"
-        >Content from Tab 3 Lorem ipsum dolor sit amet consectetur, adipisicing
-        elit. Voluptates, ipsa.</TabItem
-      >
+        ><a href="/detail">
+          <div class="course">
+            <boardList
+              v-for="item in boardList"
+              :boardList="item"
+              :key="item.id"
+              :hideBrdOpen="true"
+            /></div></a
+      ></TabItem>
       <TabItem title="내가 쓴 댓글"
-        >Content from Tab 4 Lorem ipsum dolor sit amet.</TabItem
-      >
+        ><button class="edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
+        <a href="/detail">
+          <div class="course">
+            <commentList
+              v-for="item in commentList"
+              :commentList="item"
+              :key="item.id"
+            />
+          </div> </a
+      ></TabItem>
     </TabsWrapper>
   </section>
 </template>
@@ -64,8 +79,8 @@ import { ref } from "vue";
 import gnbBarLogin from "../components/gnbBarLogin.vue";
 import TabsWrapper from "../components/TabsWrapper.vue";
 import TabItem from "../components/TabItem.vue";
-import boardList from "@/components/boardList.vue";
-import boardListNoOpen from "@/components/boardListNoOpen.vue";
+import boardList from "../components/boardList.vue";
+import commentList from "@/components/commentList.vue";
 
 export default {
   components: {
@@ -73,7 +88,7 @@ export default {
     TabsWrapper,
     TabItem,
     boardList,
-    boardListNoOpen,
+    commentList,
   },
   setup() {
     const boardListData = ref([

@@ -224,3 +224,19 @@ a {
   background-position: center;
   display: inline-block;
 }
+
+
+
+.comment-list {
+  position: relative;
+  height: 250px;
+  width: 100%;
+  background-color: #eee;
+  margin-top: 3.5vh;
+}
+
+.comment_content {
+  width: 100%;
+  position: absolute;
+  padding: 60px 45px;  
+}

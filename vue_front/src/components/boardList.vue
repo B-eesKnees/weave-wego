@@ -1,12 +1,10 @@
-<script setup>
-import { defineProps } from "vue";
-
-const props = defineProps({
-  boardList: {
-    type: Object,
-    required: true,
+<script>
+export default {
+  props: {
+    boardList: Object,
+    hideBrdOpen: Boolean,
   },
-});
+};
 </script>
 
 <template>
@@ -23,7 +21,7 @@ const props = defineProps({
         <img src="../assets/img/like_on.png" alt="like" />
         {{ boardList.likecount }}
       </div>
-      <div class="brd_open">{{ boardList.BRD_OPEN }}</div>
+      <div v-if="!hideBrdOpen" class="brd_open">{{ boardList.BRD_OPEN }}</div>
     </div>
     <div class="mypage_img"></div>
   </div>
