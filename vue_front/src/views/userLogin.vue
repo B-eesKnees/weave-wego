@@ -190,8 +190,7 @@ export default {
   width: 25%;
   min-width: 350px;
   margin: 0 auto;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   box-shadow: 0 0 5px #ccc;
   border: 1px solid #fff;
 }
@@ -201,8 +200,7 @@ export default {
   width: 25%;
   min-width: 350px;
   margin: 10px auto;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
 }
 
 input,
@@ -210,8 +208,7 @@ input,
   width: 90%;
   margin-bottom: 10px;
   padding: 5%;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   border: 1px solid #efefef;
   font-size: 15px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -224,8 +221,7 @@ input,
   margin-top: 20px;
   margin-bottom: 0px;
   padding: 5%;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   border: 1px solid #efefef;
   font-size: 15px;
   color: #fff;
@@ -248,8 +244,7 @@ input.submit,
 .join_btn {
   width: 100%;
   padding: 5%;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   border: 1px solid #388265;
   font-size: 15px;
   background-color: #388265;
@@ -263,8 +258,7 @@ input.submit,
 input.submit:hover {
   width: 100%;
   padding: 5%;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   opacity: 0.7;
   font-size: 15px;
 
@@ -278,8 +272,7 @@ input.submit:hover {
 input.submit2:hover {
   width: 100%;
   padding: 5%;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   opacity: 0.7;
   font-size: 15px;
   color: #fff;
@@ -314,8 +307,7 @@ input.submit2:hover {
   width: 90%;
   padding: 5%;
   text-decoration: none;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   border: 1px solid #388265;
   font-size: 15px;
   background-color: #388265;
@@ -338,8 +330,7 @@ input.submit2:hover {
 .error_submit {
   width: 100%;
   padding: 3%;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   border: 1px solid gray;
   font-size: 15px;
   background-color: grey;
