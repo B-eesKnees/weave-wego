@@ -11,12 +11,12 @@ const userEmail = 'user1@example.com'; // 로그인한 유저의 이메일(후�
 const queries = {
 
   myPageQuery:  // 마이페이지 프로필 정보(아이디(이메일), 닉네임, 프로필 이미지)
-  `select USER_EMAIL, USER_NICKNAME, USER_IMAGE
+    `select USER_EMAIL, USER_NICKNAME, USER_IMAGE
   from user
   where USER_EMAIL = ?;`,
 
   myCourseQuery:
-  `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT, b.BRD_OPEN,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT, b.BRD_OPEN,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -26,8 +26,8 @@ const queries = {
 
   delMyCourseQuery: ``,
 
-  recentCourseQuery: 
-  `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
+  recentCourseQuery:
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -36,8 +36,8 @@ const queries = {
   group by b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE, rv.RC_TIME
   order by rv.RC_TIME desc;`,
 
-  likeListQuery: 
-  `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
+  likeListQuery:
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -46,7 +46,7 @@ const queries = {
   order by ll.LL_TIME desc;`,
 
   myCommentQuery:
-  `select b.BRD_TITLE, com.COM_COMMENT, com.COM_CREATED_AT
+    `select b.BRD_TITLE, com.COM_COMMENT, com.COM_CREATED_AT
   from comment com
   left join board b on com.COM_NUM = b.BRD_ID
   where com.COM_WRITER = ?
@@ -148,8 +148,8 @@ const mysql = require('mysql');
 
 const dbPool = mysql.createPool({
   host: 'localhost',
-  user: 'sw',
-  password: '1234',
+  user: 'root',
+  password: '12345678',
   database: 'weavewego',
 });
 

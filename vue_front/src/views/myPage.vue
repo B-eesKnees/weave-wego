@@ -105,12 +105,16 @@ export default {
   },
   data() {
     return {
-      editMode: false,
       email: "",
       nick: "",
       image: "",
       provider: "",
+      editMode: false,
+      myPageData: "",
     };
+  },
+  created() {
+    this.getMyPageData();
   },
   mounted() {
     (this.email = localStorage.getItem("userID")),
@@ -123,10 +127,21 @@ export default {
       this.editMode = true;
     },
     deleteComment() {
-      // 삭제 로직을 구현하세요
+      // 삭제 로직을 구현
     },
     cancelEdit() {
       this.editMode = false;
+    },
+    async getMyPageData() {
+      //마이페이지 내 정보
+      try {
+        const response = await axios.post("/myPage", {
+          userEmail: "user@example.com", // userEmail 값을 적절히 설정
+        });
+        this.myPageData = response.data; // 서버에서 받은 데이터를 myPageData에 할당
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
   setup() {
