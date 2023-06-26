@@ -27,7 +27,7 @@
   </section>
   <section>
     <TabsWrapper>
-      <TabItem title="내코스">
+      <TabItem title="내코스" @click="">
         <div>
           <button v-if="!editMode" class="edit" @click="toggleEditMode">
             &nbsp;&nbsp;편집&nbsp;&nbsp;
@@ -45,6 +45,7 @@
             v-for="item in boardList"
             :boardList="item"
             :key="item.BRD_ID"
+            :editMode="editMode"
           >
           </boardList>
         </div>
@@ -89,6 +90,10 @@ import TabsWrapper from "../components/TabsWrapper.vue";
 import TabItem from "../components/TabItem.vue";
 import boardList from "../components/boardList.vue";
 import commentList from "../components/commentList.vue";
+import axios from "axios";
+axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 export default {
   components: {
@@ -101,12 +106,21 @@ export default {
   data() {
     return {
       editMode: false,
+      email: "",
+      nick: "",
+      image: "",
+      provider: "",
     };
+  },
+  mounted() {
+    (this.email = localStorage.getItem("userID")),
+      (this.nick = localStorage.getItem("userNick")),
+      (this.image = localStorage.getItem("userImage")),
+      (this.provider = localStorage.getItem("userProvider"));
   },
   methods: {
     toggleEditMode() {
       this.editMode = true;
-      boardList.editMode = true;
     },
     deleteComment() {
       // 삭제 로직을 구현하세요

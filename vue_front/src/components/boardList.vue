@@ -3,14 +3,14 @@ export default {
   props: {
     boardList: Object,
     hideBrdOpen: Boolean,
+    editMode: Boolean, // editMode 프롭 추가
   },
 };
-export let editMode = true;
 </script>
 
 <template>
-  <input class="mycourse_checkbox" type="checkbox" />
-  <a href="/detail">
+  <a href="/detail"
+    ><input class="mycourse_checkbox" type="checkbox" v-if="editMode" />
     <div class="board-list">
       <div class="board_content">
         <div class="hashtag">{{ boardList.BRD_HASHTAG }}</div>

@@ -24,7 +24,8 @@ a {
   color: black;
 }
 .gnb {
-  z-index: 100;
+  z-index: 9999;
+  position: relative;
 }
 .gnb_bar {
   width: 100%;
@@ -32,14 +33,11 @@ a {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-top: 35px;
-  padding-bottom: 3vh;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   text-align: center;
   position: fixed;
   top: 0;
   background-color: #fafafa;
-  z-index: 100;
 }
 .gnb_bar_logo {
   position: absolute;
