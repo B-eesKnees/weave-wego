@@ -36,6 +36,7 @@ a {
   position: fixed;
   top: 0;
   background-color: white;
+  z-index: 1000;
 }
 .gnb_bar_logo {
   position: absolute;

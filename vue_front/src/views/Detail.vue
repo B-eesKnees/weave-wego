@@ -195,8 +195,8 @@ const location = ref([
 }
 .carousel,
 .carousel_item {
-  width: 500px;
-  height: 350px;
+  width: 600px;
+  height: 450px;
 }
 .imageslider {
   display: flex;
