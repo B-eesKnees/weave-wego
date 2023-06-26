@@ -5,9 +5,11 @@ export default {
     hideBrdOpen: Boolean,
   },
 };
+export let editMode = true;
 </script>
 
 <template>
+  <input class="mycourse_checkbox" type="checkbox" />
   <a href="/detail">
     <div class="board-list">
       <div class="board_content">

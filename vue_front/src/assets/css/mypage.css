@@ -138,6 +138,31 @@ a {
 
   /* padding: 5px 20px; */
 }
+.delete{
+  position: absolute;
+  right: 5vw;
+  top: -5vh;
+  width: 100px;
+  background: #fafafa;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+}
+
+.cancel{
+  position: absolute;
+  right: 0;
+  top: -5vh;
+  width: 100px;
+  background: #fafafa;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+}
 
 .board-list {
   position: relative;
@@ -226,18 +251,69 @@ a {
   display: inline-block;
 }
 
-
-
-.comment-list {
-  position: relative;
-  height: 250px;
-  width: 100%;
-  background-color: #eee;
-  margin-top: 3.5vh;
+.mycourse_checkbox{
+  background-color: #6969ff;
+  width: 300px;
+  height: 300px;
 }
 
+/* tab comment css ------------------------------------------------------------- */
+
+
+.comment_edit {
+  position: absolute;
+  display: block;
+  right: 0;
+  top: -5vh;
+  width: 100px;
+  border: none;
+  background: #fafafa;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+
+  /* padding: 5px 20px; */
+}
+
+
+.commentlist {
+  position: relative;
+  height: 200px;
+  width: 100%;
+  
+  margin-top: 7vh;
+}
+
+.comment-list{
+  position: relative;
+  height: 150px;
+  width: 100%;
+  margin-top: 4vh;
+  background-color: #eee;
+}
 .comment_content {
   width: 100%;
   position: absolute;
-  padding: 60px 45px;  
+  padding: 44px 45px;  
+}
+
+.com_brd_title{
+  position: relative;
+  display: inline-block;
+}
+
+.com_created_at{
+  position: relative;
+  display: inline-block;
+}
+
+.com_list_icon{
+  position: relative;
+  display: block;
+}
+
+.com_comment{
+  position: relative;
+  display: inline-block;
 }
