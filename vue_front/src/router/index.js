@@ -3,7 +3,8 @@ import Detail from "../views/Detail.vue";
 import MainPage from "../views/MainPage.vue";
 import Join from "../views/userJoin.vue";
 import Login from "../views/userLogin.vue";
-import myPage from "../views/myPage.vue"
+import myPage from "../views/myPage.vue";
+// import adminPage from "../views/adminPage.vue";
 
 const routes = [
 
@@ -31,7 +32,12 @@ const routes = [
     path: '/mypage',
     name: 'myPage',
     component: myPage
-  }
+  },
+  // {
+  //   path: '/adminpage',
+  //   name: 'admin',
+  //   component: adminPage
+  // }
 ]
 
 const router = createRouter({
