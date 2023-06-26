@@ -1,33 +1,36 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 import Detail from "../views/Detail.vue";
+import MainPage from "../views/MainPage.vue";
+import Join from "../views/userJoin.vue";
+import Login from "../views/userLogin.vue";
+import myPage from "../views/myPage.vue"
 
 const routes = [
-  {
-    path: "/mainpage",
-    name: "MainPage",
-    component: () =>
-      import(/* webpackChunkName: "mainpage" */ "../views/MainPage.vue"),
-  },
+
   {
     path: '/',
     name: 'MainPage',
-    component: () => import(/* webpackChunkName: "mainpage" */ '../views/MainPage.vue')
+    component: MainPage
   },
   {
     path: '/join',
     name: 'userJoin',
-    component: () => import(/* webpackChunkName: "userjoin" */ '../views/userJoin.vue')
+    component: Join
   },
   {
     path: '/login',
     name: 'userLogin',
-    component: () => import(/* webpackChunkName: "userjoin" */ '../views/userLogin.vue')
+    component: Login
   },
   {
     path: '/detail',
     name: 'Detail',
-    component: () => import(/* webpackChunkName: "detail" */ '../views/Detail.vue')
+    component: Detail
+  },
+  {
+    path: '/mypage',
+    name: 'myPage',
+    component: myPage
   }
 ]
 
