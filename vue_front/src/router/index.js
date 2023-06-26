@@ -28,7 +28,17 @@ const routes = [
     path: '/detail',
     name: 'Detail',
     component: () => import(/* webpackChunkName: "detail" */ '../views/Detail.vue')
+<<<<<<< Updated upstream
   }
+=======
+  },
+  {
+    path: '/naverlogin',
+    name: 'naverlogin',
+    component: () => import(/* webpackChunkName: "naverlogin" */ '../views/NaverLogin.vue')
+  },
+  
+>>>>>>> Stashed changes
 ]
 
 const router = createRouter({

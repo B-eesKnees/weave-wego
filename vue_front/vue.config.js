@@ -13,3 +13,16 @@ module.exports = defineConfig({
     headers: { "Access-Control-Allow-Origin": "*" }
   }
 })
+
+module.exports = {
+  chainWebpack: config => {
+    config.plugins.delete('prefatch');  //prefatch 삭제
+  },
+  devServer: {
+    proxy: {
+      '/oauth2.0': {
+        target: 'http://nid.naver.com'
+      }
+    }
+  }
+}

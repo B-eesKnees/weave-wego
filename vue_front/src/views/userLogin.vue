@@ -1,4 +1,5 @@
 <template>
+<<<<<<< Updated upstream
   <gnbBar />
   <div class="login">
     <div class="title-bar">로그인</div>
@@ -36,6 +37,37 @@
             value="로그인"
           />
           <a class="join_btn" href="/join">회원가입</a>
+=======
+    <gnbBar />
+    <div class="login">
+        <div class="title-bar">
+            <h5>로그인</h5>
+        </div>
+
+        <div class="wrap">
+            <form  @submit.prevent="loginForm">
+                <input v-model="email" type="text" id="username" :class="{error_border:error_border_check}" placeholder="이메일">
+                <p id="error" v-if="email_check">이메일주소를 정확히 입력해주세요. 예)abcd@naver.com</p>
+
+                <input v-model="password" type="password" id="password" :class="{error_border:error_border_check}" placeholder="비밀번호">
+                <p id="error" v-if="password_check">비밀번호를 정확히 입력해주세요.<br/> *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상</p>
+                <div class="user_login_btns">
+                    <a href="/auth/login" class="login_btn"><input :class="{ 'error_submit': allcheck, 'submit': !allcheck }"
+                        :disabled="allcheck" type="submit" id="login" value="로그인"></a>   
+                    <a class="join_btn" href="/join">회원가입</a>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="wrap2">
+            <form method="post">
+                <div class="user_social_btns">
+                    <a class="social_btn kakao" @click="kakaoLogin">카카오로 시작하기</a>
+                    <a class="social_btn naver" href="/naverlogin">네이버로 시작하기</a>
+                </div>
+            </form>
+>>>>>>> Stashed changes
         </div>
       </form>
     </div>
@@ -58,6 +90,7 @@ import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+
 
 export default {
   data() {
@@ -139,6 +172,7 @@ export default {
           email: this.email,
           password: this.password,
         },
+<<<<<<< Updated upstream
       })
         .then((res) => {
           alert(res.data.message);
@@ -151,6 +185,118 @@ export default {
   },
 };
 </script>
+=======
+        checkPassword() {
+            // 최소 8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
+            const validatePassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/
+
+            if (this.password === '' || !validatePassword.test(this.password) || !this.password) {
+                this.password_check = true;
+                this.error_border_check = true;
+                this.allcheck2 = true;
+            } else {
+                this.password_check = false;
+                this.error_border_check = false;
+                this.allcheck2 = false;
+            }
+        },
+        inputAllCheck() {
+            if (this.allcheck1 || this.allcheck2) { //하나라도 입력조건이 안맞을시
+                this.allcheck = true; //버튼 비활성
+            } else {
+                this.allcheck = false;
+
+            }
+        },
+        loginForm() { //백엔드로 로그인정보 전달
+            axios({
+                url: "http://localhost:3000/auth/login",
+                method: "POST",
+                data: {
+                    email: this.email,
+                    password: this.password
+                }
+            }).then(res => {
+                if(res.data.code == 200) { //로그인 성공시
+                    alert(res.data.success);
+                    localStorage.setItem('userID', res.data.email);
+                    localStorage.setItem('userNick', res.data.nick);
+                    localStorage.setItem('userImage', res.data.image);
+                    localStorage.setItem('userProvider', res.data.provider);
+
+                    window.location.href = '/';
+                } else {
+                    if(res.data.code == 204) { //비밀번호 오류시
+                        alert(res.data.error + '\n' + res.data.message);
+                        window.location.href = '/login';
+                    } else if(res.data.code == 206) { // 존재하지 않는 이메일 일때
+                        alert(res.data.error + '\n' + res.data.message);
+                        window.location.href = '/login';
+                    }
+                }
+            }).catch(err => {
+                alert(err);
+            })
+        },
+        kakaoLogin()  {
+            window.Kakao.Auth.login({
+                scope: 'profile_nickname, profile_image, account_email, gender, age_range',
+                success: this.getProfile
+            });
+        },
+        getProfile(autoObj) {
+            console.log(autoObj);
+            window.Kakao.API.request({
+                url: '/v2/user/me',
+                success: res=> {
+                    const kakao_account = res.kakao_account;
+                    console.log(kakao_account);
+                    this.login(kakao_account);
+                    alert('로그인 성공');
+                }
+            });
+        },
+        async login(kakao_account) {
+            const email = kakao_account.email;
+
+            await axios({
+                url: "http://localhost:3000/auth/kakaologin",
+                method: "POST",
+                data: {
+                    email: kakao_account.email,
+                    nick: kakao_account.profile.nickname,
+                    image: kakao_account.profile.profile_image_url,
+                    sex: kakao_account.gender,
+                    agegroup: kakao_account.age_range,
+                    provider: 'kakao'
+                },
+
+            }).then(async (res)=> {
+                this.pullData(email)
+            })
+        },
+        pullData(email) {
+            axios({
+                url: "http://localhost:3000/auth/kakaoData",
+                method: "POST",
+                data: {
+                    email: email,
+                }
+            }).then(async (res)=> {
+                localStorage.setItem('userID', res.data.email);
+                localStorage.setItem('userNick', res.data.nick);
+                localStorage.setItem('userImage', res.data.image);
+                localStorage.setItem('userProvider', res.data.provider);
+
+                window.location.href = '/';
+            })
+
+        }
+    }
+}
+
+</script> 
+>>>>>>> Stashed changes
 
 <style scoped>
 .login {

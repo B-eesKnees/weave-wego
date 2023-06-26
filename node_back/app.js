@@ -56,7 +56,7 @@ app.get('/downloadProfile/:userEmail/:fileName', (req, res) => { //프로필 이
     userEmail,
     fileName
   } = req.params;
-  const filepath = `${__dirname}/profiles/${userEmail}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/profiles/test@test.com/image.png
+  const filepath = `${__dirname}/userProfile/${userEmail}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/profiles/test@test.com/image.png
   res.header('Content-Type', `image/${fileName.substring(fileName.lastIndexOf("."))}`); //이미지 보내는 코드인가?
   if (!fs.existsSync(filepath)) res.send(404, { //경로에 이미지가 없으면 에러 처리
     error: 'Can not found file.'
