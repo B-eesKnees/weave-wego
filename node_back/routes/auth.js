@@ -113,7 +113,8 @@ router.post("/login", async (req, res) => {
                         "success": '로그인 성공',
                         "email" : results[0].USER_EMAIL, //쿼리 실행값에서 데이터 뽑기 유저 이메일,닉네임, 이미지 파일 vue단으로 보내기
                         "nick" : results[0].USER_NICKNAME,
-                        'image' : results[0].USER_IMAGE //프로필 사진을 얻기위해서는 유저 이메일과 테이블의 image가 필요하니까 보내줌
+                        'image' : results[0].USER_IMAGE, //프로필 사진을 얻기위해서는 유저 이메일과 테이블의 image가 필요하니까 보내줌
+                        "provider" : results[0].USER_PROVIDER
                     });
                     
                 } else { //비밀번호가 다르면
@@ -133,6 +134,116 @@ router.post("/login", async (req, res) => {
         }
     });
 });
+//-------카카오 로그인----------
+router.post('/kakaologin', async(req, res)=> {
+    let sex = '';
 
+    if(req.body.sex === 'male') {
+        sex = 'm'
+    } else {
+        sex= 'f'
+    }
+
+    const user = { //프론트에서 전달해주는 데이터
+        'USER_EMAIL' : req.body.email,
+        'USER_IMAGE' : req.body.image,
+        'USER_SEX' : sex,
+        'USER_AGEGROUP': req.body.agegroup,
+        'USER_NICKNAME' : req.body.nick,
+        'USER_PROVIDER' : req.body.provider,
+        'USER_ADD' : req.body.add
+    }
+
+    db.query('insert into weavewego.user set ?', user, (err)=>{ //쿼리 실행
+        if(err) {
+            res.send({ // 에러 발생 시
+                'code':400,
+                'failed': 'error occurred',
+                'error': err
+            })
+        } else {
+            res.send({ //쿼리 실행 성공시
+                'code':200,
+                'message': '회원가입 성공'
+            })
+        }
+    })
+});
+//카카오 로그인 후-----------------------------------
+router.post('/kakaoData', async(req, res)=> {
+    const email = req.body.email;
+
+    db.query(`select * from weavewego.user where USER_EMAIL = ?`, email, async(err, results)=> {
+        if(err) {
+            res.send({ // 에러 발생 시
+                'code':400,
+                'failed': 'error occurred',
+                'error': err
+            })
+        } else {
+            res.send({
+                email : results[0].USER_EMAIL,
+                nick : results[0].USER_NICKNAME,
+                image: results[0].USER_IMAGE,
+                provider: results[0].USER_PROVIDER
+            })
+        }
+    })
+});
+//------------네이버 로그인---------
+router.post('/naverlogin', async(req, res)=> {
+    let sex = '';
+
+    if(req.body.sex === 'M') {
+        sex = 'm'
+    } else {
+        sex= 'f'
+    }
+
+    const user = { //프론트에서 전달해주는 데이터
+        'USER_EMAIL' : req.body.email,
+        'USER_IMAGE' : req.body.image,
+        'USER_SEX' : sex,
+        'USER_AGEGROUP': req.body.agegroup,
+        'USER_NICKNAME' : req.body.nick,
+        'USER_PROVIDER' : req.body.provider,
+    }
+
+    db.query('insert into weavewego.user set ?', user, (err)=>{ //쿼리 실행
+        if(err) {
+            res.send({ // 에러 발생 시
+                'code':400,
+                'failed': 'error occurred',
+                'error': err
+            })
+        } else {
+            res.send({ //쿼리 실행 성공시
+                'code':200,
+                'message': '회원가입 성공'
+            })
+        }
+    })
+});
+//네이버 로그인 후-------------------------------------
+router.post('/naverData', async(req, res)=> {
+    const email = req.body.email;
+
+    db.query(`select * from weavewego.user where USER_EMAIL = ?`, email, async(err, results)=> {
+        if(err) {
+            res.send({ // 에러 발생 시
+                'code':400,
+                'failed': 'error occurred',
+                'error': err
+            })
+        } else {
+            res.send({
+                email : results[0].USER_EMAIL,
+                nick : results[0].USER_NICKNAME,
+                image: results[0].USER_IMAGE,
+                provider: results[0].USER_PROVIDER
+            })
+        }
+    })
+});
 
 module.exports = router;

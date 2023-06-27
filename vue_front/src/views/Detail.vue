@@ -161,7 +161,11 @@ const location = ref([
 .title {
   display: flex;
   align-items: baseline;
+<<<<<<< HEAD
   padding: 0.2rem 0 1rem 0;
+=======
+  padding: 0.75rem 0 1rem 0;
+>>>>>>> refs/remotes/origin/main
   margin: 0.5rem 0;
 }
 .title > div:first-of-type {
@@ -212,9 +216,15 @@ const location = ref([
 
 .map {
   width: 70%;
+<<<<<<< HEAD
   height: 450px;
   border: 1px solid black;
   margin-bottom: 8rem;
+=======
+  height: 400px;
+  border: 1px solid black;
+  margin-bottom: 10rem;
+>>>>>>> refs/remotes/origin/main
 }
 .map-wrapper {
   display: flex;
@@ -224,7 +234,11 @@ const location = ref([
   width: 70%;
 }
 .carousel_item {
+<<<<<<< HEAD
   width: 100%;
+=======
+  width: 600px;
+>>>>>>> refs/remotes/origin/main
   height: 450px;
 }
 .imageslider {

@@ -1,43 +1,40 @@
 import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
 import Detail from "../views/Detail.vue";
-import MainPage from "../views/MainPage.vue";
-import Join from "../views/userJoin.vue";
-import Login from "../views/userLogin.vue";
-import myPage from "../views/myPage.vue";
-// import adminPage from "../views/adminPage.vue";
 
 const routes = [
-
+  {
+    path: "/mainpage",
+    name: "MainPage",
+    component: () =>
+      import(/* webpackChunkName: "mainpage" */ "../views/MainPage.vue"),
+  },
   {
     path: '/',
     name: 'MainPage',
-    component: MainPage
+    component: () => import(/* webpackChunkName: "mainpage" */ '../views/MainPage.vue')
   },
   {
     path: '/join',
     name: 'userJoin',
-    component: Join
+    component: () => import(/* webpackChunkName: "userjoin" */ '../views/userJoin.vue')
   },
   {
     path: '/login',
     name: 'userLogin',
-    component: Login
+    component: () => import(/* webpackChunkName: "userjoin" */ '../views/userLogin.vue')
   },
   {
     path: '/detail',
     name: 'Detail',
-    component: Detail
+    component: () => import(/* webpackChunkName: "detail" */ '../views/Detail.vue')
   },
   {
-    path: '/mypage',
-    name: 'myPage',
-    component: myPage
+    path: '/naverlogin',
+    name: 'naverlogin',
+    component: () => import(/* webpackChunkName: "naverlogin" */ '../views/NaverLogin.vue')
   },
-  // {
-  //   path: '/adminpage',
-  //   name: 'admin',
-  //   component: adminPage
-  // }
+
 ]
 
 const router = createRouter({
