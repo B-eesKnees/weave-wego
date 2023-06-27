@@ -10,7 +10,7 @@
 </template>
 
 <style>
-button {
+ㅇ button {
   cursor: pointer;
 }
 input {
