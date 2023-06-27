@@ -46,11 +46,12 @@ app.use(session({
 const authRouter = require('./routes/auth'); //routes폴더
 const mainRouter = require('./routes/main');
 const boardMakeRouter = require('./routes/boardCreate');
-
+const myPageRouter = require('./routes/mypage');  // 마이페이지
 
 app.use('/auth', authRouter); // /autu 로그인 관련 라우터 
 app.use('/', mainRouter); // 메인페이지 관련 라우터
 app.use('/boardCreate', boardMakeRouter); //임시
+app.use('/mypage', myPageRouter); // 마이페이지 관련 라우터
 
 app.get('/downloadProfile/:userEmail/:fileName', (req, res) => { //프로필 이미지 다운 라우터
   const { //url에 있는 userEmail, fileName 받아오기
@@ -167,6 +168,11 @@ app.post('/uploadCourse/:boardID/:fileName', async (req, res) => { // 게시글 
       });
     }
   });
+});
+
+// 마이페이지
+app.post('/mypage', (req, res) => {
+  res.sendFile(path.join(__dirname, '/.html'));  // 연결할 html 주소(마이페이지)
 });
 
 app.listen(app.get('port'), () => { //서버 연결
