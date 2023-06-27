@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     toggleEditMode() {
-      this.editMode = true;
+      this.editMode = true; //ㅋㅋ
     },
     deleteComment() {
       // 삭제 로직을 구현
