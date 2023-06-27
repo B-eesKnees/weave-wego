@@ -115,8 +115,12 @@ export default {
             }).then(res => {
                 if(res.data.code == 200) { //로그인 성공시
                     alert(res.data.success);
-                    console.log(res.data.test);
-                    // window.location.href = '/';
+                    localStorage.setItem('userID', res.data.email);
+                    localStorage.setItem('userNick', res.data.nick);
+                    localStorage.setItem('userImage', res.data.image);
+                    localStorage.setItem('userProvider', res.data.provider);
+
+                    window.location.href = '/';
                 } else {
                     if(res.data.code == 204) { //비밀번호 오류시
                         alert(res.data.error + '\n' + res.data.message);
