@@ -125,7 +125,7 @@ export default {
                         alert(res.data.error + '\n' + res.data.message);
                         window.location.href = '/login';
                     }
-                }
+                }//test commit
             }).catch(err => {
                 alert(err);
             })
