@@ -5,6 +5,7 @@ import Location from "@/components/Location.vue";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import KakaoMap from "@/components/KakaoMap.vue";
+import gnbBar from "@/components/gnbBar.vue";
 
 const images = ref([
   "https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg",
@@ -61,10 +62,11 @@ const location = ref([
 </script>
 
 <template>
+  <div class="gnb"><gnb-bar></gnb-bar></div>
   <div class="detail">
-    <div class="hashtag">#태그 #태그 #태그 #태그</div>
+    <div class="hashtag">#종로 #식사 #카페 #전시</div>
     <div class="title">
-      <div>제목제목제목제목제목제목제목제목</div>
+      <div>서울에서 우리의 전통 문화를 체험해보세요</div>
       <div class="time">2023.06.20</div>
     </div>
     <div class="name-info">
@@ -127,20 +129,25 @@ const location = ref([
 </template>
 
 <style scoped>
+.gnb {
+  margin-bottom: 8rem;
+}
 .detail {
-  padding: 0 3rem;
+  padding: 0 15%;
   display: flex;
   flex-direction: column;
   text-align: left;
 }
 
 .hashtag {
-  color: grey;
+  font-size: 1.5rem;
+  color: rgb(201, 201, 201);
 }
 .title {
   display: flex;
   align-items: baseline;
   padding: 0.75rem 0 1rem 0;
+  margin: 0.5rem 0;
 }
 .title > div:first-of-type {
   padding-right: 1.5rem;
@@ -153,8 +160,7 @@ const location = ref([
 .name-info {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid black;
-  margin-bottom: 2rem;
+  margin-bottom: 6rem;
 }
 .name-info-right {
   display: flex;
@@ -178,21 +184,19 @@ const location = ref([
 }
 
 .map {
-  width: 600px;
-  height: 300px;
+  width: 70%;
+  height: 400px;
   border: 1px solid black;
-  background-color: bisque;
   margin-bottom: 10rem;
 }
 .map-wrapper {
   display: flex;
   justify-content: center;
-  background-color: aqua;
 }
 .carousel,
 .carousel_item {
-  width: 500px;
-  height: 350px;
+  width: 600px;
+  height: 450px;
 }
 .imageslider {
   display: flex;

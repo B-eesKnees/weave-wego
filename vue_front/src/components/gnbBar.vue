@@ -74,8 +74,13 @@ a {
   text-align: center;
   position: fixed;
   top: 0;
+<<<<<<< HEAD
   background-color: #fafafa;
   z-index: 100;
+=======
+  background-color: white;
+  z-index: 1000;
+>>>>>>> origin/yeongmin
 }
 .gnb_bar_logo {
   position: absolute;
