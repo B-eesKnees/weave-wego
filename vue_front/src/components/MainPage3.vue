@@ -4,10 +4,9 @@
             <div class="mainpage3_third_filters">
                 <div class="mainpage3_third_filters_location_filter">
                     <button @click="showMap">지역 선택</button>
-                    <img v-show="show_map" class="show_map" usemap="#image-map" ref="img" :src="require(`../assets/img/seoul/${img}.png`)">
+                    <img v-show="show_map" class="show_map" usemap="#image-map" src="../assets/img/seoulmap.png">
                     <map name="image-map">
-                        <area @click="locationDobong" alt="도봉" title="도봉" coords="358,52,351,68,347,83,358,92,366,106,357,128,362,140,371,136,396,168,403,146,415,156,413,122,406,105,408,81,404,68,391,66,384,71,381,59" shape="poly">
-                        <area @click="locationNowon" target="" alt="노원" title="노원"  coords="411,74,407,103,419,150,411,155,408,146,394,166,423,192,454,185,468,187,483,181,493,167,493,152,484,142,466,143,469,119,471,106,467,94,474,80,467,71,458,75,452,63" shape="poly">
+                        <area target="_blank" alt="도봉" title="도봉" href="/www.naver.com" coords="1350,228,1431,640,1671,636,1644,236" shape="poly">
                     </map>
                 </div>
                 <div class="mainpage3_third_filters_theme_filter">
@@ -89,10 +88,7 @@ export default {
     components: {},
     data() {
         return {
-            show_map: false,
-            hidden: false,
-            img: 'seoul',
-            isActive: true
+            show_map: false
         };
     },
 
@@ -106,20 +102,6 @@ export default {
                 this.show_map = true
             } else {
                 this.show_map = false;
-            }
-        },
-        locationDobong() {
-            if(this.img !== 'dobong') {
-                this.img = 'dobong';
-            } else {
-                this.img = 'seoul';
-            }
-        },
-        locationNowon() {
-            if(this.img !== 'nowon') {
-                this.img = 'nowon';
-            } else {
-                this.img = 'seoul';
             }
         }
     }
@@ -156,21 +138,14 @@ export default {
     z-index: 1;
 }
 
-<<<<<<< HEAD
-.mainpage3_third_sort {
-  display: flex;
-  justify-content: end;
-  border: none;
-=======
 .mainpage3_third_filters_theme_filter {}
 
 .mainpage3_third_filters_keyword_filter {}
 
 .mainpage3_third_sort {
     display: flex;
-    justify-content: flex-end;
+    justify-content: end;
     border: none;
->>>>>>> refs/remotes/origin/main
 }
 
 
@@ -244,12 +219,4 @@ export default {
     padding: 1% 5%;
     border: 1px solid black;
     background-color: white;
-}
-
-
-
-#aaa:hover {
-    
-    fill: blue;
-}
-</style>
+}</style>
