@@ -5,6 +5,7 @@ import Location from "@/components/Location.vue";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import KakaoMap from "@/components/KakaoMap.vue";
+import gnbBar from "@/components/gnbBar.vue";
 
 const images = ref([
   "https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg",
@@ -52,7 +53,7 @@ const location = ref([
     id: 3,
     name: "서울특별시청",
     location: "서울 그 어딘가 어쩌고저쩌고",
-    number: 3,
+    number: 4,
     comment: "여기 너무 좋아요",
     Lat: 37.566815,
     Lng: 126.978658,
@@ -61,10 +62,11 @@ const location = ref([
 </script>
 
 <template>
+  <div class="gnb"><gnb-bar></gnb-bar></div>
   <div class="detail">
-    <div class="hashtag">#태그 #태그 #태그 #태그</div>
+    <div class="hashtag">#종로 #식사 #카페 #전시</div>
     <div class="title">
-      <div>제목제목제목제목제목제목제목제목</div>
+      <div>서울에서 우리의 전통 문화를 체험해보세요</div>
       <div class="time">2023.06.20</div>
     </div>
     <div class="name-info">
@@ -100,7 +102,14 @@ const location = ref([
         </carousel>
       </div>
       <!-- 본문 본문 본문 -->
-      <div>본문 본문 본문</div>
+      <div class="main">
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+      </div>
       <div>
         <!-- 댓글 구역 시작 -->
         <div>
@@ -110,11 +119,19 @@ const location = ref([
               <input
                 type="text"
                 placeholder="좋은 댓글을 씁시다"
-                style="width: 800px; height: 70px"
+                font-size="2rem"
+                style="width: 1000px; height: 100px"
               />
             </div>
             <div>
-              <button type="submit" id="comment-submit">댓글 달기</button>
+              <button
+                class="comment-submit"
+                type="submit"
+                id="comment-submit"
+                width="100px"
+              >
+                댓글 달기
+              </button>
             </div>
           </div>
           <!--댓글 컴포넌트 -->
@@ -127,20 +144,25 @@ const location = ref([
 </template>
 
 <style scoped>
+.gnb {
+  margin-bottom: 8rem;
+}
 .detail {
-  padding: 0 3rem;
+  padding: 0 15%;
   display: flex;
   flex-direction: column;
   text-align: left;
 }
 
 .hashtag {
-  color: grey;
+  font-size: 1.5rem;
+  color: rgb(201, 201, 201);
 }
 .title {
   display: flex;
   align-items: baseline;
-  padding: 0.75rem 0 1rem 0;
+  padding: 0.2rem 0 1rem 0;
+  margin: 0.5rem 0;
 }
 .title > div:first-of-type {
   padding-right: 1.5rem;
@@ -153,8 +175,7 @@ const location = ref([
 .name-info {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid black;
-  margin-bottom: 2rem;
+  margin-bottom: 6rem;
 }
 .name-info-right {
   display: flex;
@@ -167,6 +188,12 @@ const location = ref([
   border-bottom: 1px solid black;
   margin-bottom: 2rem;
 }
+.main {
+  text-align: center;
+  margin-top: 3.5rem;
+  margin-bottom: 4rem;
+  padding: 0 10%;
+}
 .comment-write {
   display: flex;
   padding: 1rem 1rem;
@@ -176,23 +203,29 @@ const location = ref([
   text-align: center;
   padding-right: 1rem;
 }
+.comment-submit {
+  width: 70px;
+  height: 30px;
+  margin-top: 1.5rem;
+  margin-left: 1rem;
+}
 
 .map {
-  width: 600px;
-  height: 300px;
+  width: 70%;
+  height: 450px;
   border: 1px solid black;
-  background-color: bisque;
-  margin-bottom: 10rem;
+  margin-bottom: 8rem;
 }
 .map-wrapper {
   display: flex;
   justify-content: center;
-  background-color: aqua;
 }
-.carousel,
+.carousel {
+  width: 70%;
+}
 .carousel_item {
-  width: 500px;
-  height: 350px;
+  width: 100%;
+  height: 450px;
 }
 .imageslider {
   display: flex;

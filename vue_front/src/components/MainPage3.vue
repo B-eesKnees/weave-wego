@@ -156,15 +156,9 @@ export default {
   z-index: 1;
 }
 
-.mainpage3_third_filters_theme_filter {
-}
-
-.mainpage3_third_filters_keyword_filter {
-}
-
 .mainpage3_third_sort {
   display: flex;
-  justify-content: flex-end;
+  justify-content: end;
   border: none;
 }
 
