@@ -1,43 +1,4 @@
 <template>
-<<<<<<< Updated upstream
-  <gnbBar />
-  <div class="login">
-    <div class="title-bar">로그인</div>
-
-    <div class="wrap">
-      <form method="post">
-        <input
-          v-model="email"
-          type="text"
-          id="username"
-          :class="{ error_border: error_border_check }"
-          placeholder="이메일"
-        />
-        <p id="error" v-if="email_check">
-          이메일주소를 정확히 입력해주세요. 예)abcd@naver.com
-        </p>
-
-        <input
-          v-model="password"
-          type="password"
-          id="password"
-          :class="{ error_border: error_border_check }"
-          placeholder="비밀번호"
-        />
-        <p id="error" v-if="password_check">
-          비밀번호를 정확히 입력해주세요.<br />
-          *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
-        </p>
-        <div class="user_login_btns">
-          <input
-            :class="{ error_submit: allcheck, submit: !allcheck }"
-            :disabled="allcheck"
-            type="submit"
-            id="login"
-            value="로그인"
-          />
-          <a class="join_btn" href="/join">회원가입</a>
-=======
     <gnbBar />
     <div class="login">
         <div class="title-bar">
@@ -67,7 +28,6 @@
                     <a class="social_btn naver" href="/naverlogin">네이버로 시작하기</a>
                 </div>
             </form>
->>>>>>> Stashed changes
         </div>
       </form>
     </div>
@@ -172,20 +132,6 @@ export default {
           email: this.email,
           password: this.password,
         },
-<<<<<<< Updated upstream
-      })
-        .then((res) => {
-          alert(res.data.message);
-          window.location.href = "/";
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    },
-  },
-};
-</script>
-=======
         checkPassword() {
             // 최소 8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
             const validatePassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/
@@ -296,7 +242,6 @@ export default {
 }
 
 </script> 
->>>>>>> Stashed changes
 
 <style scoped>
 .login {
