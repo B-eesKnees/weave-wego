@@ -1,15 +1,16 @@
 <style src="../assets/css/mypage.css"></style>
 <style src="../assets/css/reset.css"></style>
 <template>
-  <gnbBarLogin />
+  <gnbBar />
 
   <section class="mypage_profile_set">
+    <!-- ----------------------------------------------------------------------------------------------------------------------------------- -->
     <h1 class="mypage_title">마이페이지</h1>
     <div class="myprofile">
       <div class="profileimg">
         <img
           class="profile"
-          src="../assets/img/profileExample.png"
+          :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
           alt="profileExample"
         />
         <a href="/updateprofile"
@@ -19,9 +20,9 @@
             alt="setting_btn"
         /></a>
       </div>
-      <div class="nickname_email">
-        <div class="nickname">맹구좋아</div>
-        <div class="email">maengoo9@gmail.com</div>
+      <div class="nickname_email" :key="i" v-for="(user, i) in myPageNick">
+        <div class="nickname">{{ user.USER_NICKNAME }}</div>
+        <div class="email">{{ user.USER_EMAIL }}</div>
       </div>
     </div>
   </section>
@@ -85,7 +86,7 @@
 
 <script>
 import { ref } from "vue";
-import gnbBarLogin from "../components/gnbBarLogin.vue";
+import gnbBar from "../components/gnbBar.vue";
 import TabsWrapper from "../components/TabsWrapper.vue";
 import TabItem from "../components/TabItem.vue";
 import boardList from "../components/boardList.vue";
@@ -97,7 +98,7 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 export default {
   components: {
-    gnbBarLogin,
+    gnbBar,
     TabsWrapper,
     TabItem,
     boardList,
@@ -110,9 +111,10 @@ export default {
       image: "",
       provider: "",
       editMode: false,
-      myPageData: "",
+      myPageNick: {},
     };
   },
+  // --------------------------------------------------------------------------------------------------------------------------------------
   created() {
     this.getMyPageData();
   },
@@ -133,12 +135,14 @@ export default {
       this.editMode = false;
     },
     async getMyPageData() {
-      //마이페이지 내 정보
+      //마이페이지 내 정보----------------------------------------------------------------------------------------------------------------------
       try {
-        const response = await axios.post("/myPage", {
-          userEmail: "user@example.com", // userEmail 값을 적절히 설정
+        this.myPageNick = await axios.post("/mypage/myPage", {
+          userEmail: "user1@example.com", // userEmail 값을 적절히 설정
         });
-        this.myPageData = response.data; // 서버에서 받은 데이터를 myPageData에 할당
+
+        this.myPageNick = this.myPageNick.data; // 서버에서 받은 데이터를 myPageData에 할당
+        console.log(this.myPageNick);
       } catch (error) {
         console.error(error);
       }
