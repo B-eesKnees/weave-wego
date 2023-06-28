@@ -11,7 +11,6 @@ const jwt = require("jsonwebtoken"); // 연주 추가
 
 const session = require("express-session");
 const fs = require("fs");
-const path = require("path"); // path 모듈 추가
 
 dotenv.config();
 //git 테스트
@@ -29,15 +28,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(session({
-  resave: false,
-  saveUninitialized: false,
-  secret: process.env.COOKIE_SECRET,
-  cookie: {
-    httpOnly: true,
-    secure: false,
-  },
-}));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
+  })
+);
+
+const authRouter = require("./routes/auth"); //routes폴더
+const mainRouter = require("./routes/main");
+const boardMakeRouter = require("./routes/boardCreate");
+const myPageRouter = require("./routes/mypage"); // 마이페이지
+const postDataRouter = require("./routes/post");
+const changeProfileRouter = require('./routes/profile');
+
+
+app.use("/auth", authRouter); // /autu 로그인 관련 라우터
+app.use("/", mainRouter); // 메인페이지 관련 라우터
+app.use("/boardCreate", boardMakeRouter); //임시
+app.use("/mypage", myPageRouter); // 마이페이지 관련 라우터
+app.use("/postdata", postDataRouter);
+app.use('/profile', changeProfileRouter);
 
 
 
