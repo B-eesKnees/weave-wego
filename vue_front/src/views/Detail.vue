@@ -74,7 +74,25 @@ const location = ref([
       <div class="name-info-right">
         <div>좋아요</div>
         <div>조회수</div>
-        <div>더보기</div>
+        <div>
+          <button
+            type="button"
+            class="dropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
+          </button>
+          <ul class="dropdown-menu">
+            <li><button class="dropdown-item" type="button">수정</button></li>
+            <li>
+              <button class="dropdown-item" type="button">삭제</button>
+            </li>
+            <li>
+              <button class="dropdown-item" type="button">신고</button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <!-- 본문 구역 -->
@@ -225,11 +243,16 @@ const location = ref([
 }
 .carousel_item {
   width: 100%;
-  width: 600px;
   height: 450px;
 }
 .imageslider {
   display: flex;
   justify-content: center;
+}
+.dropdown {
+  border: 0;
+  background-color: transparent;
+}
+.dropdown-item {
 }
 </style>

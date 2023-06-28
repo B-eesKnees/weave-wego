@@ -93,6 +93,10 @@ app.post('/delMyCourse', async (request, response) => {
   }
 }); */
 
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
+
 
 // 프로필 정보 보내주기
 router.post('/myPage', async (request, res) => {

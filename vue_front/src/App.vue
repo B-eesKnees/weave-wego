@@ -9,8 +9,15 @@
   <router-view />
 </template>
 
+<script>
+  import css from '../src/assets/css/reset.css'
+
+export default{ 
+  components: { css }
+}
+</script>
 <style>
-button {
+ㅇ button {
   cursor: pointer;
 }
 input {
