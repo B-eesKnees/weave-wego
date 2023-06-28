@@ -1,7 +1,7 @@
 <style src="../assets/css/mypage.css"></style>
 <style src="../assets/css/reset.css"></style>
 <template>
-  <gnbBarLogin />
+  <gnbBar />
 
   <section class="mypage_profile_set">
     <!-- ----------------------------------------------------------------------------------------------------------------------------------- -->
@@ -86,7 +86,7 @@
 
 <script>
 import { ref } from "vue";
-import gnbBarLogin from "../components/gnbBarLogin.vue";
+import gnbBar from "../components/gnbBar.vue";
 import TabsWrapper from "../components/TabsWrapper.vue";
 import TabItem from "../components/TabItem.vue";
 import boardList from "../components/boardList.vue";
@@ -98,7 +98,7 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 export default {
   components: {
-    gnbBarLogin,
+    gnbBar,
     TabsWrapper,
     TabItem,
     boardList,
