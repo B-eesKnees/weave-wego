@@ -74,7 +74,7 @@ router.post('/likeCourse', async(req, res)=> {
         LL_ID,
         LL_NUM
     }
-    db.query(`insert into weavewego.likelist set ?`, like, (err, results)=> {
+    db.query(`insert into weavewego.likelist set ?`, like, (err)=> {
         if(err) {
             res.send({ // 에러 발생 시
                 'code':400,

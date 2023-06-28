@@ -46,7 +46,7 @@
     <div class="wrap2">
       <form method="post">
         <div class="user_social_btns">
-          <a class="social_btn kakao" href="/auth/kakao">카카오로 시작하기</a>
+          <a class="social_btn kakao" @click="kakaoLogin">카카오로 시작하기</a>
           <a class="social_btn naver" href="/auth/naver">네이버로 시작하기</a>
         </div>
       </form>
@@ -146,12 +146,8 @@ export default {
           if (res.data.code == 200) {
             //로그인 성공시
             alert(res.data.success);
-            localStorage.setItem("userID", res.data.email);
-            localStorage.setItem("userNick", res.data.nick);
-            localStorage.setItem("userImage", res.data.image);
-            localStorage.setItem("userProvider", res.data.provider);
-
-            window.location.href = "/";
+            console.log(res.data.test);
+            // window.location.href = '/';
           } else {
             if (res.data.code == 204) {
               //비밀번호 오류시
