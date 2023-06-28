@@ -4,6 +4,7 @@ const db = require("../db");
 const path = require("path");
 const fs = require("fs");
 
+//게시글 받아오기
 router.get("/board", (req, res) => {
   const { boardId } = req.query;
   const query = `
@@ -25,13 +26,14 @@ router.get("/board", (req, res) => {
   });
 });
 
+//댓글 받아오기
 router.get("/comments", (req, res) => {
   const { boardId } = req.query;
   const query = `SELECT c.COM_NICK,c.COM_IMAGE, c.COM_COMMENT, c.COM_CREATED_AT
                   FROM board b
                   JOIN comment c ON b.BRD_ID = c.COM_NUM
                   JOIN user u ON (b.BRD_WRITER = u.USER_EMAIL OR c.COM_WRITER = u.USER_EMAIL)
-                  where b.BRD_ID=?;`;
+                  where b.BRD_ID=2;`;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -43,6 +45,7 @@ router.get("/comments", (req, res) => {
   });
 });
 
+//장소 받아오기
 router.get("/locations", (req, res) => {
   const { boardId } = req.query;
   const query = `SELECT b.BRD_ID, b.BRD_TITLE, l.LOC_NAME, l.LOC_LAT, l.LOC_LNG
@@ -60,6 +63,7 @@ router.get("/locations", (req, res) => {
   });
 });
 
+//이미지 받아오기
 router.get("/images", (req, res) => {
   const imagePath = "../board_img/푸바오1.jpg";
   const imageFullPath = path.join(__dirname, imagePath);
@@ -75,6 +79,7 @@ router.get("/images", (req, res) => {
   });
 });
 
+//팝업 운영시간
 router.get("/locationpoptime", (req, res) => {
   const { boardId } = req.query;
   const query = `SELECT LOC_POP_TIME
@@ -92,6 +97,7 @@ router.get("/locationpoptime", (req, res) => {
   });
 });
 
+//팝업 이미지 받아오기
 router.get("/locationpopimages", (req, res) => {
   const { boardId } = req.query;
   const query = `SELECT LOC_POP_IMG
@@ -109,6 +115,7 @@ router.get("/locationpopimages", (req, res) => {
   });
 });
 
+//게시글 삭제
 router.get("/deleteboard", (req, res) => {
   const { boardId } = req.query;
   const query = `DELETE FROM board where BRD_ID=?`;
@@ -123,6 +130,7 @@ router.get("/deleteboard", (req, res) => {
   });
 });
 
+//댓글 삭제
 router.get("/deletecomments", (req, res) => {
   const { commentId } = req.query;
   const query = `DELETE FROM comment WHERE COM_ID=?;`;
@@ -136,25 +144,26 @@ router.get("/deletecomments", (req, res) => {
   });
 });
 
-//댓글 수정.........
-//댓글 받아옴 -> 댓글 수정 버튼 누름 -> 기존의 내용들이 다 적혀있음-> 수정할 부분 수정
-router.put("/updatecomments/:id", (req, res) => {
-  const { commentId } = req.params.id;
-  const updatedComment = req.body.comment;
+//댓글 수정
+
+router.put("/updatecomments/", (req, res) => {
+  const { commentId } = req.params;
+  const updatedComment = req.body.updatedComment;
 
   const query = `update comment 
-                set COM_COMMENT = ?
-                where COM_ID = ?`;
+                set COM_COMMENT = '수정된 댓글입니다.'
+                where COM_ID = 52`;
   db.query(query, (err, results) => {
     if (err) {
       console.error(err);
-      res.json.status(500).json({ error: "서버에러" });
+      res.status(500).json({ error: "서버에러" });
     } else {
       if (!updatedComment) {
-        res.json.status(400).json({ message: "댓글을 입력하세요." });
+        res.status(400).json({ message: "댓글을 입력하세요." });
       } else {
-        res.json({ updatecomments: results });
-        res.json.status(200).json({ message: "댓글이 수정되었습니다." });
+        res
+          .status(200)
+          .json({ updatecomments: results, message: "댓글이 수정되었습니다." });
       }
     }
   });
