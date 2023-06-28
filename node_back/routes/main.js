@@ -7,6 +7,7 @@ router.post('/getLikeCourse', async(req, res)=>{
     db.query(`SELECT board.BRD_ID, board.BRD_WRITER, board.BRD_HASHTAG, board.BRD_NICK, board.BRD_TITLE, board.BRD_CREATED_AT, board.BRD_VIEWCOUNT, (SELECT IMG_PATH FROM weavewego.image 
                 WHERE weavewego.image.IMG_NUM = weavewego.board.BRD_ID LIMIT 1) AS IMG_PATH, COUNT(likelist.LL_ID) as likecount
                 FROM weavewego.board left JOIN weavewego.likelist ON board.BRD_ID = likelist.LL_NUM 
+                where board.BRD_OPEN = 0
                 GROUP BY board.BRD_ID, board.BRD_WRITER, board.BRD_HASHTAG, board.BRD_NICK, board.BRD_TITLE
                 order by likecount desc;` 
             , (err, results)=>{
@@ -17,9 +18,9 @@ router.post('/getLikeCourse', async(req, res)=>{
                 'error': err
             })
         } else {
-            res.send({
+            res.send(
                 results
-            })
+            )
         }
     })
 });
@@ -38,9 +39,9 @@ router.post('/getViewsCourse', async(req, res)=>{
                 'error': err
             })
         } else {
-            res.send({
+            res.send(
                 results
-            })
+            )
         }
     })
 });
@@ -59,9 +60,9 @@ router.post('/getNewestCourse', async(req, res)=>{
                 'error': err
             })
         } else {
-            res.send({
+            res.send(
                 results
-            })
+            )
         }
     })
 });
