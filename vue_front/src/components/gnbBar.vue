@@ -14,8 +14,12 @@
       </div>
       <div v-else-if="provider === 'kakao'" class="gnb_bar_user_login">
         <a href="/mypage"
-          ><img class="kakao_img" :src="image" alt="profileExample"
-        /></a>
+          ><div
+            class="kakao_img"
+            :style="{ 'background-image': 'url(' + image + ')' }"
+          ></div>
+          <!-- <img class="kakao_img" :src="image" alt="profileExample"/> -->
+        </a>
       </div>
       <div v-else-if="provider === 'local'" class="gnb_bar_user_login">
         <a href="/mypage"

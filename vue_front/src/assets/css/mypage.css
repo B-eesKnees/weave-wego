@@ -47,6 +47,16 @@ a {
   border: #000 solid 0.5px;
 }
 
+.kakao_profile_img, .naver_profile_img{
+  position: relative;
+  text-align: left;
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+  border: #000 solid 0.5px;
+  background-size: cover;
+}
+
 .setting_icon {
   position: absolute;
   text-align: left;

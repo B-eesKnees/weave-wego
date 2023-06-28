@@ -8,11 +8,25 @@
     <h1 class="mypage_title">마이페이지</h1>
     <div class="myprofile">
       <div class="profileimg">
-        <img
-          class="profile"
-          :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
-          alt="profileExample"
-        />
+        <div v-if="provider === 'local'">
+          <img
+            class="profile"
+            :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
+            alt="profileExample"
+          />
+        </div>
+        <div v-else-if="provider === 'kakao'">
+          <div
+            class="kakao_profile_img"
+            :style="{ 'background-image': 'url(' + image + ')' }"
+          ></div>
+        </div>
+        <div v-else-if="provider === 'naver'">
+          <div
+            class="naver_profile_img"
+            :style="{ 'background-image': 'url(' + image + ')' }"
+          ></div>
+        </div>
         <a href="/updateprofile"
           ><img
             class="setting_icon"
@@ -20,9 +34,9 @@
             alt="setting_btn"
         /></a>
       </div>
-      <div class="nickname_email" :key="i" v-for="(user, i) in myPageNick">
-        <div class="nickname">{{ user.USER_NICKNAME }}</div>
-        <div class="email">{{ user.USER_EMAIL }}</div>
+      <div class="nickname_email">
+        <div class="nickname">{{ nick }}</div>
+        <div class="email">{{ email }}</div>
       </div>
     </div>
   </section>
@@ -111,7 +125,6 @@ export default {
       image: "",
       provider: "",
       editMode: false,
-      myPageNick: {},
     };
   },
   // --------------------------------------------------------------------------------------------------------------------------------------
@@ -140,9 +153,6 @@ export default {
         this.myPageNick = await axios.post("/mypage/myPage", {
           userEmail: "user1@example.com", // userEmail 값을 적절히 설정
         });
-
-        this.myPageNick = this.myPageNick.data; // 서버에서 받은 데이터를 myPageData에 할당
-        console.log(this.myPageNick);
       } catch (error) {
         console.error(error);
       }
