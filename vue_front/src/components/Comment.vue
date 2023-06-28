@@ -26,6 +26,7 @@ const props = defineProps({
 .comment {
   display: flex;
   min-height: 100px;
+  width: 90%;
 }
 .profile_icon {
   width: 4rem;
@@ -44,6 +45,10 @@ const props = defineProps({
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.75rem;
+}
+
+.comment-nickname > div:first-of-type {
+  font-weight: 600;
 }
 
 .comment-date {
