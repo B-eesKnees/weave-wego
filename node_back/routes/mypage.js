@@ -143,7 +143,7 @@ router.post('/myComment', async (request, res) => {
 // 내 댓글 삭제
 
 
-// db 설정
+// db 설정rr
 const mysql = require('mysql');
 
 const dbPool = mysql.createPool({
