@@ -47,7 +47,7 @@
       <form method="post">
         <div class="user_social_btns">
           <a class="social_btn kakao" @click="kakaoLogin">카카오로 시작하기</a>
-          <a class="social_btn naver" href="/auth/naver">네이버로 시작하기</a>
+          <a class="social_btn naver" href="/naverlogin">네이버로 시작하기</a>
         </div>
       </form>
     </div>
