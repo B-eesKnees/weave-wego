@@ -6,16 +6,52 @@
           <a href="/"><img src="../assets/img/logo.png" alt="logo" /></a>
         </h2>
       </div>
-      <div class="gnb_bar_user">
+      <div v-if="email===null" class="gnb_bar_user">
         <p><a href="/login">로그인</a></p>
         <p><a href="/join">회원가입</a></p>
+      </div>
+      <div v-else-if="provider==='kakao'" class="gnb_bar_user">
+        <p>
+          <a href="/mypage"
+            ><img class="kakao_img" :src="image" alt="profileExample"
+          /></a>
+        </p>
+      </div>
+      <div v-else-if="provider==='local'" class="gnb_bar_user">
+        <p>
+          <a href="/mypage"
+            ><img class="local_img" :src="`http://localhost:3000/downloadProfile/${email}/${image}`" alt="profileExample"
+          /></a>
+        </p>
+      </div>
+      <div v-else-if="provider==='naver'" class="gnb_bar_user">
+        <p>
+          <a href="/mypage"
+            ><img class="naver_img" :src="image" alt="profileExample"
+          /></a>
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      email: '',
+      nick : '',
+      image : '',
+      provider : ''
+    }
+  },
+  mounted() {
+    this.email = localStorage.getItem('userID'),
+    this.nick = localStorage.getItem('userNick'),
+    this.image = localStorage.getItem('userImage'),
+    this.provider = localStorage.getItem('userProvider')
+  }
+};
 </script>
 
 <style scoped>
@@ -60,5 +96,19 @@ a {
 
 .gnb_bar_user a:hover {
   background-color: rgba(56, 130, 101, 0.2);
+}
+.kakao_img {
+  width: 7%;
+  border-radius: 100%;
+}
+
+.local_img {
+  width: 7%;
+  border-radius: 100%;
+}
+
+.naver_img {
+  width: 7%;
+  border-radius: 100%;
 }
 </style>
