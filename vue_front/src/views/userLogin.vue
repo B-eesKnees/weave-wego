@@ -146,8 +146,12 @@ export default {
           if (res.data.code == 200) {
             //로그인 성공시
             alert(res.data.success);
-            console.log(res.data.test);
-            // window.location.href = '/';
+            localStorage.setItem("userID", res.data.email);
+            localStorage.setItem("userNick", res.data.nick);
+            localStorage.setItem("userImage", res.data.image);
+            localStorage.setItem("userProvider", res.data.provider);
+
+            window.location.href = "/";
           } else {
             if (res.data.code == 204) {
               //비밀번호 오류시
@@ -163,6 +167,59 @@ export default {
         .catch((err) => {
           alert(err);
         });
+    },
+    kakaoLogin() {
+      window.Kakao.Auth.login({
+        scope:
+          "profile_nickname, profile_image, account_email, gender, age_range",
+        success: this.getProfile,
+      });
+    },
+    getProfile(autoObj) {
+      console.log(autoObj);
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: (res) => {
+          const kakao_account = res.kakao_account;
+          console.log(kakao_account);
+          this.login(kakao_account);
+          alert("로그인 성공");
+        },
+      });
+    },
+    async login(kakao_account) {
+      const email = kakao_account.email;
+
+      await axios({
+        url: "http://localhost:3000/auth/kakaologin",
+        method: "POST",
+        data: {
+          email: kakao_account.email,
+          nick: kakao_account.profile.nickname,
+          image: kakao_account.profile.profile_image_url,
+          sex: kakao_account.gender,
+          agegroup: kakao_account.age_range,
+          provider: "kakao",
+        },
+      }).then(async (res) => {
+        this.pullData(email);
+      });
+    },
+    pullData(email) {
+      axios({
+        url: "http://localhost:3000/auth/kakaoData",
+        method: "POST",
+        data: {
+          email: email,
+        },
+      }).then(async (res) => {
+        localStorage.setItem("userID", res.data.email);
+        localStorage.setItem("userNick", res.data.nick);
+        localStorage.setItem("userImage", res.data.image);
+        localStorage.setItem("userProvider", res.data.provider);
+
+        window.location.href = "/";
+      });
     },
   },
 };
