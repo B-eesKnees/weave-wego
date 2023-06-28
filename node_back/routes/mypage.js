@@ -185,8 +185,8 @@ const mysql = require('mysql');
 
 const dbPool = mysql.createPool({
   host: 'localhost',
-  user: 'sw',
-  password: '1234',
+  user: 'root',
+  password: '12345678',
   database: 'weavewego',
 });
 
