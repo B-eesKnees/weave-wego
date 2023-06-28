@@ -1,21 +1,23 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+import MainPage from '../views/MainPage.vue'
+import userLogin from '../views/userLogin.vue'
+import userJoin from '../views/userJoin.vue'
 
 const routes = [
   {
     path: '/',
     name: 'MainPage',
-    component: () => import(/* webpackChunkName: "mainpage" */ '../views/MainPage.vue')
-  },
-  {
-    path: '/join',
-    name: 'userJoin',
-    component: () => import(/* webpackChunkName: "userjoin" */ '../views/userJoin.vue')
+    component: MainPage
   },
   {
     path: '/login',
     name: 'userLogin',
-    component: () => import(/* webpackChunkName: "userjoin" */ '../views/userLogin.vue')
+    component: userLogin
+  },
+  {
+    path: '/join',
+    name: 'userJoin',
+    component: userJoin
   },
   {
     path: '/detail',
@@ -32,13 +34,11 @@ const routes = [
     name: 'myPage',
     component: () => import(/* webpackChunkName: "mypage" */ '../views/myPage.vue')
   }
-
-
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes,
+  routes
 });
 
 export default router;
