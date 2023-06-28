@@ -45,24 +45,18 @@ const mainRouter = require("./routes/main");
 const boardMakeRouter = require("./routes/boardCreate");
 const myPageRouter = require("./routes/mypage"); // 마이페이지
 const postDataRouter = require("./routes/post");
+const changeProfileRouter = require('./routes/profile');
+
 
 app.use("/auth", authRouter); // /autu 로그인 관련 라우터
 app.use("/", mainRouter); // 메인페이지 관련 라우터
 app.use("/boardCreate", boardMakeRouter); //임시
 app.use("/mypage", myPageRouter); // 마이페이지 관련 라우터
 app.use("/postdata", postDataRouter);
-
-const authRouter = require('./routes/auth'); //routes폴더
-const mainRouter = require('./routes/main');
-const boardMakeRouter = require('./routes/boardCreate');
-const myPageRouter = require('./routes/mypage');  // 마이페이지
-const changeProfileRouter = require('./routes/profile');
-
-app.use('/auth', authRouter); // /autu 로그인 관련 라우터 
-app.use('/', mainRouter); // 메인페이지 관련 라우터
-app.use('/boardCreate', boardMakeRouter); //임시
-app.use('/mypage', myPageRouter); // 마이페이지 관련 라우터
 app.use('/profile', changeProfileRouter);
+
+
+
 
 app.get('/downloadProfile/:userEmail/:fileName', (req, res) => { //프로필 이미지 다운 라우터
   const { //url에 있는 userEmail, fileName 받아오기
