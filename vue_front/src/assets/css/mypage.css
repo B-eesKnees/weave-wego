@@ -43,6 +43,8 @@ a {
   position: relative;
   text-align: left;
   width: 70px;
+  border-radius: 100%;
+  border: #000 solid 0.5px;
 }
 
 .setting_icon {
