@@ -4,8 +4,8 @@ const bcrypt = require('bcrypt'); //암호화 관련 모듈
 
 const router = express.Router();
 
-// 쿼리 변수 선언zz--------------------------------------------------
-const userEmail = 'user1@example.com'; // 로그인한 유저의 이메일(후에 변경)
+// 쿼리 변수 선언--------------------------------------------------
+/* const userEmail = 'user1@example.com'; // 로그인한 유저의 이메일(후에 변경) */
 
 // 쿼리 모음-----------------------------------------------------------------------------------------------------------------------------
 const queries = {
@@ -70,8 +70,8 @@ const req = async (query, params) => {
   });
 };
 
-// 배열로 받기
-/* const express = require('express');
+/* // 배열로 받기
+const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -93,13 +93,12 @@ app.post('/delMyCourse', async (request, response) => {
   }
 }); */
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
-});
-
 
 // 프로필 정보 보내주기
 router.post('/myPage', async (request, res) => {
+
+  const userEmail = request.body.userEmail;
+
   try {
     res.send(await req(queries.myPageQuery, userEmail));
   } catch (err) {
@@ -111,6 +110,9 @@ router.post('/myPage', async (request, res) => {
 
 // 내 코스에 내가 쓴 글 출력
 router.post('/myCourse', async (request, res) => {
+
+  const userEmail = request.body.userEmail;
+
   try {
     res.send(await req(queries.myCourseQuery, userEmail));
   } catch (err) {
@@ -134,6 +136,9 @@ router.get('/delMyCourse', async (request, res) => {
 
 // 최근에 본 코스
 router.post('/recentCourse', async (request, res) => {
+
+  const userEmail = request.body.userEmail;
+
   try {
     res.send(await req(queries.recentCourseQuery, userEmail));
   } catch (err) {
@@ -180,13 +185,13 @@ router.get('/delmyComment', async (request, res) => {
 });
 
 
-// db 설정rr
+// db 설정
 const mysql = require('mysql');
 
 const dbPool = mysql.createPool({
   host: 'localhost',
-  user: 'sw',
-  password: '1234',
+  user: 'root',
+  password: '12345678',
   database: 'weavewego',
 });
 
