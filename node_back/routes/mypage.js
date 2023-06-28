@@ -4,8 +4,7 @@ const bcrypt = require('bcrypt'); //암호화 관련 모듈
 
 const router = express.Router();
 
-// 쿼리 변수 선언--------------------------------------------------
-/* const userEmail = 'user1@example.com'; // 로그인한 유저의 이메일(후에 변경) */
+
 
 // 쿼리 모음-----------------------------------------------------------------------------------------------------------------------------
 const queries = {
@@ -16,7 +15,7 @@ const queries = {
   where USER_EMAIL = ?;`,
 
   myCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT, b.BRD_OPEN,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT, b.BRD_OPEN,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -27,7 +26,7 @@ const queries = {
   delMyCourseQuery: `delete from board b where b.BRD_ID = ?`,
 
   recentCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -37,7 +36,7 @@ const queries = {
   order by rv.RC_TIME desc;`,
 
   likeListQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -70,40 +69,13 @@ const req = async (query, params) => {
   });
 };
 
-/* // 배열로 받기
-const express = require('express');
-const bodyParser = require('body-parser');
-
-const app = express();
-app.use(bodyParser.json());
-
-app.post('/delMyCourse', async (request, response) => {
-  try {
-    const whaaattt = request.body; // 요청 본문의 JSON 데이터를 배열로 처리
-    // `whaaattt` 변수에는 수신한 배열 값이 할당됨
-
-    // 배열 값에 대한 추가적인 처리 수행
-    // ...
-
-    response.send(await req(queries.delMyCourseQuery, whaaattt)); // 배열 형태로 매개변수 전달
-  } catch (error) {
-    response.status(500).send({
-      error: error.message
-    });
-  }
-}); */
-
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
-});
 
 
 // 프로필 정보 보내주기
 router.post('/myPage', async (request, res) => {
-
-  const userEmail = request.body.userEmail;
-
   try {
+    const userEmail = request.body.userEmail;
+
     res.send(await req(queries.myPageQuery, userEmail));
   } catch (err) {
     res.status(500).send({
@@ -114,10 +86,9 @@ router.post('/myPage', async (request, res) => {
 
 // 내 코스에 내가 쓴 글 출력
 router.post('/myCourse', async (request, res) => {
-
-  const userEmail = request.body.userEmail;
-
   try {
+    const userEmail = request.body.userEmail;
+
     res.send(await req(queries.myCourseQuery, userEmail));
   } catch (err) {
     res.status(500).send({
@@ -129,7 +100,9 @@ router.post('/myCourse', async (request, res) => {
 // 내 코스 선택 삭제
 router.get('/delMyCourse', async (request, res) => {
   try {
-    res.send(await req(queries.delMyCourseQuery, delBoard));
+    const delBoard = [];  // 게시판 아이디 어떻게 받아아ㅏㅏ와아아악
+
+    res.send(await req(queries.delMyCourseQuery, [delBoard]));
   } catch (err) {
     res.status(500).send({
       error: err
@@ -139,11 +112,10 @@ router.get('/delMyCourse', async (request, res) => {
 
 
 // 최근에 본 코스
-router.post('/recentCourse', async (request, res) => {
-
-  const userEmail = request.body.userEmail;
-
+router.post('/recentCourse', async (request, res) => {  
   try {
+    const userEmail = request.body.userEmail;
+
     res.send(await req(queries.recentCourseQuery, userEmail));
   } catch (err) {
     res.status(500).send({
@@ -156,6 +128,8 @@ router.post('/recentCourse', async (request, res) => {
 // 좋아요 리스트 글 출력
 router.post('/likeList', async (request, res) => {
   try {
+    const userEmail = request.body.userEmail;
+
     res.send(await req(queries.likeListQuery, userEmail));
   } catch (err) {
     res.status(500).send({
@@ -168,6 +142,8 @@ router.post('/likeList', async (request, res) => {
 // 내가 쓴 댓글 출력
 router.post('/myComment', async (request, res) => {
   try {
+    const userEmail = request.body.userEmail;
+
     res.send(await req(queries.myCommentQuery, userEmail));
   } catch (err) {
     res.status(500).send({
@@ -180,7 +156,9 @@ router.post('/myComment', async (request, res) => {
 // 내 댓글 삭제
 router.get('/delmyComment', async (request, res) => {
   try {
-    res.send(await req(queries.delmyCommentQuery, whaaat));
+    const delCom = [15, 16];
+
+    res.send(await req(queries.delmyCommentQuery, [delCom]));
   } catch (err) {
     res.status(500).send({
       error: err
