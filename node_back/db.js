@@ -3,8 +3,8 @@ const db = {
   database: "weavewego", //
   connectionLimit: 10,
   host: "127.0.0.1",
-  user: "white",
-  password: "1234",
+  user: "root",
+  password: "12345678",
 };
 const dbPool = require("mysql").createPool(db);
 
