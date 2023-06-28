@@ -60,7 +60,8 @@ a {
   color: black;
 }
 .gnb {
-  z-index: 100;
+  z-index: 9999;
+  position: relative;
 }
 .gnb_bar {
   width: 100%;
@@ -68,19 +69,11 @@ a {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-top: 35px;
-  padding-bottom: 3vh;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   text-align: center;
   position: fixed;
   top: 0;
-<<<<<<< HEAD
   background-color: #fafafa;
-  z-index: 100;
-=======
-  background-color: white;
-  z-index: 1000;
->>>>>>> origin/yeongmin
 }
 .gnb_bar_logo {
   position: absolute;
@@ -96,9 +89,6 @@ a {
 .gnb_bar_user {
   display: flex;
   margin-right: 10%;
-  align-items: center;
-  margin-top: 0.3%;
-
 }
 .gnb_bar_user a {
   padding: 2vh;
@@ -107,7 +97,6 @@ a {
 .gnb_bar_user a:hover {
   background-color: rgba(56, 130, 101, 0.2);
 }
-
 .kakao_img {
   width: 7%;
   border-radius: 100%;

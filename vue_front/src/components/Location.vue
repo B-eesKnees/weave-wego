@@ -54,6 +54,4 @@ const props = defineProps({
   margin-right: 0.25rem;
   font-size: 0.9rem;
 }
-.location-comment {
-}
 </style>

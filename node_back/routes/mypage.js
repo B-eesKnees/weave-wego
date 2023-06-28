@@ -24,7 +24,7 @@ const queries = {
   group by b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
   order by BRD_CREATED_AT desc;`,
 
-  delMyCourseQuery: ``,
+  delMyCourseQuery: `delete from board b where b.BRD_ID = ?`,
 
   recentCourseQuery:
     `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID), b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
@@ -52,7 +52,7 @@ const queries = {
   where com.COM_WRITER = ?
   order by com.COM_CREATED_AT desc;`,
 
-  delmyCommentQuery: ``
+  delmyCommentQuery: `delete from comment com where com.COM_ID in (?)`
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 
@@ -69,6 +69,34 @@ const req = async (query, params) => {
     });
   });
 };
+
+// 배열로 받기
+/* const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+app.use(bodyParser.json());
+
+app.post('/delMyCourse', async (request, response) => {
+  try {
+    const whaaattt = request.body; // 요청 본문의 JSON 데이터를 배열로 처리
+    // `whaaattt` 변수에는 수신한 배열 값이 할당됨
+
+    // 배열 값에 대한 추가적인 처리 수행
+    // ...
+
+    response.send(await req(queries.delMyCourseQuery, whaaattt)); // 배열 형태로 매개변수 전달
+  } catch (error) {
+    response.status(500).send({
+      error: error.message
+    });
+  }
+}); */
+
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
+
 
 // 프로필 정보 보내주기
 router.post('/myPage', async (request, res) => {
@@ -93,9 +121,9 @@ router.post('/myCourse', async (request, res) => {
 });
 
 // 내 코스 선택 삭제
-router.post('/delMyCourse', async (request, res) => {
+router.get('/delMyCourse', async (request, res) => {
   try {
-    res.send(await req(queries.delMyCourseQuery, userEmail));
+    res.send(await req(queries.delMyCourseQuery, delBoard));
   } catch (err) {
     res.status(500).send({
       error: err
@@ -141,6 +169,15 @@ router.post('/myComment', async (request, res) => {
 
 
 // 내 댓글 삭제
+router.get('/delmyComment', async (request, res) => {
+  try {
+    res.send(await req(queries.delmyCommentQuery, whaaat));
+  } catch (err) {
+    res.status(500).send({
+      error: err
+    });
+  }
+});
 
 
 // db 설정rr
@@ -148,8 +185,8 @@ const mysql = require('mysql');
 
 const dbPool = mysql.createPool({
   host: 'localhost',
-  user: 'root',
-  password: '12345678',
+  user: 'sw',
+  password: '1234',
   database: 'weavewego',
 });
 

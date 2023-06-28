@@ -53,7 +53,7 @@ const location = ref([
     id: 3,
     name: "서울특별시청",
     location: "서울 그 어딘가 어쩌고저쩌고",
-    number: 3,
+    number: 4,
     comment: "여기 너무 좋아요",
     Lat: 37.566815,
     Lng: 126.978658,
@@ -102,7 +102,14 @@ const location = ref([
         </carousel>
       </div>
       <!-- 본문 본문 본문 -->
-      <div>본문 본문 본문</div>
+      <div class="main">
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+      </div>
       <div>
         <!-- 댓글 구역 시작 -->
         <div>
@@ -112,11 +119,19 @@ const location = ref([
               <input
                 type="text"
                 placeholder="좋은 댓글을 씁시다"
-                style="width: 800px; height: 70px"
+                font-size="2rem"
+                style="width: 1000px; height: 100px"
               />
             </div>
             <div>
-              <button type="submit" id="comment-submit">댓글 달기</button>
+              <button
+                class="comment-submit"
+                type="submit"
+                id="comment-submit"
+                width="100px"
+              >
+                댓글 달기
+              </button>
             </div>
           </div>
           <!--댓글 컴포넌트 -->
@@ -146,7 +161,7 @@ const location = ref([
 .title {
   display: flex;
   align-items: baseline;
-  padding: 0.75rem 0 1rem 0;
+  padding: 0.2rem 0 1rem 0;
   margin: 0.5rem 0;
 }
 .title > div:first-of-type {
@@ -173,6 +188,12 @@ const location = ref([
   border-bottom: 1px solid black;
   margin-bottom: 2rem;
 }
+.main {
+  text-align: center;
+  margin-top: 3.5rem;
+  margin-bottom: 4rem;
+  padding: 0 10%;
+}
 .comment-write {
   display: flex;
   padding: 1rem 1rem;
@@ -182,19 +203,28 @@ const location = ref([
   text-align: center;
   padding-right: 1rem;
 }
+.comment-submit {
+  width: 70px;
+  height: 30px;
+  margin-top: 1.5rem;
+  margin-left: 1rem;
+}
 
 .map {
   width: 70%;
-  height: 400px;
+  height: 450px;
   border: 1px solid black;
-  margin-bottom: 10rem;
+  margin-bottom: 8rem;
 }
 .map-wrapper {
   display: flex;
   justify-content: center;
 }
-.carousel,
+.carousel {
+  width: 70%;
+}
 .carousel_item {
+  width: 100%;
   width: 600px;
   height: 450px;
 }

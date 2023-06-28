@@ -1,14 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import Detail from "../views/Detail.vue";
+
 
 const routes = [
-  {
-    path: "/mainpage",
-    name: "MainPage",
-    component: () =>
-      import(/* webpackChunkName: "mainpage" */ "../views/MainPage.vue"),
-  },
   {
     path: '/',
     name: 'MainPage',
@@ -34,6 +27,12 @@ const routes = [
     name: 'naverlogin',
     component: () => import(/* webpackChunkName: "naverlogin" */ '../views/NaverLogin.vue')
   },
+  {
+    path: '/mypage',
+    name: 'myPage',
+    component: () => import(/* webpackChunkName: "mypage" */ '../views/myPage.vue')
+  }
+
 
 ]
 
