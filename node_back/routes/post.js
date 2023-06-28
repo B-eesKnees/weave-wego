@@ -8,13 +8,10 @@ const fs = require("fs");
 router.get("/board", (req, res) => {
   const { boardId } = req.query;
   const query = `
-  SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,
-       b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,
-       b.BRD_HASHTAG, b.BRD_CREATED_AT, b.BRD_NICK
-        FROM board b
-        LEFT JOIN likelist ll ON b.BRD_ID = ll.LL_NUM
-        WHERE b.BRD_ID =?;
-        `;
+  SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, b.BRD_CREATED_AT., b.BRD_NICK
+  FROM board b
+  LEFT JOIN likelist ll ON b.BRD_ID = ll.LL_NUM
+  WHERE b.BRD_ID =2;`;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -33,7 +30,7 @@ router.get("/comments", (req, res) => {
                   FROM board b
                   JOIN comment c ON b.BRD_ID = c.COM_NUM
                   JOIN user u ON (b.BRD_WRITER = u.USER_EMAIL OR c.COM_WRITER = u.USER_EMAIL)
-                  where b.BRD_ID=2;`;
+                  where b.BRD_ID=3;`;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -151,8 +148,8 @@ router.put("/updatecomments/", (req, res) => {
   const updatedComment = req.body.updatedComment;
 
   const query = `update comment 
-                set COM_COMMENT = '수정된 댓글입니다.'
-                where COM_ID = 52`;
+                set COM_COMMENT = "수정수정.", COM_CREATED_AT = NOW() 
+                where COM_ID = 68`;
   db.query(query, (err, results) => {
     if (err) {
       console.error(err);

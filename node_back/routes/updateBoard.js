@@ -4,33 +4,10 @@ const db = require("../db");
 const path = require("path");
 const fs = require("fs");
 
-// router.put("/updatecomments/", (req, res) => {
-//   const { commentId } = req.params;
-//   const updatedComment = req.body.updatedComment;
-
-//   const query = `update comment
-//                 set COM_COMMENT = '수정된 댓글입니다.'
-//                 where COM_ID = 52`;
-//   db.query(query, (err, results) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).json({ error: "서버에러" });
-//     } else {
-//       if (!updatedComment) {
-//         res.status(400).json({ message: "댓글을 입력하세요." });
-//       } else {
-//         res
-//           .status(200)
-//           .json({ updatecomments: results, message: "댓글이 수정되었습니다." });
-//       }
-//     }
-//   });
-// });
-
+//게시글 내용 수정--------------------------------------------------------
 router.put("/updateboard", (req, res) => {
   const { boardId } = req.params;
   const {
-    open,
     title,
     hashtag,
     loc1rev,
@@ -38,20 +15,13 @@ router.put("/updateboard", (req, res) => {
     loc3rev,
     loc4rev,
     loc5rev,
-    boardrev,
-    boardid,
+    locrev,
+    createdat,
   } = req.body;
 
-  let query = `UPDATE BOARD SET `;
-  const values = [];
+  const query = `UPDATE BOARD SET BRD_TITLE = 'ㅎㅇ', BRD_HASHTAG = '#ㅎㅇ', BRD_LOC_REV1 = 'ㅎㅇ', BRD_LOC_REV2 = 'ㅎㅇ', BRD_LOC_REV3 = 'ㅎㅇ', BRD_LOC_REV4 = 'ㅎㅇ', BRD_LOC_REV5 = 'ㅎㅇ', BRD_REV = 'ㅎㅇ',BRD_CREATED_AT=NOW() WHERE BRD_ID = 2;`;
 
-  if (open === "O" || open === "X") {
-    query += `BRD_OPEN =? ,`;
-    values.push(open);
-  }
-
-  query += `BRD_TITLE = ?, BRD_HASHTAG = ?, BRD_LOC_REV1 = ?, BRD_LOC_REV2 = ?, BRD_LOC_REV3 = ?, BRD_LOC_REV4 = ?, BRD_LOC_REV5 = ?, BRD_REV = ? WHERE BRD_ID = ?`;
-  values.push(
+  const values = [
     title,
     hashtag,
     loc1rev,
@@ -59,45 +29,59 @@ router.put("/updateboard", (req, res) => {
     loc3rev,
     loc4rev,
     loc5rev,
-    boardrev,
-    boardid
-  );
-
+    locrev,
+    createdat,
+    boardId,
+  ];
   db.query(query, values, (err, results) => {
     if (err) {
       console.error(err);
-      res.json.status(500).json({ error: "서버에러" });
+      res.status(500).json({ error: "서버에러" });
     } else {
-      res.json({ updateboard: results, message: "수정 완료되었습니다." });
+      //res.redirect("/postdata/board?boardid=2");
+      res.status(200).json({
+        updateboard: results,
+        message: "게시글 수정이 완료되었습니다.",
+      });
     }
   });
 });
 
-router.put("/updateopen", (req, res) => {
-  const { boardId } = req.params;
-  const { updatedIsOpen } = req.body.updatedIsOpen; //변경할 공개 여부 값 ('o' 또는
+//이미지 추가(진행중)--------------------------------------------------------
 
-  const query = `SELECT LOC_POP_IMG
-                FROM locationpop
-                ORDER BY rand()
-                LIMIT ?;`;
+const storage = multer.diskStorage({
+  destination: (req, res, cb) => {
+    cb(null, "uploads/"); //이미지를 저장할 폴더 설정
+  },
+});
+router.post("/addimage", upload.array("images", 10), (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    res.status(400).json({ error: "이미지 업로드 실패했습니다." });
+    return;
+  }
+  const uploadPath = "./uploads/";
+  req.files.forEach((file) => {
+    const filename = file.originalname;
+    const filePath = uploadPath + filename;
+
+    file;
+  });
+  res.json({ imageUrls, message: "이미지 업로드가 완료되었습니다." });
 
   db.query(query, (err, results) => {
     if (err) {
       console.error(err);
       res.json.status(500).json({ error: "서버에러" });
     } else {
-      res.json({ open: results });
+      res.json({ addimage: results });
     }
   });
 });
 
-router.post("/updateimages", (req, res) => {
+//----------------------이미지삭제
+router.delete("/deleteimage", (req, res) => {
   const { boardId } = req.query;
-  const query = `SELECT LOC_POP_IMG
-                FROM locationpop
-                ORDER BY rand()
-                LIMIT ?;`;
+  const query = `DELETE FROM image WHERE IMG_ID=<img_id>;`;
 
   db.query(query, (err, results) => {
     if (err) {
