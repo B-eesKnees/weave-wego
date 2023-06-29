@@ -170,7 +170,7 @@ app.post('/imagesave', upload.array('filelist'), function(req, res) {
         } else {
           newname = result.BRD_ID;
         }
-      }).then(()=>{
+      }).then((newname)=>{
         for(i=0; i<req.files.length;i++) {
           fs.renameSync(req.files[i].path, 'uploads/'+(newname+1)+'-'+(i+1)+'.png');
           db.query(`insert into weavewego.image set IMG_NUM = ?, IMG_PATH = ?`, [newname+1, i+1], (err)=>{
@@ -193,12 +193,12 @@ app.post('/imagesave', upload.array('filelist'), function(req, res) {
   });
 
 
-app.get('/downloadProfile/:userEmail/:fileName', (req, res) => { //프로필 이미지 다운 라우터
+app.get('/downloadCourse/:boardID/:fileName', (req, res) => { //프로필 이미지 다운 라우터
   const { //url에 있는 userEmail, fileName 받아오기
-    userEmail,
+    boardID,
     fileName,
   } = req.params;
-  const filepath = `${__dirname}/userProfile/${userEmail}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/userProfile/test@test.com/image.png
+  const filepath = `${__dirname}/CourseImage/${boardID}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/userProfile/test@test.com/image.png
   res.header('Content-Type', `image/${fileName.substring(fileName.lastIndexOf("."))}`); //이미지 보내는 코드인가?
   if (!fs.existsSync(filepath)) res.send(404, { //경로에 이미지가 없으면 에러 처리
     error: 'Can not found file.'
