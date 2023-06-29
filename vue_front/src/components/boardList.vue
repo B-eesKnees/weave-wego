@@ -26,7 +26,13 @@ export default {
         </div>
         <div v-if="!hideBrdOpen" class="brd_open">{{ boardList.BRD_OPEN }}</div>
       </div>
-      <div class="mypage_img"></div>
+      <div class="mypage_img">
+        <!-- <img
+          v-if="i == 0"
+          :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`"
+          alt=""
+        /> -->
+      </div>
     </div>
   </a>
 </template>

@@ -61,8 +61,7 @@
             :boardList="item"
             :key="item.BRD_ID"
             :editMode="editMode"
-          >
-          </boardList>
+          ></boardList>
         </div>
       </TabItem>
       <TabItem title="최근에 본 코스">
@@ -95,7 +94,11 @@
           <button v-if="comment_editMode" class="delete" @click="deleteComment">
             &nbsp;&nbsp;삭제&nbsp;&nbsp;
           </button>
-          <button v-if="editMode" class="cancel" @click="cancelEdit">
+          <button
+            v-if="comment_editMode"
+            class="cancel"
+            @click="cancelCommentEdit"
+          >
             &nbsp;&nbsp;취소&nbsp;&nbsp;
           </button>
         </div>
@@ -105,7 +108,8 @@
           <commentList
             v-for="item in commentList"
             :commentList="item"
-            :key="item.id"
+            :key="item.COM_ID"
+            :comment_editMode="comment_editMode"
           />
         </div>
       </TabItem>
@@ -141,11 +145,13 @@ export default {
       provider: "",
       editMode: false,
       comment_editMode: false,
+      boardList: [],
     };
   },
   // --------------------------------------------------------------------------------------------------------------------------------------
   created() {
     this.getMyPageData();
+    this.boardListData();
   },
   mounted() {
     (this.email = localStorage.getItem("userID")),
@@ -164,53 +170,38 @@ export default {
       this.editMode = false;
     }, //여기까지 내 글 수정버튼
     toggleCommentEditMode() {
+      console.log("toggleCommentEditMode 호출됨");
       this.comment_editMode = true;
     },
-
+    deleteComment() {
+      // 코멘트 삭제 로직
+    },
+    cancelCommentEdit() {
+      console.log("cancelCommentEdit 호출됨");
+      this.comment_editMode = false;
+    },
     async getMyPageData() {
       //마이페이지 내 정보----------------------------------------------------------------------------------------------------------------------
       try {
         this.myPageNick = await axios.post("/mypage/myPage", {
-          userEmail: "user1@example.com", // userEmail 값을 적절히 설정
+          userEmail: email, // userEmail 값을 적절히 설정
         });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async boardListData() {
+      try {
+        const response = await axios.post("/mypage/myCourse", {
+          userEmail: "22116010@kaywon.ac.kr", // userEmail 값을 적절히 설정
+        });
+        this.boardList = response.data;
       } catch (error) {
         console.error(error);
       }
     },
   },
   setup() {
-    const boardListData = ref([
-      {
-        BRD_ID: 0,
-        BRD_HASHTAG: "#종로구 #중구 #식사 #전시",
-        BRD_TITLE: "서울 실내 데이트 코스 추천!",
-        BRD_CREATED_AT: "2023-06-22",
-        likecount: 10,
-        BRD_VIEWCOUNT: 100,
-        BRD_OPEN: "공개",
-        checked: false,
-      },
-      {
-        BRD_ID: 1,
-        BRD_HASHTAG: "#서초구 #강남구 #카페 #쇼룸,편집샵",
-        BRD_TITLE: "테스트 제목2",
-        BRD_CREATED_AT: "2023-06-22",
-        likecount: 20,
-        BRD_VIEWCOUNT: 200,
-        BRD_OPEN: "비공개",
-        checked: false,
-      },
-      {
-        BRD_ID: 2,
-        BRD_HASHTAG: "#마포구 #식사 #전시",
-        BRD_TITLE: "테스트 제목3",
-        BRD_CREATED_AT: "2023-06-22",
-        likecount: 30,
-        BRD_VIEWCOUNT: 300,
-        BRD_OPEN: "공개",
-        checked: false,
-      },
-    ]);
     const commentListData = ref([
       {
         COM_ID: 0,
@@ -236,7 +227,7 @@ export default {
     ]);
 
     return {
-      boardList: boardListData,
+      // boardList: boardListData,
       commentList: commentListData,
     };
   },

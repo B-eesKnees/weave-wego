@@ -256,7 +256,7 @@ a {
   width: 40%;
   max-width: 450px;
   height: 250px;
-  background-image: url(../img/mypage_img.png);
+  /* background-image: url(http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}); */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

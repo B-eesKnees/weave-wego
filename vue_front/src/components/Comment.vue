@@ -7,7 +7,7 @@ const props = defineProps({
 
 <template>
   <a href="/detail">
-    <input class="mycourse_checkbox" type="checkbox" v-if="comment_editMode" />
+    <input class="comment_checkbox" type="checkbox" v-if="comment_editMode" />
     <div class="comment">
       <div class="profile">
         <img class="profile_icon" src="../assets/img/test.png" />
