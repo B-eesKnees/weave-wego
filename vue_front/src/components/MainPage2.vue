@@ -20,7 +20,7 @@
                 <div class="mainpage2_second_right_rows">
                     <div v-for="(item, i) in recommendData" :key="i" class="mainpage2_second_right_row">
                         <div class="mainpage2_second_right_row_img">
-                            <img src="/downloadCourse/" alt="">
+                            <img src="" alt="">
                             <div id="opacity_glass2"></div>
                         </div>
                         <div class="mainpage2_second_right_row_content">
@@ -49,6 +49,7 @@ export default {
     data() {
         return {
             recommendData: {},
+            recommendData2: []
         };
     },
 
@@ -65,8 +66,10 @@ export default {
                 method: 'POST'
             }).then(res => {
                 this.recommendData = res.data;
+                this.recommendData2 =(res.data[0],res.data[1]);
 
-                console.log(this.recommendData[0].IMG_PATH);
+
+                console.log(this.recommendData2);
             })
         }
     }
