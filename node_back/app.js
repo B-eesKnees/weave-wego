@@ -46,7 +46,7 @@ const mainRouter = require("./routes/main");
 const boardMakeRouter = require("./routes/boardCreate");
 const myPageRouter = require("./routes/mypage"); // 마이페이지
 const postDataRouter = require("./routes/post");
-const updateBoardRouter = require("./routes/updateBoard");
+// const updateBoardRouter = require("./routes/updateBoard");
 const changeProfileRouter = require("./routes/profile");
 
 app.use("/auth", authRouter); // /autu 로그인 관련 라우터
@@ -54,7 +54,7 @@ app.use("/", mainRouter); // 메인페이지 관련 라우터
 app.use("/boardCreate", boardMakeRouter); //임시
 app.use("/mypage", myPageRouter); // 마이페이지 관련 라우터
 app.use("/postdata", postDataRouter);
-app.use("/updateBoard", updateBoardRouter);
+// app.use("/updateBoard", updateBoardRouter);
 app.use("/profile", changeProfileRouter);
 
 app.get("/downloadProfile/:userEmail/:fileName", (req, res) => {

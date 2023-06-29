@@ -82,4 +82,5 @@ a {
     background-size: cover;
     border-radius: 100%;
     background-position: center top;
+    border: 0.5px solid #424242;
   }
