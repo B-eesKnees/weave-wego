@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser"); // 연주 추가
 const bodyParser = require("body-parser"); // 연주 추가
 const jwt = require("jsonwebtoken"); // 연주 추가
+const multer = require('multer'); //승리 추가
 
 const session = require("express-session");
 const fs = require("fs");
@@ -142,65 +143,54 @@ app.post("/uploadProfile/:userEmail/:fileName", async (req, res) => {
     }
   });
 });
-
-app.post("/uploadCourse/:boardID/:fileName", async (req, res) => {
-  // 게시글 이미지 데이터받는 라우터 작동하는지는 안해봄..
-  let { boardID, fileName } = req.params;
-
-  const dir = `${__dirname}/courseImage/${boardID}`;
-  const file = `${dir}/${fileName}`;
-
-  if (!req.body.data) {
-    return fs.unlink(file, async (err) =>
-      res.send({
-        err,
-      })
-    );
+// 이미지 업로드 관련 쿼리 작동여부 ?
+// multer을 이용해 파일 업로드 기능 구현
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {	// 경로 => uploads 폴더
+      cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {	// 파일명 => 이미지 업로드시 원본 이름 그대로
+      cb(null, file.originalname);
   }
+})
+var upload = multer({ storage: storage });
 
-  const data = req.body.data.slice(req.body.data.indexOf(";base64") + 8);
-
-  if (!fs.existsSync(dir)) {
-    try {
-      fs.mkdirSync(dir, { recursive: true });
-    } catch (err) {
-      return res.send({
-        code: 400,
-        failed: "error occurred while creating directory",
-        error: err,
-      });
-    }
-  }
-  fs.writeFile(file, data, "base64", async (err) => {
-    if (err) {
-      res.send({
-        code: 400,
-        failed: "error occurred",
-        error: err,
-      });
-    } else {
-      // DB에 이미지 파일명 업데이트 코드 추가
-      db.query(
-        "INSERT weavewego.image SET IMG_NUM = ?, IMG_PATH = ?",
-        [boardID, fileName],
-        (err) => {
-          if (err) {
-            res.send({
-              code: 400,
-              failed: "error occurred",
-              error: err,
-            });
-          } else {
-            res.send({
-              code: 200,
-              success: "image uploaded and user updated",
-            });
-          }
+// 글 작성 페이지에서 이미지를 올리면 실행되게 되는 부분
+app.post('/imagesave', upload.array('filelist'), function(req, res) {
+  // 전송된 formdata의 filelist에 해당하는 value 값들을 multer을 통해 저장
+      var i, newname;
+      db.query(`select BRD_ID from weavewego.board order by BRD_ID DESC limit 1`, (err, result)=>{
+        if(err) {
+          res.send({
+            //에러처리
+            code: 400,
+            failed: "error occurred",
+            error: err,
+          });
+        } else {
+          newname = result.BRD_ID;
         }
-      );
-    }
+      }).then(()=>{
+        for(i=0; i<req.files.length;i++) {
+          fs.renameSync(req.files[i].path, 'uploads/'+(newname+1)+'-'+(i+1)+'.png');
+          db.query(`insert into weavewego.image set IMG_NUM = ?, IMG_PATH = ?`, [newname+1, i+1], (err)=>{
+            if(err) {
+              res.send({
+                //에러처리
+                code: 400,
+                failed: "error occurred",
+                error: err,
+              });
+            } else {
+              res.send({
+                "code" : 200,
+                "message" : '업로드 성공'
+              })
+            }
+          })
+        }
+      })
   });
-});
 
 
 app.get('/downloadProfile/:userEmail/:fileName', (req, res) => { //프로필 이미지 다운 라우터
