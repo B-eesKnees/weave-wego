@@ -334,7 +334,7 @@ export default {
     justify-content: center;
     flex-wrap: wrap;
     background-color: white;
-    padding: 5% 4%;
+    padding: 1% 1%;
     margin-top: 1%;
     border-radius: 5%;
     position: absolute;
@@ -343,7 +343,7 @@ export default {
 }
 
 .show_theme h4 {
-    padding: 6% 16%;
+    padding: 3% 6%;
     border: 1px solid black;
     cursor: pointer;
     user-select: none;
@@ -494,7 +494,7 @@ svg {
     position: absolute;
     z-index: 1;
     top: 70%;
-    left: -180%;
+    left: -160%;
 }
 
 .OUTLINE {
