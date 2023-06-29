@@ -39,6 +39,7 @@ export default {
         var profile_image = this.naverLogin.user.getProfileImage();
         /* var mobile = this.naverLogin.user.getMobile(); */
         
+        
         userData = {email, nickname, gender, age, profile_image};
 
         if (email == undefined || email == null) {
@@ -51,8 +52,7 @@ export default {
         console.log("callback 처리에 실패하였습니다.");
       }
       
-      if (nickname == undefined || nickname == null) {
-          
+      if (nickname == undefined || nickname == null) {          
           /* alert("별명은 필수 정보입니다. 정보 제공을 동의해주세요."); */
           // 사용자 정보 재동의를 위하여 다시 동의 페이지로 이동함
           this.naverLogin.reprompt();
@@ -62,7 +62,7 @@ export default {
       }
 
       if (gender == undefined || gender == null) {
-          alert("성별은 필수 정보입니다. 정보 제공을 동의해주세요.");
+          /* alert("성별은 필수 정보입니다. 정보 제공을 동의해주세요."); */
           // 사용자 정보 재동의를 위하여 다시 동의 페이지로 이동함
           this.naverLogin.reprompt();
           return;
@@ -71,7 +71,7 @@ export default {
       }
 
       if (age == undefined || age == null) {
-          alert("연령대는 필수 정보입니다. 정보 제공을 동의해주세요.");
+          /* alert("연령대는 필수 정보입니다. 정보 제공을 동의해주세요."); */
           // 사용자 정보 재동의를 위하여 다시 동의 페이지로 이동함
           this.naverLogin.reprompt();
           return;
@@ -80,7 +80,7 @@ export default {
       }
 
       if (profile_image == undefined || profile_image == null) {
-          alert("프로필 이미지는 필수 정보입니다. 정보 제공을 동의해주세요.");
+          /* alert("프로필 이미지는 필수 정보입니다. 정보 제공을 동의해주세요."); */
           // 사용자 정보 재동의를 위하여 다시 동의 페이지로 이동함
           this.naverLogin.reprompt();
           return;
