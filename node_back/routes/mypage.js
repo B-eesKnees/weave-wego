@@ -15,7 +15,7 @@ const queries = {
   where USER_EMAIL = ?;`,
 
   myCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date(b.BRD_CREATED_AT) as BRD_CREATED_AT, b.BRD_OPEN,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT, b.BRD_OPEN,
     (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
     from board b
     left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -26,7 +26,7 @@ const queries = {
   delMyCourseQuery: `delete from board b where b.BRD_ID = ?`,
 
   recentCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date(b.BRD_CREATED_AT) as BRD_CREATED_AT,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -36,7 +36,7 @@ const queries = {
   order by rv.RC_TIME desc;`,
 
   likeListQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date(b.BRD_CREATED_AT) as BRD_CREATED_AT,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -45,7 +45,7 @@ const queries = {
   order by ll.LL_TIME desc;`,
 
   myCommentQuery:
-    `select b.BRD_TITLE, com.COM_COMMENT, date(com.COM_CREATED_AT) as COM_CREATED_AT
+    `select b.BRD_TITLE, com.COM_COMMENT, date_format(com.COM_CREATED_AT, '%Y-%m-%d') as COM_CREATED_AT
     from comment com
     left join board b on com.COM_NUM = b.BRD_ID
     where com.COM_WRITER = ?
