@@ -19,9 +19,9 @@ router.post("/getLikeCourse", async (req, res) => {
           'error': err
         })
       } else {
-        res.send({
+        res.send(
           results
-        })
+        )
       }
     })
 });
@@ -41,9 +41,9 @@ router.post("/getViewsCourse", async (req, res) => {
           'error': err
         })
       } else {
-        res.send({
+        res.send(
           results
-        })
+        )
       }
     })
 });
@@ -63,9 +63,9 @@ router.post("/getNewestCourse", async (req, res) => {
           'error': err
         })
       } else {
-        res.send({
+        res.send(
           results
-        })
+        )
       }
     })
 });
