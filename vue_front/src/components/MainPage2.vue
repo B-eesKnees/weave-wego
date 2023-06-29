@@ -70,10 +70,6 @@ export default {
                 for (let i = 1; i <= 3; i++) {
                     this.recommendData2.push(res.data[i]);
                 }
-
-
-
-                console.log(this.recommendData2);
             })
         }
     }
