@@ -118,7 +118,7 @@ router.post("/dislikeCoures", async (req, res) => {
     }
   );
 });
-//조회수 늘어나는 쿼리?
+//조회수 늘어나는 쿼리? testttt
 router.post("/increase", async (req, res) => {
   const brdID = req.body.brd_id;
 
