@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./db");
+const path = require("path");
 
 const bcrypt = require("bcrypt");
 const morgan = require("morgan");
@@ -8,7 +9,6 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser"); // 연주 추가
 const bodyParser = require("body-parser"); // 연주 추가
 const jwt = require("jsonwebtoken"); // 연주 추가
-const multer = require('multer'); //승리 추가
 
 const session = require("express-session");
 const fs = require("fs");
@@ -46,7 +46,6 @@ const mainRouter = require("./routes/main");
 const boardMakeRouter = require("./routes/boardCreate");
 const myPageRouter = require("./routes/mypage"); // 마이페이지
 const postDataRouter = require("./routes/post");
-// const updateBoardRouter = require("./routes/updateBoard");
 const changeProfileRouter = require("./routes/profile");
 
 app.use("/auth", authRouter); // /autu 로그인 관련 라우터
@@ -54,7 +53,6 @@ app.use("/", mainRouter); // 메인페이지 관련 라우터
 app.use("/boardCreate", boardMakeRouter); //임시
 app.use("/mypage", myPageRouter); // 마이페이지 관련 라우터
 app.use("/postdata", postDataRouter);
-// app.use("/updateBoard", updateBoardRouter);
 app.use("/profile", changeProfileRouter);
 
 app.get("/downloadProfile/:userEmail/:fileName", (req, res) => {
@@ -143,71 +141,185 @@ app.post("/uploadProfile/:userEmail/:fileName", async (req, res) => {
     }
   });
 });
-// 이미지 업로드 관련 쿼리 작동여부 ? 안될것같은데..
-// multer을 이용해 파일 업로드 기능 구현
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {	// 경로 => uploads 폴더
-      cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {	// 파일명 => 이미지 업로드시 원본 이름 그대로
-      cb(null, file.originalname);
-  }
-})
-var upload = multer({ storage: storage });
 
-// 글 작성 페이지에서 이미지를 올리면 실행되게 되는 부분
-app.post('/imagesave', upload.array('filelist'), function(req, res) {
-  // 전송된 formdata의 filelist에 해당하는 value 값들을 multer을 통해 저장
-      var i, newname;
-      db.query(`select BRD_ID from weavewego.board order by BRD_ID DESC limit 1`, (err, result)=>{
-        if(err) {
-          res.send({
-            //에러처리
-            code: 400,
-            failed: "error occurred",
-            error: err,
-          });
-        } else {
-          newname = result.BRD_ID;
-        }
-      }).then((newname)=>{
-        for(i=0; i<req.files.length;i++) {
-          fs.renameSync(req.files[i].path, 'uploads/'+(newname+1)+'-'+(i+1)+'.png');
-          db.query(`insert into weavewego.image set IMG_NUM = ?, IMG_PATH = ?`, [newname+1, i+1], (err)=>{
-            if(err) {
-              res.send({
-                //에러처리
-                code: 400,
-                failed: "error occurred",
-                error: err,
-              });
-            } else {
-              res.send({
-                "code" : 200,
-                "message" : '업로드 성공'
-              })
-            }
-          })
-        }
+app.post("/uploadCourse/:boardID/:fileName", async (req, res) => {
+  // 게시글 이미지 데이터받는 라우터 작동하는지는 안해봄..
+  let { boardID, fileName } = req.params;
+
+  const dir = `${__dirname}/courseImage/${boardID}`;
+  const file = `${dir}/${fileName}`;
+
+  if (!req.body.data) {
+    return fs.unlink(file, async (err) =>
+      res.send({
+        err,
       })
+    );
+  }
+
+  const data = req.body.data.slice(req.body.data.indexOf(";base64") + 8);
+
+  if (!fs.existsSync(dir)) {
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+    } catch (err) {
+      return res.send({
+        code: 400,
+        failed: "error occurred while creating directory",
+        error: err,
+      });
+    }
+  }
+  fs.writeFile(file, data, "base64", async (err) => {
+    if (err) {
+      res.send({
+        code: 400,
+        failed: "error occurred",
+        error: err,
+      });
+    } else {
+      // DB에 이미지 파일명 업데이트 코드 추가
+      db.query(
+        "INSERT weavewego.image SET IMG_NUM = ?, IMG_PATH = ?",
+        [boardID, fileName],
+        (err) => {
+          if (err) {
+            res.send({
+              code: 400,
+              failed: "error occurred",
+              error: err,
+            });
+          } else {
+            res.send({
+              code: 200,
+              success: "image uploaded and user updated",
+            });
+          }
+        }
+      );
+    }
   });
+});
 
-
-app.get('/downloadCourse/:boardID/:fileName', (req, res) => { //프로필 이미지 다운 라우터
-  const { //url에 있는 userEmail, fileName 받아오기
-    boardID,
+app.get("/downloadProfile/:userEmail/:fileName", (req, res) => {
+  //프로필 이미지 다운 라우터
+  const {
+    //url에 있는 userEmail, fileName 받아오기
+    userEmail,
     fileName,
   } = req.params;
-  const filepath = `${__dirname}/CourseImage/${boardID}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/userProfile/test@test.com/image.png
-  res.header('Content-Type', `image/${fileName.substring(fileName.lastIndexOf("."))}`); //이미지 보내는 코드인가?
-  if (!fs.existsSync(filepath)) res.send(404, { //경로에 이미지가 없으면 에러 처리
-    error: 'Can not found file.'
-  });
+  const filepath = `${__dirname}/userProfile/${userEmail}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/userProfile/test@test.com/image.png
+  res.header(
+    "Content-Type",
+    `image/${fileName.substring(fileName.lastIndexOf("."))}`
+  ); //이미지 보내는 코드인가?
+  if (!fs.existsSync(filepath))
+    res.send(404, {
+      //경로에 이미지가 없으면 에러 처리
+      error: "Can not found file.",
+    });
   else fs.createReadStream(filepath).pipe(res); //파일 있으면 vue단으로 전송
 });
 
+//---------------------------------------------------------------------------------
+//게시글 수정 (이미지 추가 업로드)
+app.post("/updateCourse/:boardID/:fileName", async (req, res) => {
+  let { boardID, fileName } = req.params;
 
+  const dir = `${__dirname}/CourseImage/${boardID}`;
+  const file = `${dir}/${fileName}`;
 
+  //dirname/courseimage/boardid/filename
+  //CourseImage
+
+  if (!req.body.data) {
+    return res.status(400).send({
+      code: 400,
+      failed: "이미지 입력 값은 필수 입니다.",
+    });
+  }
+
+  const data = req.body.data.slice(req.body.data.indexOf(";base64") + 8);
+
+  if (!fs.existsSync(dir)) {
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+    } catch (err) {
+      return res.send({
+        code: 400,
+        failed: "error occurred while creating directory",
+        error: err,
+      });
+    }
+  }
+  fs.writeFile(file, data, "base64", async (err) => {
+    if (err) {
+      res.send({
+        code: 400,
+        failed: "error occurred",
+        error: err,
+      });
+    } else {
+      // DB에 이미지 파일명 업데이트 코드 추가
+      db.query(
+        "INSERT weavewego.image SET IMG_NUM ,IMG_PATH VALUES(2, `../CourseImage/2/leobao.jpg`)",
+        [boardID, `../CourseImage/${boardID}/${fileName}`],
+        (err) => {
+          if (err) {
+            res.send({
+              code: 400,
+              failed: "error occurred",
+              error: err,
+            });
+          } else {
+            res.send({
+              code: 200,
+              success: "image uploaded and user updated",
+            });
+          }
+        }
+      );
+    }
+  });
+});
+//---------------------------------------------------------------------------------
+
+//게시글 수정 (이미지 삭제)
+
+app.delete("/deleteImage/:boardID/:fileName", (req, res) => {
+  const { boardID, fileName } = req.params;
+
+  const dir = `${__dirname}/CourseImage/${boardID}`;
+  const file = `${dir}/${fileName}`;
+
+  fs.unlink(file, (err) => {
+    if (err) {
+      res.status(500).send({
+        code: 500,
+        error: "이미지 삭제 실패",
+      });
+    } else {
+      // 이미지 삭제 후 DB에서 이미지 정보 업데이트 코드 추가
+      db.query(
+        "DELETE FROM weavewego.image WHERE IMG_NUM = ?",
+        [boardID],
+        (err) => {
+          if (err) {
+            res.status(500).send({
+              code: 500,
+              error: "이미지 업데이트에 실패했습니다.",
+            });
+          } else {
+            res.status(200).send({
+              code: 200,
+              success: "이미지가 삭제되었습니다.",
+            });
+          }
+        }
+      );
+    }
+  });
+});
 
 const adminRouter = require('./routes/admin'); //어드민 관련 라우터
 app.use('/admin', adminRouter); 
