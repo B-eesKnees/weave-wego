@@ -47,7 +47,7 @@
           <button v-if="!editMode" class="edit" @click="toggleEditMode">
             &nbsp;&nbsp;편집&nbsp;&nbsp;
           </button>
-          <button v-if="editMode" class="delete" @click="deleteComment">
+          <button v-if="editMode" class="delete" @click="deleteContent">
             &nbsp;&nbsp;삭제&nbsp;&nbsp;
           </button>
           <button v-if="editMode" class="cancel" @click="cancelEdit">
@@ -83,8 +83,23 @@
             :hideBrdOpen="true"
           /></div
       ></TabItem>
-      <TabItem title="내가 쓴 댓글"
-        ><button class="comment_edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
+      <TabItem title="내가 쓴 댓글">
+        <div>
+          <button
+            v-if="!comment_editMode"
+            class="edit"
+            @click="toggleCommentEditMode"
+          >
+            &nbsp;&nbsp;편집&nbsp;&nbsp;
+          </button>
+          <button v-if="comment_editMode" class="delete" @click="deleteComment">
+            &nbsp;&nbsp;삭제&nbsp;&nbsp;
+          </button>
+          <button v-if="editMode" class="cancel" @click="cancelEdit">
+            &nbsp;&nbsp;취소&nbsp;&nbsp;
+          </button>
+        </div>
+        <button class="comment_edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
 
         <div class="commentlist">
           <commentList
@@ -125,6 +140,7 @@ export default {
       image: "",
       provider: "",
       editMode: false,
+      comment_editMode: false,
     };
   },
   // --------------------------------------------------------------------------------------------------------------------------------------
@@ -141,12 +157,16 @@ export default {
     toggleEditMode() {
       this.editMode = true;
     },
-    deleteComment() {
+    deleteContent() {
       // 삭제 로직을 구현
     },
     cancelEdit() {
       this.editMode = false;
+    }, //여기까지 내 글 수정버튼
+    toggleCommentEditMode() {
+      this.comment_editMode = true;
     },
+
     async getMyPageData() {
       //마이페이지 내 정보----------------------------------------------------------------------------------------------------------------------
       try {
