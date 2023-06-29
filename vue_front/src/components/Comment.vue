@@ -1,25 +1,29 @@
 <script setup>
 const props = defineProps({
   comment: Object,
+  comment_editMode: Boolean,
 });
 </script>
 
 <template>
-  <div class="comment">
-    <div class="profile">
-      <img class="profile_icon" src="../assets/img/test.png" />
-    </div>
-    <div class="comment-body">
-      <div class="comment-nickname">
-        <div>{{ comment.nickname }}</div>
-        <div class="comment-date">
-          <div>{{ comment.date }}</div>
-          <div>더보기</div>
-        </div>
+  <a href="/detail">
+    <input class="mycourse_checkbox" type="checkbox" v-if="comment_editMode" />
+    <div class="comment">
+      <div class="profile">
+        <img class="profile_icon" src="../assets/img/test.png" />
       </div>
-      <div>{{ comment.content }}</div>
+      <div class="comment-body">
+        <div class="comment-nickname">
+          <div>{{ comment.nickname }}</div>
+          <div class="comment-date">
+            <div>{{ comment.date }}</div>
+            <div>더보기</div>
+          </div>
+        </div>
+        <div>{{ comment.content }}</div>
+      </div>
     </div>
-  </div>
+  </a>
 </template>
 
 <style>

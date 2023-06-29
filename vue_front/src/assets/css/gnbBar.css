@@ -1,0 +1,86 @@
+a {
+    text-decoration: none;
+    color: black;
+  }
+  .gnb {
+    z-index: 9999;
+    position: relative;
+  }
+  .gnb_bar {
+    width: 100%;
+    height: 7%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: fixed;
+    top: 0;
+    background-color: #fafafa;
+  }
+  .gnb_bar_logo {
+    position: absolute;
+    left: 40vw;
+  }
+  .gnb_bar_logo a {
+    padding: 3vh;
+  }
+  
+  .gnb_bar_logo > h2 > a > img {
+    width: 20vh;
+  }
+  .gnb_bar_user {
+    display: flex;
+    margin-right: 10%;
+    margin-top: 15px;
+
+  }
+  .gnb_bar_user a {
+    position: relative;
+    width: 100%;
+    padding: 25px;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .gnb_bar_user a:hover {
+    background-color: rgba(56, 130, 101, 0.2);
+  }
+
+  .gnb_bar_user_login{
+    width: 5%;
+    max-width: 50px;
+    min-width: 50px;
+    margin-right: 10%;
+    position: relative;
+    display: block;
+  }
+
+  .gnb_bar_user_login > a{
+    width: 1000px;
+    position: relative;
+    text-decoration: none;
+    color: black;
+  }
+  .gnb_bar_user_login > a:hover{
+    background-color: rgba(56, 130, 101, 0.2);
+  }
+
+
+  
+  .local_img, .naver_img {
+    width: 100%;
+    border-radius: 100%;
+    border: 0.5px solid #424242;
+    overflow: hidden;
+
+  }
+  
+  .kakao_img {
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    border-radius: 100%;
+    background-position: center top;
+    border: 0.5px solid #424242;
+  }

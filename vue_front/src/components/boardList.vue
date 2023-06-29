@@ -9,8 +9,8 @@ export default {
 </script>
 
 <template>
-  <a href="/detail"
-    ><input class="mycourse_checkbox" type="checkbox" v-if="editMode" />
+  <a href="/detail">
+    <input class="mycourse_checkbox" type="checkbox" v-if="editMode" />
     <div class="board-list">
       <div class="board_content">
         <div class="hashtag">{{ boardList.BRD_HASHTAG }}</div>
@@ -26,6 +26,7 @@ export default {
         </div>
         <div v-if="!hideBrdOpen" class="brd_open">{{ boardList.BRD_OPEN }}</div>
       </div>
-      <div class="mypage_img"></div></div
-  ></a>
+      <div class="mypage_img"></div>
+    </div>
+  </a>
 </template>

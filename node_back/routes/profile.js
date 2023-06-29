@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../db'); //db연결
+const bcrypt = require('bcrypt'); //암호화 관련 모듈
 
 const router = express.Router();
 
@@ -34,6 +35,9 @@ router.post('/updateProfile', async(req, res) => {
     const email = req.body.email;
     const nick = req.body.nick;
     const phone_num = req.body.phone;
+    const pw = req.body.password;
+
+    const encryptedpw = await bcrypt.hash(pw, 12);
 
     let query = `UPDATE weavewego.user SET`;
     let queryParams = [];
@@ -46,6 +50,11 @@ router.post('/updateProfile', async(req, res) => {
     if (phone_num) {
         query += ` USER_PHONE = ?,`;
         queryParams.push(phone_num);
+    }
+
+    if (encryptedpw) {
+        query += ` USER_PW = ?,`;
+        queryParams.push(encryptedpw);
     }
 
     query = query.slice(0, -1); // 마지막 쉼표 제거
@@ -67,6 +76,7 @@ router.post('/updateProfile', async(req, res) => {
         }
     });
 });
+
 
 
 module.exports = router;
