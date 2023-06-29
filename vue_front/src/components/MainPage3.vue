@@ -123,69 +123,41 @@
                 </div>
             </div>
             <div class="mainpage3_third_sort">
-                <select name="items1">
+                <select ref="sort" name="items1">
                     <option value="최근순">최근순</option>
                     <option value="인기순">인기순</option>
                     <option value="조회순">조회순</option>
                 </select>
             </div>
             <div class="mainpage3_third_contents">
-                <div class="mainpage3_third_content">
+                <div v-for="(item, i) in recentData" :key="i" class="mainpage3_third_content">
                     <div class="mainpage3_third_content_img">
-                        <img src="" alt="">
+                        <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
                         <div id="opacity_glass"></div>
                         <div class="mainpage3_third_content_like">
                             <img src="../assets/img/like.png" alt="" />
                         </div>
                     </div>
                     <div class="mainpage3_third_content_detail">
-                        <h5>신용산역 삼각지역 핫한 카페 추천</h5>
+                        <h5>{{ item.BRD_TITLE }}</h5>
                         <div class="border"></div>
-                        <p>요즘 삼각지역 근처엔 정말 온갖 핫플이 다 몰려있죠? 주말에
-                            친구들과 신용산에서 만났는데 저는 보통 밥먹고 어느...</p>
+                        <p>{{ item.BRD_REV }}</p>
                     </div>
                 </div>
-                <div class="mainpage3_third_content">
-                    <div class="mainpage3_third_content_img">
-                        <img src="" alt="">
-                        <div id="opacity_glass"></div>
-                        <div class="mainpage3_third_content_like">
-                            <img src="../assets/img/like.png" alt="" />
-                            
-                        </div>
-                    </div>
-                    <div class="mainpage3_third_content_detail">
-                        <h5>신용산역 삼각지역 핫한 카페 추천</h5>
-                        <div class="border"></div>
-                        <p>요즘 삼각지역 근처엔 정말 온갖 핫플이 다 몰려있죠? 주말에
-                            친구들과 신용산에서 만났는데 저는 보통 밥먹고 어느...</p>
-                    </div>
-                </div>
-                <div class="mainpage3_third_content">
-                    <div class="mainpage3_third_content_img">
-                        <img src="" alt="">
-                        <div id="opacity_glass"></div>
-                        <div class="mainpage3_third_content_like">
-                            <img src="../assets/img/like.png" alt="" />
-                            
-                        </div>
-                    </div>
-                    <div class="mainpage3_third_content_detail">
-                        <h5>신용산역 삼각지역 핫한 카페 추천</h5>
-                        <div class="border"></div>
-                        <p>요즘 삼각지역 근처엔 정말 온갖 핫플이 다 몰려있죠? 주말에
-                            친구들과 신용산에서 만났는데 저는 보통 밥먹고 어느...</p>
-                    </div>
-                </div>
+
             </div>
             <div class="more_btn">
-                <button>더보기</button>
+                <button @click="showMoreContent">더보기</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 export default {
     name: '',
@@ -197,12 +169,18 @@ export default {
             fill: false,
             locationSelectCount: 0,
             themeSelectCount: 0,
+            recentOriginData: [],
+            recentData: [],
+            testresult: [],
+            test: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16']
         };
     },
 
     setup() { },
     created() { },
-    mounted() { },
+    mounted() {
+        this.showSortRecent()
+    },
     unmounted() { },
     watch: {
 
@@ -270,6 +248,40 @@ export default {
                     console.log(this.themeSelectCount);
                 }
             }
+        },
+        //비로그인시 좋아요버튼 누르면 로그인창으로 이동할건지 물어보기
+        async showSortRecent() {
+            const sortvalue = this.$refs.sort.value;
+            if (sortvalue == "최근순") {
+                await axios({
+                    url: 'http://localhost:3000/getNewestCourse',
+                    method: 'POST'
+                }).then(res => {
+                    this.recentOriginData = res.data;
+                    for (let i = 0; i <= 5; i++) { //게시물 6개 출력
+                        this.recentData.push(this.recentOriginData[i]);
+                    }
+                    console.log(this.recentData);
+
+
+                })
+            }
+        },
+        async showMoreContent() { //더보기버튼 누를시 게시글 6개 추가 출력
+            await axios({
+                url: 'http://localhost:3000/getNewestCourse',
+                method: 'POST'
+            }).then(res => {
+                // this.recentData = res.data; //16개 데이터 16-6= 12, 7-12
+                // console.log(this.recentData);
+                // this.recentData.slice(0, 13);
+                // console.log(this.recentData);
+                this.testresult = this.test.slice(0, 7);
+                console.log(this.testresult);
+                this.testresult = this.test.slice(0, 13);
+                console.log(this.testresult);
+            })
+
         }
     }
 }
@@ -334,7 +346,7 @@ export default {
     justify-content: center;
     flex-wrap: wrap;
     background-color: white;
-    padding: 5% 4%;
+    padding: 1% 1%;
     margin-top: 1%;
     border-radius: 5%;
     position: absolute;
@@ -343,14 +355,14 @@ export default {
 }
 
 .show_theme h4 {
-    padding: 6% 16%;
+    padding: 2% 12%;
     border: 1px solid black;
     cursor: pointer;
     user-select: none;
 }
 
 .show_theme h4:nth-child(5) {
-    padding: 6% 4%;
+    padding: 2% 18%;
 }
 
 .fill_theme {
@@ -409,8 +421,8 @@ export default {
     background-color: aquamarine;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: space-between;
+    display: inline-flex;
+
     flex-wrap: wrap;
 }
 
@@ -418,7 +430,9 @@ export default {
     background-color: yellowgreen;
     width: 30%;
     height: 45vh;
-    margin-bottom: 3%;
+    margin: 0 1.6%;
+    margin-bottom: 5%;
+
 }
 
 .mainpage3_third_content_img {
@@ -426,6 +440,13 @@ export default {
     height: 65%;
     background-color: thistle;
     position: relative;
+}
+
+.mainpage3_third_content_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+    z-index: 3;
 }
 
 .mainpage3_third_content_detail {
@@ -441,7 +462,14 @@ export default {
 .mainpage3_third_content_detail h5 {
     font-size: large;
     font-weight: bold;
-    padding-bottom: 3%;
+    padding-top: 3%;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    white-space: wrap;
+    line-height: 1;
+    overflow: hidden;
 }
 
 .border {
@@ -452,6 +480,15 @@ export default {
 .mainpage3_third_content_detail p {
     padding-top: 2%;
     font-size: small;
+    width: 100%;
+    height: 2.8em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    white-space: wrap;
+    line-height: 1.2;
+    overflow: hidden;
 }
 
 .mainpage3_third_content_like {
@@ -476,15 +513,17 @@ export default {
     box-shadow: 0 0 5px #ccc;
     background-color: white;
 }
+
 #opacity_glass {
     width: 100%;
     height: 100%;
     position: absolute;
     left: 0;
     top: 0;
-    opacity: 0.2;
+    opacity: 0.1;
     background-color: black;
 }
+
 /* svg스타일 코드 */
 
 svg {
@@ -494,7 +533,7 @@ svg {
     position: absolute;
     z-index: 1;
     top: 70%;
-    left: -180%;
+    left: -162%;
 }
 
 .OUTLINE {

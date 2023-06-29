@@ -143,7 +143,7 @@ app.post("/uploadProfile/:userEmail/:fileName", async (req, res) => {
     }
   });
 });
-// 이미지 업로드 관련 쿼리 작동여부 ?
+// 이미지 업로드 관련 쿼리 작동여부 ? 안될것같은데..
 // multer을 이용해 파일 업로드 기능 구현
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {	// 경로 => uploads 폴더
@@ -209,8 +209,8 @@ app.get('/downloadCourse/:boardID/:fileName', (req, res) => { //프로필 이미
 
 
 
-const adminRouter = require('./routes/admin');
-app.use('/admin', adminRouter);
+const adminRouter = require('./routes/admin'); //어드민 관련 라우터
+app.use('/admin', adminRouter); 
 
 // 마이페이지
 app.post("/mypage", (req, res) => {
