@@ -15,18 +15,18 @@ const queries = {
   where USER_EMAIL = ?;`,
 
   myCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT, b.BRD_OPEN,
-  (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
-  from board b
-  left join likelist ll on b.BRD_ID = ll.LL_NUM
-  where b.BRD_WRITER = ?
-  group by b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
-  order by BRD_CREATED_AT desc;`,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date(b.BRD_CREATED_AT) as BRD_CREATED_AT, b.BRD_OPEN,
+    (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
+    from board b
+    left join likelist ll on b.BRD_ID = ll.LL_NUM
+    where b.BRD_WRITER = ?
+    group by b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
+    order by BRD_CREATED_AT desc;`,
 
   delMyCourseQuery: `delete from board b where b.BRD_ID = ?`,
 
   recentCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date(b.BRD_CREATED_AT) as BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -36,7 +36,7 @@ const queries = {
   order by rv.RC_TIME desc;`,
 
   likeListQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date(b.BRD_CREATED_AT) as BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -45,11 +45,11 @@ const queries = {
   order by ll.LL_TIME desc;`,
 
   myCommentQuery:
-    `select b.BRD_TITLE, com.COM_COMMENT, com.COM_CREATED_AT
-  from comment com
-  left join board b on com.COM_NUM = b.BRD_ID
-  where com.COM_WRITER = ?
-  order by com.COM_CREATED_AT desc;`,
+    `select b.BRD_TITLE, com.COM_COMMENT, date(com.COM_CREATED_AT) as COM_CREATED_AT
+    from comment com
+    left join board b on com.COM_NUM = b.BRD_ID
+    where com.COM_WRITER = ?
+    order by com.COM_CREATED_AT desc;`,
 
   delmyCommentQuery: `delete from comment com where com.COM_ID in (?)`
 }
