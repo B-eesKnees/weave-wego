@@ -42,26 +42,26 @@ router.post('/updateProfile', async(req, res) => {
     let query = `UPDATE weavewego.user SET`;
     let queryParams = [];
 
-    if (nick) {
+    if (nick) { //닉네임이 전달이 되면 쿼리에 추가
         query += ` USER_NICKNAME = ?,`;
         queryParams.push(nick);
     }
 
-    if (phone_num) {
+    if (phone_num) { //전화번호가 전달이 되면 쿼리에 추가
         query += ` USER_PHONE = ?,`;
         queryParams.push(phone_num);
     }
 
-    if (encryptedpw) {
+    if (encryptedpw) { //비밀번호가 전달이 되면 쿼리에 추가
         query += ` USER_PW = ?,`;
         queryParams.push(encryptedpw);
     }
 
-    query = query.slice(0, -1); // 마지막 쉼표 제거
+    query = query.slice(0, -1); // 마지막 쉼표 제거 쿼리에 추가
     query += ` WHERE USER_EMAIL = ?`;
     queryParams.push(email);
 
-    db.query(query, queryParams, (err, results) => {
+    db.query(query, queryParams, (err) => {
         if (err) {
             res.send({
                 'code': 400,
