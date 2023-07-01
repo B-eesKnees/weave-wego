@@ -112,7 +112,7 @@ router.get('/delMyCourse', async (request, res) => {
 
 
 // 최근에 본 코스
-router.post('/recentCourse', async (request, res) => {  
+router.post('/recentCourse', async (request, res) => {
   try {
     const userEmail = request.body.userEmail;
 

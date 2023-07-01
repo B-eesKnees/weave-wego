@@ -150,14 +150,13 @@ export default {
   },
   // --------------------------------------------------------------------------------------------------------------------------------------
   created() {
-    this.getMyPageData();
     this.boardListData();
   },
   mounted() {
-    (this.email = localStorage.getItem("userID")),
-      (this.nick = localStorage.getItem("userNick")),
-      (this.image = localStorage.getItem("userImage")),
-      (this.provider = localStorage.getItem("userProvider"));
+    this.email = localStorage.getItem("userID");
+    this.nick = localStorage.getItem("userNick");
+    this.image = localStorage.getItem("userImage");
+    this.provider = localStorage.getItem("userProvider");
   },
   methods: {
     toggleEditMode() {
@@ -180,21 +179,13 @@ export default {
       console.log("cancelCommentEdit 호출됨");
       this.comment_editMode = false;
     },
-    async getMyPageData() {
-      //마이페이지 내 정보----------------------------------------------------------------------------------------------------------------------
-      try {
-        this.myPageNick = await axios.post("/mypage/myPage", {
-          userEmail: email, // userEmail 값을 적절히 설정
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    },
     async boardListData() {
       try {
+        console.log("boardListData 메서드 호출됨"); // 로그 추가
         const response = await axios.post("/mypage/myCourse", {
           userEmail: "22116010@kaywon.ac.kr", // userEmail 값을 적절히 설정
         });
+        console.log("서버 응답 데이터:", response.data); // 로그 추가
         this.boardList = response.data;
       } catch (error) {
         console.error(error);
@@ -227,7 +218,6 @@ export default {
     ]);
 
     return {
-      // boardList: boardListData,
       commentList: commentListData,
     };
   },
