@@ -4,8 +4,8 @@
       <div class="mainpage_first">
         <div class="mainpage_first_left">
           <img src="../assets/img/logo.png" alt="">
-          <a href=""><button>코스 보러가기</button></a>
-          <a href=""><button>작성하기</button></a>
+          <a href="#main3"><button>코스 보러가기</button></a>
+          <a href="/newpost"><button>작성하기</button></a>
         </div>
         <div class="mainpage_first_right">
           <div class="image-slide">
