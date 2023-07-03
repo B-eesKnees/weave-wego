@@ -66,9 +66,23 @@
         <p>총 평</p>
         <textarea placeholder="코멘트 입력" />
       </div>
-      <div class="images">
-        <p>사진첨부</p>
-        <div>사진첨부 버튼</div>
+      <div>
+        이미지 업로드
+        <div class="images">
+          <div v-for="image in images" class="image">
+            <button type="button" @click="() => removeImage(image.id)">
+              x
+            </button>
+            <img :src="image.preview" />
+          </div>
+          <label for="upload_btn">+</label>
+          <input
+            id="upload_btn"
+            type="file"
+            accept="image/*"
+            @change="addImage"
+          />
+        </div>
       </div>
       <!-- 사진 첨부하는 버튼 들어갈 곳-->
       <div class="buttons">
@@ -108,7 +122,20 @@ const locations = ref([
     content: "",
   },
 ]);
+const images = ref([]); // 이미지 업로드 하는 스크립트
 
+const addImage = (e) => {
+  images.value.push({
+    ...e.target.files[0],
+    id: Math.max(...images.value.map((i) => i.id), 0) + 1,
+    preview: URL.createObjectURL(e.target.files[0]),
+  });
+  console.log(images.value[0]);
+};
+
+const removeImage = (id) => {
+  images.value = images.value.filter((i) => i.id !== id);
+};
 const prepareMap = () => {
   const script = document.createElement("script");
 
@@ -639,5 +666,54 @@ hr {
   font-weight: bold;
   cursor: default;
   color: #777;
+}
+
+.images {
+  padding: 1rem;
+  border: 1px solid black;
+
+  display: flex;
+}
+
+.images > input {
+  display: none;
+}
+
+.images > label {
+  width: 5rem;
+  height: 5rem;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.image {
+  width: 5rem;
+  height: 5rem;
+  margin-right: 1rem;
+  border: 1px solid black;
+  position: relative;
+}
+
+.image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image > button {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  color: white;
+  background-color: black;
 }
 </style>
