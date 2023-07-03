@@ -29,13 +29,17 @@ export default {
             {{ boardList.BRD_OPEN }}
           </div>
         </div>
-        <div class="mypage_img">
-          <!-- <img
-          v-if="i == 0"
-          :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`"
-          alt=""
-        /> -->
-        </div>
+        <!-- <div class="mypage_img"
+        :style="">
+          <img
+            :src="`http://localhost:3000/downloadCourse/${boardList.BRD_ID}/${boardList.IMG_PATH}`"
+            alt=""
+          />
+        </div> -->
+        <div
+          class="mypage_img"
+          :style="`background-image: url(http://localhost:3000/downloadCourse/${boardList.BRD_ID}/${boardList.IMG_PATH})`"
+        ></div>
       </div>
     </a>
   </div>
