@@ -164,7 +164,31 @@ export default {
       this.editMode = true;
     },
     deleteContent() {
-      // 삭제 로직을 구현
+      const values = [7, 8, 9]; // 삭제할 컨텐츠의 배열 값
+      if (values.length === 0) {
+        console.log("삭제할 컨텐츠가 없습니다");
+        return; // 빈 배열이면 종료
+      }
+
+      const url = "http://localhost:3000/mypage/delMyCourse";
+      //console.log(values);
+      const options = {
+        method: "POST",
+        data: { aaa: JSON.stringify(values) }, // JSON 형식으로 변환하여 전송
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      axios(url, options)
+        .then((response) => {
+          console.log("컨텐츠가 성공적으로 삭제되었습니다", response);
+          // 삭제 후 추가 작업을 수행할 수 있습니다
+        })
+        .catch((error) => {
+          console.error("컨텐츠 삭제 중 오류가 발생했습니다", error);
+          // 오류를 적절히 처리할 수 있습니다
+        });
     },
     cancelEdit() {
       this.editMode = false;
@@ -190,7 +214,7 @@ export default {
       try {
         console.log("boardListData 메서드 호출됨"); // 로그 추가
         const response = await axios.post("/mypage/myCourse", {
-          userEmail: this.email, // userEmail 값을 적절히 설정
+          userEmail: this.email,
         });
         console.log("서버 응답 데이터:", response.data); // 로그 추가
         this.boardList = response.data;

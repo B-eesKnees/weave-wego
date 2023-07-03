@@ -118,11 +118,11 @@ export default {
       }
     },
     logout() {
-      // localStorage.removeItem("userID");
-      // localStorage.removeItem("userNick");
-      // localStorage.removeItem("userImage");
-      // localStorage.removeItem("userProvider");
-      localStorage.clear(); // localStorage의 모든 항목 제거
+      localStorage.removeItem("userID");
+      localStorage.removeItem("userNick");
+      localStorage.removeItem("userImage");
+      localStorage.removeItem("userProvider");
+      // localStorage.clear(); // localStorage의 모든 항목 제거
       window.location.href = "/"; // 메인
     },
   },

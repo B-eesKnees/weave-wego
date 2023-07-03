@@ -23,7 +23,7 @@ const queries = {
     group by b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
     order by BRD_CREATED_AT desc;`,
 
-  delMyCourseQuery: `delete from board b where b.BRD_ID = ?`,
+  delMyCourseQuery: `delete from board b where b.BRD_ID in (?)`,
 
   recentCourseQuery:
     `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT,
@@ -85,23 +85,11 @@ router.post('/myPage', async (request, res) => {
 });
 
 // 내 코스에 내가 쓴 글 출력
-// router.post('/myCourse', async (request, res) => {
-//   try {
-//     const userEmail = request.body.userEmail;
-
-//     res.send(await req(queries.myCourseQuery, userEmail));
-//   } catch (err) {
-//     res.status(500).send({
-//       error: err
-//     });
-//   }
-// });
-
 router.post('/myCourse', async (request, res) => {
   try {
     const userEmail = request.body.userEmail;
 
-    res.send(await req(queries.myCourseQuery, [userEmail])); // userEmail을 배열로 감싸서 전달
+    res.send(await req(queries.myCourseQuery, userEmail));
   } catch (err) {
     res.status(500).send({
       error: err
@@ -112,12 +100,15 @@ router.post('/myCourse', async (request, res) => {
 
 
 
-// 내 코스 선택 삭제
-router.get('/delMyCourse', async (request, res) => {
-  try {
-    const delBoard = [];  // 게시판 아이디 어떻게 받아아ㅏㅏ와아아악
 
-    res.send(await req(queries.delMyCourseQuery, [delBoard]));
+
+// 내 코스 선택 삭제
+router.post('/delMyCourse', async (request, res) => {
+  try {
+    const delBoard = request.body.data;  // 게시판 아이디 어떻게 받아아ㅏㅏ와아아악
+    console.log(delBoard.aaa);
+
+    res.send(await req(queries.delMyCourseQuery, delBoard));
   } catch (err) {
     res.status(500).send({
       error: err

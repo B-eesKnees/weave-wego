@@ -26,7 +26,7 @@ export default {
             {{ boardList.likecount }}
           </div>
           <div v-if="!hideBrdOpen" class="brd_open">
-            {{ boardList.BRD_OPEN }}
+            {{ boardList.BRD_OPEN === 1 ? "공개" : "비공개" }}
           </div>
         </div>
         <div
