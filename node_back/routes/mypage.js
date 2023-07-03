@@ -15,7 +15,7 @@ const queries = {
   where USER_EMAIL = ?;`,
 
   myCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT, b.BRD_OPEN,
+    `select b.BRD_ID, b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT, b.BRD_OPEN,
     (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
     from board b
     left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -85,17 +85,32 @@ router.post('/myPage', async (request, res) => {
 });
 
 // 내 코스에 내가 쓴 글 출력
+// router.post('/myCourse', async (request, res) => {
+//   try {
+//     const userEmail = request.body.userEmail;
+
+//     res.send(await req(queries.myCourseQuery, userEmail));
+//   } catch (err) {
+//     res.status(500).send({
+//       error: err
+//     });
+//   }
+// });
+
 router.post('/myCourse', async (request, res) => {
   try {
     const userEmail = request.body.userEmail;
 
-    res.send(await req(queries.myCourseQuery, userEmail));
+    res.send(await req(queries.myCourseQuery, [userEmail])); // userEmail을 배열로 감싸서 전달
   } catch (err) {
     res.status(500).send({
       error: err
     });
   }
 });
+
+
+
 
 // 내 코스 선택 삭제
 router.get('/delMyCourse', async (request, res) => {
@@ -112,7 +127,7 @@ router.get('/delMyCourse', async (request, res) => {
 
 
 // 최근에 본 코스
-router.post('/recentCourse', async (request, res) => {  
+router.post('/recentCourse', async (request, res) => {
   try {
     const userEmail = request.body.userEmail;
 

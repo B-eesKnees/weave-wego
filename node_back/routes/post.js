@@ -11,7 +11,7 @@ router.get("/board", (req, res) => {
   SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, b.BRD_CREATED_AT., b.BRD_NICK
   FROM board b
   LEFT JOIN likelist ll ON b.BRD_ID = ll.LL_NUM
-  WHERE b.BRD_ID =2;`;
+  WHERE b.BRD_ID =?;`;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -62,7 +62,7 @@ router.get("/locations", (req, res) => {
 
 //이미지 받아오기
 router.get("/images", (req, res) => {
-  const imagePath = "../board_img/푸바오1.jpg";
+  const imagePath = "./";
   const imageFullPath = path.join(__dirname, imagePath);
 
   fs.readFile(imageFullPath, (err, data) => {
@@ -148,8 +148,8 @@ router.put("/updatecomments/", (req, res) => {
   const updatedComment = req.body.updatedComment;
 
   const query = `update comment 
-                set COM_COMMENT = "수정수정.", COM_CREATED_AT = NOW() 
-                where COM_ID = 68`;
+                set COM_COMMENT = ?, COM_CREATED_AT = NOW() 
+                where COM_ID = ?`;
   db.query(query, (err, results) => {
     if (err) {
       console.error(err);
@@ -162,6 +162,49 @@ router.put("/updatecomments/", (req, res) => {
           .status(200)
           .json({ updatecomments: results, message: "댓글이 수정되었습니다." });
       }
+    }
+  });
+});
+
+//게시글 내용 수정--------------------------------------------------------
+router.put("/updateboard", (req, res) => {
+  const boardId = req.params.boardId;
+  const {
+    title,
+    hashtag,
+    loc1rev,
+    loc2rev,
+    loc3rev,
+    loc4rev,
+    loc5rev,
+    locrev,
+    createdat,
+  } = req.body;
+
+  const query = `UPDATE BOARD SET BRD_TITLE = ?, BRD_HASHTAG = ?, BRD_LOC_REV1 = ?, BRD_LOC_REV2 = ?, BRD_LOC_REV3 = ?, BRD_LOC_REV4 = ?, BRD_LOC_REV5 = ?, BRD_REV = ?,BRD_CREATED_AT=NOW() WHERE BRD_ID = ?;`;
+
+  const values = [
+    title,
+    hashtag,
+    loc1rev,
+    loc2rev,
+    loc3rev,
+    loc4rev,
+    loc5rev,
+    locrev,
+    createdat,
+    boardId,
+  ];
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "서버에러" });
+    } else {
+      //res.redirect("/postdata/board?boardid=2");
+      res.status(200).json({
+        updateboard: results,
+        message: "게시글 수정이 완료되었습니다.",
+      });
     }
   });
 });

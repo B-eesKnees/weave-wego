@@ -189,7 +189,7 @@ a {
   width: 60%;
   height: 100%;
   position: absolute;
-  padding: 60px 45px;
+  padding: 60px 0 45px 45px;
   /* border: solid 1px #000; */
   /* background-color: #9696ff; */
   
@@ -209,7 +209,7 @@ a {
 .brd_created_at {
   position: absolute;
   display: inline-block;
-  right: 0;
+  right: 2.5%;
   font-size: 1.1em;
   font-weight: 300;
 
@@ -242,7 +242,7 @@ a {
 
 .brd_open {
   position: absolute;
-  right: 0;
+  right: 2.5%;
   display: inline-block;
   font-size: 1.3em;
   font-weight: 300;
@@ -256,11 +256,11 @@ a {
   width: 40%;
   max-width: 450px;
   height: 250px;
-  /* background-image: url(http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}); */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   display: inline-block;
+  margin-left: 10%;
 }
 
 .mycourse_checkbox{
