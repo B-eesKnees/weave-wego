@@ -152,7 +152,7 @@ a {
 }
 .delete{
   position: absolute;
-  right: 5vw;
+  right: 80px;
   top: -5vh;
   width: 100px;
   background: #fafafa;
