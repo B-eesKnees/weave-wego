@@ -153,13 +153,11 @@ export default {
     };
   },
   created() {
-    this.boardListData();
-  },
-  mounted() {
     this.email = localStorage.getItem("userID");
     this.nick = localStorage.getItem("userNick");
     this.image = localStorage.getItem("userImage");
     this.provider = localStorage.getItem("userProvider");
+    this.boardListData();
   },
   methods: {
     toggleEditMode() {
@@ -192,7 +190,7 @@ export default {
       try {
         console.log("boardListData 메서드 호출됨"); // 로그 추가
         const response = await axios.post("/mypage/myCourse", {
-          userEmail: "22116010@kaywon.ac.kr", // userEmail 값을 적절히 설정
+          userEmail: this.email, // userEmail 값을 적절히 설정
         });
         console.log("서버 응답 데이터:", response.data); // 로그 추가
         this.boardList = response.data;
