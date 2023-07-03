@@ -6,8 +6,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <a href="/detail">
-    <input class="comment_checkbox" type="checkbox" v-if="comment_editMode" />
+  <div>
     <div class="comment">
       <div class="profile">
         <img class="profile_icon" src="../assets/img/test.png" />
@@ -17,16 +16,35 @@ const props = defineProps({
           <div>{{ comment.nickname }}</div>
           <div class="comment-date">
             <div>{{ comment.date }}</div>
-            <div>더보기</div>
+            <div>
+              <button
+                type="button"
+                class="dropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <button class="dropdown-item" type="button">수정</button>
+                </li>
+                <li>
+                  <button class="dropdown-item" type="button">삭제</button>
+                </li>
+                <li>
+                  <button class="dropdown-item" type="button">신고</button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div>{{ comment.content }}</div>
       </div>
     </div>
-  </a>
+  </div>
 </template>
 
-<style>
+<style scoped>
 .comment {
   display: flex;
   min-height: 100px;
@@ -60,5 +78,9 @@ const props = defineProps({
 }
 .comment-date > div:first-of-type {
   padding-right: 0.5rem;
+}
+.dropdown {
+  border: 0;
+  background-color: transparent;
 }
 </style>
