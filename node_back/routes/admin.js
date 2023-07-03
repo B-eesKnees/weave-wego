@@ -59,6 +59,7 @@ router.post('/deleteCourse', async(req, res)=>{
 //----------------------------------신고된 댓글 삭제 여러개 한번에 지우기?
 router.post('/deleteComment', async(req, res)=>{
     const deleteComments = req.body.commentID; //ex) [1,2,3] 형식으로 날라오면
+    console.log(deleteComments);
 
     deleteComments.forEach(commentID=>{ //반복문 실행
         db.query(`delete from weavewego.comment where COM_ID = ?`, commentID, (err)=>{ //쿼리문 반복 실행
@@ -73,7 +74,8 @@ router.post('/deleteComment', async(req, res)=>{
     });
 
     res.send({
-        "message" : "삭제 성공"
+        "message" : "삭제 성공",
+        "?" : deleteComments
     })
 })
 //-----------글 목록 보기
