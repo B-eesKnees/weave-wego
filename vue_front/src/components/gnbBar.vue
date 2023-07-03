@@ -1,3 +1,5 @@
+<style src="../assets/css/gnbBar.css"></style>
+<style src="../assets/css/reset.css"></style>
 <template>
   <div class="gnb">
     <div class="gnb_bar">
@@ -6,59 +8,123 @@
           <a href="/"><img src="../assets/img/logo.png" alt="logo" /></a>
         </h2>
       </div>
-      <div class="gnb_bar_user">
+      <div v-if="email === null" class="gnb_bar_user">
         <p><a href="/login">로그인</a></p>
         <p><a href="/join">회원가입</a></p>
+      </div>
+      <div v-else-if="provider === 'kakao'" class="gnb_bar_user_login">
+        <div
+          class="kakao_img"
+          :style="{ 'background-image': 'url(' + image + ')' }"
+          @click="toggleButtons"
+        ></div>
+        <div class="gnbmypage">
+          <div v-if="isButtonsVisible">
+            <div v-for="button in buttonList" :key="button.tab">
+              <button
+                @click="selectTab(button.tab)"
+                :class="{ 'active-button': activeTab === button.tab }"
+              >
+                {{ button.name }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else-if="provider === 'local'" class="gnb_bar_user_login">
+        <img
+          class="local_img"
+          :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
+          alt="profileExample"
+          @click="toggleButtons"
+        />
+        <div class="gnbmypage">
+          <div v-if="isButtonsVisible">
+            <div v-for="button in buttonList" :key="button.tab">
+              <button
+                @click="selectTab(button.tab)"
+                :class="{ 'active-button': activeTab === button.tab }"
+              >
+                {{ button.name }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="provider === 'naver'" class="gnb_bar_user_login">
+        <img
+          class="naver_img"
+          :src="image"
+          alt="profileExample"
+          @click="toggleButtons"
+        />
+        <div class="gnbmypage">
+          <div v-if="isButtonsVisible">
+            <div v-for="button in buttonList" :key="button.tab">
+              <button
+                @click="selectTab(button.tab)"
+                :class="{ 'active-button': activeTab === button.tab }"
+              >
+                {{ button.name }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      email: "",
+      nick: "",
+      image: "",
+      provider: "",
+      buttonList: [
+        { name: "마이페이지", tab: "myPage" },
+        { name: "내 코스", tab: "myCourse" },
+        { name: "최근에 본 코스", tab: "recentCourse" },
+        { name: "좋아요 리스트", tab: "likeList" },
+        { name: "내가 쓴 댓글", tab: "myComment" },
+        { name: "로그아웃", tab: "logout" },
+      ],
+      isButtonsVisible: false,
+      activeTab: "",
+    };
+  },
+  mounted() {
+    (this.email = localStorage.getItem("userID")),
+      (this.nick = localStorage.getItem("userNick")),
+      (this.image = localStorage.getItem("userImage")),
+      (this.provider = localStorage.getItem("userProvider"));
+  },
+  methods: {
+    // 생략
+    toggleButtons() {
+      this.isButtonsVisible = !this.isButtonsVisible;
+    },
+    selectTab(tab) {
+      this.activeTab = tab;
+      if (tab === "logout") {
+        this.logout();
+      } else if (tab === "myPage") {
+        window.location.href = "/mypage";
+      } else if (tab === "myCourse") {
+        window.location.href = "/mypage";
+      }
+    },
+    logout() {
+      // localStorage.removeItem("userID");
+      // localStorage.removeItem("userNick");
+      // localStorage.removeItem("userImage");
+      // localStorage.removeItem("userProvider");
+      localStorage.clear(); // localStorage의 모든 항목 제거
+      window.location.href = "/"; // 메인
+    },
+  },
+};
 </script>
-
-<style scoped>
-a {
-  text-decoration: none;
-  color: black;
-}
-.gnb {
-  z-index: 9999;
-  position: relative;
-}
-.gnb_bar {
-  width: 100%;
-  height: 7%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  text-align: center;
-  position: fixed;
-  top: 0;
-  background-color: #fafafa;
-}
-.gnb_bar_logo {
-  position: absolute;
-  left: 40vw;
-}
-.gnb_bar_logo a {
-  padding: 3vh;
-}
-
-.gnb_bar_logo > h2 > a > img {
-  width: 20vh;
-}
-.gnb_bar_user {
-  display: flex;
-  margin-right: 10%;
-}
-.gnb_bar_user a {
-  padding: 2vh;
-}
-
-.gnb_bar_user a:hover {
-  background-color: rgba(56, 130, 101, 0.2);
-}
-</style>

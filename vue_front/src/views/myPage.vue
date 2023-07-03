@@ -1,17 +1,32 @@
 <style src="../assets/css/mypage.css"></style>
 <style src="../assets/css/reset.css"></style>
 <template>
-  <gnbBarLogin />
+  <gnbBar />
 
   <section class="mypage_profile_set">
+    <!-- ----------------------------------------------------------------------------------------------------------------------------------- -->
     <h1 class="mypage_title">마이페이지</h1>
     <div class="myprofile">
       <div class="profileimg">
-        <img
-          class="profile"
-          src="../assets/img/profileExample.png"
-          alt="profileExample"
-        />
+        <div v-if="provider === 'local'">
+          <img
+            class="profile"
+            :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
+            alt="profileExample"
+          />
+        </div>
+        <div v-else-if="provider === 'kakao'">
+          <div
+            class="kakao_profile_img"
+            :style="{ 'background-image': 'url(' + image + ')' }"
+          ></div>
+        </div>
+        <div v-else-if="provider === 'naver'">
+          <div
+            class="naver_profile_img"
+            :style="{ 'background-image': 'url(' + image + ')' }"
+          ></div>
+        </div>
         <a href="/updateprofile"
           ><img
             class="setting_icon"
@@ -20,8 +35,8 @@
         /></a>
       </div>
       <div class="nickname_email">
-        <div class="nickname">맹구좋아</div>
-        <div class="email">maengoo9@gmail.com</div>
+        <div class="nickname">{{ nick }}</div>
+        <div class="email">{{ email }}</div>
       </div>
     </div>
   </section>
@@ -32,7 +47,7 @@
           <button v-if="!editMode" class="edit" @click="toggleEditMode">
             &nbsp;&nbsp;편집&nbsp;&nbsp;
           </button>
-          <button v-if="editMode" class="delete" @click="deleteComment">
+          <button v-if="editMode" class="delete" @click="deleteContent">
             &nbsp;&nbsp;삭제&nbsp;&nbsp;
           </button>
           <button v-if="editMode" class="cancel" @click="cancelEdit">
@@ -46,8 +61,7 @@
             :boardList="item"
             :key="item.BRD_ID"
             :editMode="editMode"
-          >
-          </boardList>
+          ></boardList>
         </div>
       </TabItem>
       <TabItem title="최근에 본 코스">
@@ -68,14 +82,34 @@
             :hideBrdOpen="true"
           /></div
       ></TabItem>
-      <TabItem title="내가 쓴 댓글"
-        ><button class="comment_edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
+      <TabItem title="내가 쓴 댓글">
+        <div>
+          <button
+            v-if="!comment_editMode"
+            class="edit"
+            @click="toggleCommentEditMode"
+          >
+            &nbsp;&nbsp;편집&nbsp;&nbsp;
+          </button>
+          <button v-if="comment_editMode" class="delete" @click="deleteComment">
+            &nbsp;&nbsp;삭제&nbsp;&nbsp;
+          </button>
+          <button
+            v-if="comment_editMode"
+            class="cancel"
+            @click="cancelCommentEdit"
+          >
+            &nbsp;&nbsp;취소&nbsp;&nbsp;
+          </button>
+        </div>
+        <button class="comment_edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
 
         <div class="commentlist">
           <commentList
             v-for="item in commentList"
             :commentList="item"
-            :key="item.id"
+            :key="item.COM_ID"
+            :comment_editMode="comment_editMode"
           />
         </div>
       </TabItem>
@@ -85,7 +119,7 @@
 
 <script>
 import { ref } from "vue";
-import gnbBarLogin from "../components/gnbBarLogin.vue";
+import gnbBar from "../components/gnbBar.vue";
 import TabsWrapper from "../components/TabsWrapper.vue";
 import TabItem from "../components/TabItem.vue";
 import boardList from "../components/boardList.vue";
@@ -97,7 +131,7 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 export default {
   components: {
-    gnbBarLogin,
+    gnbBar,
     TabsWrapper,
     TabItem,
     boardList,
@@ -110,73 +144,55 @@ export default {
       image: "",
       provider: "",
       editMode: false,
-      myPageData: "",
+      comment_editMode: false,
+      boardList: [],
     };
   },
+  // --------------------------------------------------------------------------------------------------------------------------------------
   created() {
-    this.getMyPageData();
+    this.boardListData();
   },
   mounted() {
-    (this.email = localStorage.getItem("userID")),
-      (this.nick = localStorage.getItem("userNick")),
-      (this.image = localStorage.getItem("userImage")),
-      (this.provider = localStorage.getItem("userProvider"));
+    this.email = localStorage.getItem("userID");
+    this.nick = localStorage.getItem("userNick");
+    this.image = localStorage.getItem("userImage");
+    this.provider = localStorage.getItem("userProvider");
   },
   methods: {
     toggleEditMode() {
-      this.editMode = true; //ㅋㅋ
+      this.editMode = true;
     },
-    deleteComment() {
+    deleteContent() {
       // 삭제 로직을 구현
     },
     cancelEdit() {
       this.editMode = false;
+    }, //여기까지 내 글 수정버튼
+    toggleCommentEditMode() {
+      console.log("toggleCommentEditMode 호출됨");
+      this.comment_editMode = true;
     },
-    async getMyPageData() {
-      //마이페이지 내 정보
+    deleteComment() {
+      // 코멘트 삭제 로직
+    },
+    cancelCommentEdit() {
+      console.log("cancelCommentEdit 호출됨");
+      this.comment_editMode = false;
+    },
+    async boardListData() {
       try {
-        const response = await axios.post("/myPage", {
-          userEmail: "user@example.com", // userEmail 값을 적절히 설정
+        console.log("boardListData 메서드 호출됨"); // 로그 추가
+        const response = await axios.post("/mypage/myCourse", {
+          userEmail: "22116010@kaywon.ac.kr", // userEmail 값을 적절히 설정
         });
-        this.myPageData = response.data; // 서버에서 받은 데이터를 myPageData에 할당
+        console.log("서버 응답 데이터:", response.data); // 로그 추가
+        this.boardList = response.data;
       } catch (error) {
         console.error(error);
       }
     },
   },
   setup() {
-    const boardListData = ref([
-      {
-        BRD_ID: 0,
-        BRD_HASHTAG: "#종로구 #중구 #식사 #전시",
-        BRD_TITLE: "서울 실내 데이트 코스 추천!",
-        BRD_CREATED_AT: "2023-06-22",
-        likecount: 10,
-        BRD_VIEWCOUNT: 100,
-        BRD_OPEN: "공개",
-        checked: false,
-      },
-      {
-        BRD_ID: 1,
-        BRD_HASHTAG: "#서초구 #강남구 #카페 #쇼룸,편집샵",
-        BRD_TITLE: "테스트 제목2",
-        BRD_CREATED_AT: "2023-06-22",
-        likecount: 20,
-        BRD_VIEWCOUNT: 200,
-        BRD_OPEN: "비공개",
-        checked: false,
-      },
-      {
-        BRD_ID: 2,
-        BRD_HASHTAG: "#마포구 #식사 #전시",
-        BRD_TITLE: "테스트 제목3",
-        BRD_CREATED_AT: "2023-06-22",
-        likecount: 30,
-        BRD_VIEWCOUNT: 300,
-        BRD_OPEN: "공개",
-        checked: false,
-      },
-    ]);
     const commentListData = ref([
       {
         COM_ID: 0,
@@ -202,7 +218,6 @@ export default {
     ]);
 
     return {
-      boardList: boardListData,
       commentList: commentListData,
     };
   },

@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   comment: Object,
+  comment_editMode: Boolean,
 });
 </script>
 
@@ -35,9 +36,8 @@ const props = defineProps({
           </div>
         </div>
       </div>
-      <div>{{ comment.content }}</div>
     </div>
-  </div>
+  
 </template>
 
 <style scoped>

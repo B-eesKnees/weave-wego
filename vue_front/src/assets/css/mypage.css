@@ -43,6 +43,18 @@ a {
   position: relative;
   text-align: left;
   width: 70px;
+  border-radius: 100%;
+  border: #000 solid 0.5px;
+}
+
+.kakao_profile_img, .naver_profile_img{
+  position: relative;
+  text-align: left;
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+  border: #000 solid 0.5px;
+  background-size: cover;
 }
 
 .setting_icon {
@@ -209,7 +221,7 @@ a {
   /* border: solid 1px #000; */
   font-size: 1.8em;
   font-weight: 350;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   
 }
 
@@ -244,7 +256,7 @@ a {
   width: 40%;
   max-width: 450px;
   height: 250px;
-  background-image: url(../img/mypage_img.png);
+  /* background-image: url(http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}); */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
