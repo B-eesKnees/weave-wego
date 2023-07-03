@@ -54,7 +54,7 @@
             &nbsp;&nbsp;취소&nbsp;&nbsp;
           </button>
         </div>
-        <!-- --------------------------------------------------------------------------------------------------------------------------------------
+        <!-- 내코스--------------------------------------------------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------------------------------
         --------------------------------------------------------------------------------------------------------------------------------------
@@ -70,11 +70,10 @@
       </TabItem>
       <TabItem title="최근에 본 코스">
         <div class="course">
-          <boardList
-            v-for="item in boardList"
-            :boardList="item"
+          <recentBoardList
+            v-for="item in recentBoardList"
+            :recentBoardList="item"
             :key="item.id"
-            :hideBrdOpen="true"
           /></div
       ></TabItem>
       <TabItem title="좋아요 리스트">
@@ -128,6 +127,7 @@ import TabsWrapper from "../components/TabsWrapper.vue";
 import TabItem from "../components/TabItem.vue";
 import boardList from "../components/boardList.vue";
 import commentList from "../components/commentList.vue";
+import recentBoardList from "../components/recentBoardList.vue";
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
@@ -139,6 +139,7 @@ export default {
     TabsWrapper,
     TabItem,
     boardList,
+    recentBoardList,
     commentList,
   },
   data() {
@@ -150,6 +151,7 @@ export default {
       editMode: false,
       comment_editMode: false,
       boardList: [],
+      recentBoardList: [],
     };
   },
   created() {
@@ -158,8 +160,11 @@ export default {
     this.image = localStorage.getItem("userImage");
     this.provider = localStorage.getItem("userProvider");
     this.boardListData();
+    this.recentBoardListData();
   },
   methods: {
+    // 내글 편집 삭제 수정 버튼-------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------------------
     toggleEditMode() {
       this.editMode = true;
     },
@@ -183,16 +188,17 @@ export default {
       axios(url, options)
         .then((response) => {
           console.log("컨텐츠가 성공적으로 삭제되었습니다", response);
-          // 삭제 후 추가 작업을 수행할 수 있습니다
         })
         .catch((error) => {
           console.error("컨텐츠 삭제 중 오류가 발생했습니다", error);
-          // 오류를 적절히 처리할 수 있습니다
         });
     },
     cancelEdit() {
       this.editMode = false;
-    }, //여기까지 내 글 수정버튼
+    },
+
+    // 코멘트 글 편집 삭제 수정 버튼-------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------------------
     toggleCommentEditMode() {
       console.log("toggleCommentEditMode 호출됨");
       this.comment_editMode = true;
@@ -204,12 +210,8 @@ export default {
       console.log("cancelCommentEdit 호출됨");
       this.comment_editMode = false;
     },
-    // --------------------------------------------------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------------------------------------------------
-
+    // 보드리스트 불러오기-------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------------------
     async boardListData() {
       try {
         console.log("boardListData 메서드 호출됨"); // 로그 추가
@@ -218,6 +220,18 @@ export default {
         });
         console.log("서버 응답 데이터:", response.data); // 로그 추가
         this.boardList = response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    // 최근에 본 게시글 리스트 불러오기-------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------------------
+    async recentBoardListData() {
+      try {
+        const response = await axios.post("/mypage/recentCourse", {
+          userEmail: this.email,
+        });
+        this.recentBoardList = response.data;
       } catch (error) {
         console.error(error);
       }
