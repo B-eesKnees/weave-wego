@@ -12,6 +12,8 @@ const jwt = require("jsonwebtoken"); // 연주 추가
 
 const session = require("express-session");
 const fs = require("fs");
+const util = require("util");
+const writeFileAsync = util.promisify(fs.writeFile);
 
 dotenv.config();
 //git 테스트
@@ -231,9 +233,6 @@ app.post("/updateCourse/:boardID/:fileName", async (req, res) => {
   const dir = `${__dirname}/CourseImage/${boardID}`;
   const file = `${dir}/${fileName}`;
 
-  //dirname/courseimage/boardid/filename
-  //CourseImage
-
   if (!req.body.data) {
     return res.status(400).send({
       code: 400,
@@ -242,6 +241,7 @@ app.post("/updateCourse/:boardID/:fileName", async (req, res) => {
   }
 
   const data = req.body.data.slice(req.body.data.indexOf(";base64") + 8);
+  const decodedData = Buffer.from(data, "base64");
 
   if (!fs.existsSync(dir)) {
     try {
@@ -249,47 +249,48 @@ app.post("/updateCourse/:boardID/:fileName", async (req, res) => {
     } catch (err) {
       return res.send({
         code: 400,
-        failed: "error occurred while creating directory",
+        failed: "디렉토리 생성 중 오류가 발생했습니다.",
         error: err,
       });
     }
   }
-  fs.writeFile(file, data, "base64", async (err) => {
-    if (err) {
-      res.send({
-        code: 400,
-        failed: "error occurred",
-        error: err,
-      });
-    } else {
-      // DB에 이미지 파일명 업데이트 코드 추가
-      db.query(
-        "INSERT weavewego.image SET IMG_NUM ,IMG_PATH VALUES(2, `../CourseImage/2/leobao.jpg`)",
-        [boardID, `../CourseImage/${boardID}/${fileName}`],
-        (err) => {
-          if (err) {
-            res.send({
-              code: 400,
-              failed: "error occurred",
-              error: err,
-            });
-          } else {
-            res.send({
-              code: 200,
-              success: "image uploaded and user updated",
-            });
-          }
+
+  try {
+    await writeFileAsync(file, decodedData);
+    // DB에 이미지 파일명 업데이트 코드 추가
+    db.query(
+      "INSERT INTO weavewego.image (IMG_NUM, IMG_PATH) VALUES (?, ?)",
+      [boardID, `../CourseImage/${boardID}/${fileName}`],
+      (err) => {
+        if (err) {
+          res.send({
+            code: 400,
+            failed: "이미지 정보 업데이트 중 오류가 발생했습니다.",
+            error: err,
+          });
+        } else {
+          res.send({
+            code: 200,
+            success: "이미지가 업로드되었습니다.",
+          });
         }
-      );
-    }
-  });
+      }
+    );
+  } catch (err) {
+    res.status(400).send({
+      code: 400,
+      failed: "이미지 파일 저장 중 오류가 발생했습니다.",
+      error: err,
+    });
+  }
 });
+
 //---------------------------------------------------------------------------------
 
 //게시글 수정 (이미지 삭제)
 
-app.delete("/deleteImage/:boardID/:fileName", (req, res) => {
-  const { boardID, fileName } = req.params;
+app.delete("/deleteImage/:boardID/:imgID/:fileName", (req, res) => {
+  const { boardID, imgID, fileName } = req.params;
 
   const dir = `${__dirname}/CourseImage/${boardID}`;
   const file = `${dir}/${fileName}`;
@@ -301,11 +302,11 @@ app.delete("/deleteImage/:boardID/:fileName", (req, res) => {
         error: "이미지 삭제 실패",
       });
     } else {
-      // 이미지 삭제 후 DB에서 이미지 정보 업데이트 코드 추가
       db.query(
-        "DELETE FROM weavewego.image WHERE IMG_NUM = ?",
-        [boardID],
-        (err) => {
+        "DELETE FROM weavewego.image WHERE IMG_ID = ?",
+
+        [imgID],
+        (err, results) => {
           if (err) {
             res.status(500).send({
               code: 500,

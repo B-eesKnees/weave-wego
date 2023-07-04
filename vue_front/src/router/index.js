@@ -48,14 +48,16 @@ const routes = [
     path: "/updateprofile",
     name: "updateProfile",
     component: () =>
-      import(/* webpackChunkName: "updateprofile" */ "../views/updateProfile.vue"),
+      import(
+        /* webpackChunkName: "updateprofile" */ "../views/updateProfile.vue"
+      ),
   },
   {
-    path: "/checkpw",
-    name: "checkpw",
+    path: "/detail/:boardId",
+    name: "detail",
     component: () =>
-      import(/* webpackChunkName: "checkpw" */ "../views/checkPw.vue"),
-  }
+      import(/* webpackChunkName: "detail" */ "../views/Detail.vue"),
+  },
 ];
 
 const router = createRouter({
