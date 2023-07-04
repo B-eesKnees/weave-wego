@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useRoute } from "vue-router"; // 라우터 1번 일단 임포트
 //
+
 import { ref } from "vue";
 import Comment from "@/components/Comment.vue";
 import Location from "@/components/Location.vue";
@@ -9,6 +10,8 @@ import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import KakaoMap from "@/components/KakaoMap.vue";
 import gnbBar from "@/components/gnbBar.vue";
+
+const newComment = ref("");
 
 const boardData = ref({
   BRD_CREATED_AT: "",
@@ -29,57 +32,37 @@ const boardData = ref({
   BRD_WRITER: "",
 });
 
+const commentData = ref([
+  // 댓글 더미데이터
+  {
+    COM_COMMENT: "",
+    COM_CREATED_AT: "",
+    COM_ID: 0,
+    COM_IMAGE: "",
+    COM_NICK: "",
+    COM_NUM: 0,
+    COM_REPORT: "",
+    COM_UPDATED_AT: "",
+    COM_WRITER: "",
+  },
+]);
+
+const locationData = ref([
+  // 댓글 더미데이터
+  {
+    LOC_ID: 0,
+    LOC_NAME: "",
+    LOC_LAT: 0,
+    LOC_LNG: 0,
+  },
+]);
+
+const locationRevData = ref([""]);
+
 const images = ref([
   "https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg",
   "https://cdn.pixabay.com/photo/2016/02/17/23/03/usa-1206240_1280.jpg",
   "https://cdn.pixabay.com/photo/2016/12/04/19/30/berlin-cathedral-1882397_1280.jpg",
-]);
-
-const comment = ref([
-  // 댓글 더미데이터
-  { id: 0, nickname: "짱구", content: "바보바보", date: "2022-12-14" },
-  { id: 1, nickname: "맹구", content: "바보", date: "2022-12-15" },
-  { id: 2, nickname: "바보", content: "짱구바보", date: "2022-12-16" },
-]);
-
-const location = ref([
-  // 장소 더미데이터
-  {
-    id: 0,
-    name: "국립미술박물관",
-    location: "서울 그 어딘가 어쩌고저쩌고",
-    number: 1,
-    comment: "여기 너무 좋아요",
-    Lat: 37.577607,
-    Lng: 126.976894,
-  },
-  {
-    id: 1,
-    name: "경복궁",
-    location: "서울 그 어딘가 어쩌고저쩌고",
-    number: 2,
-    comment: "여기 너무 좋아요",
-    Lat: 37.578621,
-    Lng: 126.980098,
-  },
-  {
-    id: 2,
-    name: "이젠아카데미",
-    location: "서울 그 어딘가 어쩌고저쩌고",
-    number: 3,
-    comment: "여기 너무 좋아요",
-    Lat: 37.569882,
-    Lng: 126.986035,
-  },
-  {
-    id: 3,
-    name: "서울특별시청",
-    location: "서울 그 어딘가 어쩌고저쩌고",
-    number: 4,
-    comment: "여기 너무 좋아요",
-    Lat: 37.566815,
-    Lng: 126.978658,
-  },
 ]);
 
 const route = useRoute(); // 라우터 2번 route 변수 만들어주기
@@ -92,11 +75,53 @@ axios
   })
   .then((result) => {
     boardData.value = result.data.board;
-    console.log("success", result);
+    locationRevData.value = [
+      boardData.value.BRD_LOC_REV1,
+      boardData.value.BRD_LOC_REV2,
+      boardData.value.BRD_LOC_REV3,
+      boardData.value.BRD_LOC_REV4,
+      boardData.value.BRD_LOC_REV5,
+    ];
+    console.log(result.data.board);
   })
   .catch((error) => {
-    console.log("error", error);
+    console.log("board_error", error);
   });
+
+axios
+  .get("http://127.0.0.1:3000/postdata/comments", {
+    params: {
+      boardId: route.params.boardId, // router -> :boardId
+    },
+  })
+  .then((result) => {
+    commentData.value = result.data.comments;
+  })
+  .catch((error) => {
+    console.log("comments_error", error);
+  });
+
+axios
+  .get("http://127.0.0.1:3000/postdata/locations", {
+    params: {
+      boardId: route.params.boardId, // router -> :boardId
+    },
+  })
+  .then((result) => {
+    const temp = result.data.locations;
+
+    locationData.value = temp.map((t) => ({
+      LOC_ID: t.LOC_ID,
+      LOC_NAME: JSON.parse(t.LOC_NAME).name,
+      LOC_LAT: JSON.parse(t.LOC_LAT).lat,
+      LOC_LNG: JSON.parse(t.LOC_LNG).lng,
+    }));
+  })
+  .catch((error) => {
+    console.log("locations_error", error);
+  });
+
+const createComment = () => {};
 </script>
 
 <template>
@@ -118,7 +143,7 @@ axios
         <div>{{ boardData.BRD_WRITER }}</div>
         <div class="name-info-right">
           <div>좋아요</div>
-          <div>조회수</div>
+          <div>조회수 {{ boardData.BRD_VIEWCOUNT }}</div>
           <div>
             <button
               type="button"
@@ -146,11 +171,17 @@ axios
       <div class="content-main">
         <div class="map-wrapper">
           <div class="map">
-            <kakao-map :locations="location" />
+            <kakao-map :locations="locationData" />
           </div>
         </div>
         <!-- 장소 컴포넌트 -->
-        <location v-for="item in location" :key="item.id" :location="item" />
+        <location
+          v-for="(item, index) in locationData"
+          :key="index"
+          :location="item"
+          :number="index + 1"
+          :rev="locationRevData[index]"
+        />
         <!-- 이미지 슬라이드 -->
         <div class="imageslider">
           <carousel :items-to-show="1" :wrap-around="true">
@@ -167,27 +198,21 @@ axios
         </div>
         <!-- 본문 본문 본문 -->
         <div class="main">
-          Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
-          ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-          Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
-          ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-          Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
-          ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-          Lorem ipsum
+          {{ boardData.BRD_REV }}
         </div>
         <div>
           <!-- 댓글 구역 시작 -->
           <div>
             <div>댓글</div>
             <div class="comment-write">
-              <div>
-                <input
-                  type="text"
-                  placeholder="좋은 댓글을 씁시다"
-                  font-size="2rem"
-                  style="width: 1000px; height: 100px"
-                />
-              </div>
+              <input
+                v-model="newComment"
+                type="text"
+                placeholder="좋은 댓글을 씁시다"
+                font-size="2rem"
+                style="flex-grow: 1; height: 5rem"
+              />
+
               <div>
                 <button
                   id="comment-submit"
@@ -200,7 +225,11 @@ axios
               </div>
             </div>
             <!--댓글 컴포넌트 -->
-            <comment v-for="item in comment" :key="item.id" :comment="item" />
+            <comment
+              v-for="comment in commentData"
+              :key="comment.COM_ID"
+              :comment="comment"
+            />
           </div>
         </div>
       </div>
