@@ -7,37 +7,21 @@
 
     <div class="wrap">
       <form @submit.prevent="loginForm">
-        <input
-          v-model="email"
-          type="text"
-          id="username"
-          :class="{ error_border: error_border_check }"
-          placeholder="이메일"
-        />
+        <input v-model="email" type="text" id="username" :class="{ error_border: error_border_check }"
+          placeholder="이메일" />
         <p id="error" v-if="email_check">
           이메일주소를 정확히 입력해주세요. 예)abcd@naver.com
         </p>
 
-        <input
-          v-model="password"
-          type="password"
-          id="password"
-          :class="{ error_border: error_border_check }"
-          placeholder="비밀번호"
-        />
+        <input v-model="password" type="password" id="password" :class="{ error_border: error_border_check }"
+          placeholder="비밀번호" />
         <p id="error" v-if="password_check">
           비밀번호를 정확히 입력해주세요.<br />
           *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
         </p>
         <div class="user_login_btns">
-          <a href="/auth/login" class="login_btn"
-            ><input
-              :class="{ error_submit: allcheck, submit: !allcheck }"
-              :disabled="allcheck"
-              type="submit"
-              id="login"
-              value="로그인"
-          /></a>
+          <a href="/auth/login" class="login_btn"><input :class="{ error_submit: allcheck, submit: !allcheck }"
+              :disabled="allcheck" type="submit" id="login" value="로그인" /></a>
           <a class="join_btn" href="/join">회원가입</a>
         </div>
       </form>
@@ -249,6 +233,7 @@ a {
   font-size: 30px;
   padding-bottom: 10px;
 }
+
 .title-bar h5 {
   margin-top: 2%;
 }
@@ -294,6 +279,7 @@ input,
   font-size: 15px;
   transition: all 0.2s ease-in-out;
 }
+
 .submit2 {
   width: 100%;
   margin-top: 20px;
@@ -325,6 +311,7 @@ input.submit {
   margin-top: 25px;
   transition: all 0.2s ease-in-out;
 }
+
 .join_btn {
   width: 100%;
   padding: 3%;
@@ -369,6 +356,7 @@ input.submit2:hover {
   margin-left: 8px;
   width: 30%;
 }
+
 .user_login_btns a:first-child {
   text-decoration: none;
   text-align: center;
@@ -401,10 +389,12 @@ input.submit2:hover {
   margin-top: -1%;
   font-size: 12px;
 }
+
 .error_border:focus {
   border-color: red;
   box-shadow: none;
 }
+
 .error_submit {
   width: 100%;
   padding: 5%;
@@ -425,6 +415,7 @@ input.submit2:hover {
   font-weight: bold;
   line-height: normal;
 }
+
 .naver {
   background-color: #2db400;
   color: white;

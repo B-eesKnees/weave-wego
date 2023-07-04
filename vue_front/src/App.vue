@@ -2,11 +2,8 @@
 
 <template>
   <nav class="main">
-    <router-link to="/"></router-link>
-    <router-link to="/login"></router-link>
-    <router-link to="/join"></router-link>
+    <router-view />
   </nav>
-  <router-view />
 </template>
 
 <script>

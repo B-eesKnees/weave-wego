@@ -1,10 +1,10 @@
 <template>
-    <div class="mainpage3">
+    <div id="main3" class="mainpage3">
         <div class="mainpage3_third">
             <div class="mainpage3_third_filters">
                 <div class="mainpage3_third_filters_location_filter">
                     <button class="filter_btn" @click="showLocation(), filterBtnClick($event)">지역 선택</button>
-                    <svg v-if="isShowLocation" width="600" height="500" viewBox="50 25 700 600"
+                    <svg v-show="isShowLocation" width="600" height="500" viewBox="50 25 700 600"
                         xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <filter id="dropshadow">
@@ -25,55 +25,58 @@
                             </filter>
                         </defs>
                         <g filter="url(#dropshadow)">
-                            <path ref="jongro" id="jongro" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="jongro" id="종로구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 455 297 l 4 -2 1 0 1 0 3 -1 4 5 7 3 2 6 0 8 -11 2 -11 1 -8 0 -9 1 -8 1 -9 1 -9 -2 -10 -1 -9 1 -4 3 -2 3 -6 -6 -3 -4 -5 -6 -4 -5 -2 -5 5 -3 0 -6 0 -10 0 -9 1 -9 -3 -4 -2 0 -2 0 -1 -4 0 -9 -5 -9 1 -10 -1 -11 -1 -6 2 -6 5 -2 7 -3 10 -2 2 -1 3 0 1 0 4 -2 8 -1 3 6 4 1 3 8 3 10 1 6 3 5 0 9 0 7 -1 5 -6 3 -6 4 -1 5 6 4 5 3 5 4 9 1 10 0 4 4 3 4 5 10 1 3 z " />
-                            <path ref="jung" id="jung" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="jung" id="중구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 477 316 l 0 9 5 5 -1 3 -4 5 -4 5 -5 4 -4 7 -3 4 -4 3 -4 10 -2 -1 -3 -7 -2 -5 -2 1 -1 0 -2 -1 -3 1 0 0 -3 1 -4 2 -5 -5 -6 -3 -10 -3 -4 -1 -3 -1 -2 2 -4 -1 -3 -1 -9 0 -2 2 -4 3 0 -7 1 -4 -2 -2 0 -1 6 -3 6 -4 -1 -2 -2 -5 2 -3 4 -3 9 -1 10 1 9 2 9 -1 8 -1 9 -1 8 0 11 -1 z " />
-                            <path ref="yongsan" id="yongsan" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="yongsan" id="용산구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 394 349 l 3 1 4 1 2 -2 3 1 4 1 10 3 6 3 5 5 4 -2 3 -1 0 0 3 -1 2 1 1 0 2 -1 2 5 3 7 2 1 5 9 6 2 2 9 -4 5 -4 5 -5 6 -3 4 -5 4 -5 5 -5 4 -5 3 -8 8 -5 8 -7 3 -7 -1 -10 -4 -3 -1 -6 -3 -6 -5 -5 -3 -6 -3 -9 -3 1 -5 0 -10 -2 -8 -6 -11 5 -2 4 -1 5 -4 5 -6 2 -5 3 -6 6 -5 0 -3 -2 -3 4 -3 2 -2 z " />
-                            <path ref="sungdong" id="sungdong" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="sungdong" id="성동구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 511 315 l 7 4 6 6 4 4 6 5 2 0 15 3 4 0 -5 20 -3 5 -5 12 -3 7 -10 20 -7 -4 -5 -3 -4 -4 -10 -3 -10 0 -7 0 -12 0 -8 4 -2 -9 -6 -2 -5 -9 4 -10 4 -3 3 -4 4 -7 5 -4 4 -5 4 -5 1 -3 -5 -5 0 -9 6 1 11 -1 5 -2 2 -1 6 0 z " />
-                            <path ref="gwangjin" id="gwangjin" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="gwangjin" id="광진구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 605 315 l 1 1 -1 4 -1 7 -2 9 3 6 4 4 3 -3 9 -1 3 3 -4 10 -2 10 -2 5 -2 4 -4 5 -5 5 -5 4 -11 12 -3 3 -3 2 -8 5 -6 3 -5 1 -5 -1 -5 -1 -6 -2 -12 -5 -7 -4 13 -27 5 -12 3 -5 5 -20 3 -8 4 -5 4 -9 7 1 11 3 9 -3 4 -3 4 -2 z " />
-                            <path ref="dongdaemun" id="dongdaemun" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="dongdaemun" id="동대문구" @click="locationSelect($event), showSortRecent()"
+                                class="OUTLINE"
                                 d="M 554 245 l 2 10 -2 5 -3 6 2 9 1 6 3 9 3 6 2 3 1 11 3 5 -4 9 -4 5 -3 8 -4 0 -15 -3 -2 0 -6 -5 -4 -4 -6 -6 -7 -4 -4 -2 -6 0 -2 1 -5 2 -11 1 -6 -1 0 -8 -2 -6 6 -4 6 -5 4 -6 3 -4 4 -5 2 -3 6 -8 4 -2 8 -3 4 -5 7 -1 7 -2 4 -6 7 -2 z " />
-                            <path ref="junglang" id="junglang" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="junglang" id="중랑구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 621 218 l 5 3 1 6 0 10 2 8 -3 8 -3 5 0 3 3 4 -1 6 -4 2 -5 9 0 5 -4 6 -4 3 -4 5 -3 10 -4 2 -4 3 -9 3 -11 -3 -7 -1 -3 -5 -1 -11 -2 -3 -3 -6 -3 -9 -1 -6 -2 -9 3 -6 2 -5 -2 -10 0 -8 2 -11 6 -3 4 -1 9 -4 9 1 10 1 6 -2 9 -1 z " />
-                            <path ref="sungbuk" id="sungbuk" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="sungbuk" id="성북구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 455 297 l -3 -2 -1 -3 -5 -10 -3 -4 -4 -4 -10 0 -9 -1 -5 -4 -5 -3 -6 -4 1 -5 6 -4 6 -3 1 -5 0 -7 0 -9 -3 -5 -1 -6 -3 -10 -3 -8 -4 -1 -3 -6 9 -5 4 -3 4 1 5 4 6 4 3 2 4 5 5 5 7 3 5 2 -1 3 0 0 0 2 1 3 5 6 9 3 4 3 5 3 8 -1 6 4 9 -4 4 -6 4 -4 4 -4 4 -6 4 -3 5 4 4 5 5 5 5 4 9 0 9 -2 -2 11 0 8 -7 1 -7 2 -4 6 -7 2 -7 1 -4 5 -8 3 -4 2 -6 8 -2 3 -4 5 -3 4 -4 6 -6 5 -6 4 -7 -3 -4 -5 -3 1 -1 0 -1 0 z " />
-                            <path ref="gangbuk" id="gangbuk" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="gangbuk" id="강북구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 448 87 l 2 0 1 0 0 0 4 4 3 7 4 5 4 7 3 5 1 2 -2 4 -2 6 -2 9 -2 8 -1 5 0 4 2 4 5 3 3 0 2 -1 3 2 7 5 3 3 7 6 2 6 5 4 3 7 6 6 7 6 3 6 -4 3 -4 6 -4 4 -4 4 -4 6 -9 4 -6 -4 -8 1 -5 -3 -4 -3 -9 -3 -4 -6 -2 -3 0 -2 0 0 1 -3 -5 -2 -7 -3 -5 -5 -4 -5 -3 -2 -6 -4 -5 -4 -4 -1 3 -4 0 -6 -3 -4 1 -3 2 -3 -2 -4 -3 -7 -4 -9 4 -1 7 -7 4 -8 6 -4 2 -5 0 -13 -1 -7 2 -5 6 -5 7 -2 z " />
-                            <path ref="dobong" id="dobong" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="dobong" id="도봉구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 463 157 l -2 -4 0 -4 1 -5 2 -8 2 -9 2 -6 2 -4 -1 -2 -3 -5 -4 -7 -4 -5 -3 -7 -1 -9 0 -8 4 -11 8 -8 10 1 9 0 3 4 1 6 3 5 9 -1 4 -2 4 -1 4 4 5 0 5 13 0 9 -1 5 -4 12 0 8 3 9 2 9 3 10 1 9 2 7 -2 13 -3 -4 -2 -3 -2 3 -5 5 -1 6 -4 9 -1 7 -6 -6 -3 -7 -5 -4 -2 -6 -7 -6 -3 -3 -7 -5 -3 -2 -2 1 -3 0 z " />
-                            <path ref="nowon" id="nowon" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="nowon" id="노원구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 619 183 l 1 7 -3 7 -6 5 -3 7 1 8 -9 1 -6 2 -10 -1 -9 -1 -9 4 -4 1 -6 3 -9 2 -9 0 -5 -4 -5 -5 -4 -5 -5 -4 -3 -6 -7 -6 1 -7 4 -9 1 -6 5 -5 2 -3 2 3 3 4 2 -13 -2 -7 -1 -9 -3 -10 -2 -9 -3 -9 0 -8 4 -12 1 -5 0 -9 6 -4 5 -2 4 -4 4 -6 6 0 3 1 4 0 5 -1 4 -2 7 -1 5 8 5 5 5 0 3 -1 5 4 -3 10 -2 7 -1 2 1 3 3 7 2 8 -2 11 -2 5 -3 4 0 4 2 6 1 6 0 10 3 5 7 0 5 -2 5 0 4 4 4 3 z " />
-                            <path ref="enpyeng" id="enpyeng" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="enpyeng" id="은평구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 368 148 l 3 2 1 3 2 11 2 9 2 8 3 5 0 5 -3 3 -5 5 -7 3 -5 2 -2 6 1 6 1 11 -1 10 -7 6 -4 3 -4 7 0 7 -5 2 -9 4 -4 4 -3 5 -3 7 -5 4 -3 4 -8 -1 0 -3 -1 0 -3 -2 -3 2 -4 5 -4 5 -5 5 -1 5 -9 -8 -12 -9 -1 -2 -6 -6 -4 -5 6 -9 1 2 -2 5 2 5 8 0 9 -1 3 -6 1 -4 2 -5 -1 -9 2 -8 -2 -10 2 -10 4 -7 3 -4 2 -6 2 -9 -1 -10 5 -4 0 -1 -1 -5 1 -4 1 -4 0 -5 -5 -3 -5 -5 0 -1 1 1 5 3 6 4 11 -1 10 -3 3 -3 4 -2 9 -4 4 -5 3 -5 5 -2 6 -2 3 4 z " />
-                            <path ref="seodaemun" id="seodaemun" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="seodaemun" id="서대문구" @click="locationSelect($event), showSortRecent()"
+                                class="OUTLINE"
                                 d="M 365 255 l 1 4 2 0 2 0 3 4 -1 9 0 9 0 10 0 6 -5 3 2 5 4 5 5 6 3 4 6 6 2 5 1 2 -6 4 -6 3 -3 3 -8 0 -10 1 -11 1 -7 2 -10 -4 -7 -6 -2 -10 -6 -3 -6 -2 -4 -2 -8 -4 -5 -5 -7 -5 1 -5 5 -5 4 -5 4 -5 3 -2 3 2 1 0 0 3 8 1 3 -4 5 -4 3 -7 3 -5 4 -4 9 -4 5 -2 0 -7 4 -7 4 -3 7 -6 5 9 z " />
-                            <path ref="mapo" id="mapo" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="mapo" id="마포구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 263 289 l 12 9 9 8 7 5 5 5 8 4 4 2 6 2 6 3 2 10 7 6 10 4 7 -2 11 -1 10 -1 8 0 3 -3 0 1 2 2 -1 4 0 7 2 3 0 3 -6 5 -3 6 -2 5 -5 6 -5 4 -4 1 -5 2 -7 -4 -5 -4 -5 -3 -5 -2 -4 1 -4 2 -6 -4 -11 0 -12 0 -5 -2 -6 -7 -6 -6 -8 -4 -8 -4 -5 -4 -5 -3 -11 -7 -8 -5 -4 -2 -6 -4 -4 -4 -4 -3 -6 -6 -1 -3 8 -4 4 -2 4 -2 10 -2 10 -2 3 -2 0 -1 -1 -6 0 -5 4 -5 5 -4 4 5 6 6 z " />
-                            <path ref="yangcheon" id="yangcheon" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="yangcheon" id="양천구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 240 363 l 8 -1 5 5 2 5 4 8 4 9 -2 3 2 2 0 2 -8 3 -5 4 -3 4 -2 12 0 4 -2 7 -4 6 -1 8 -2 6 -1 -1 -4 -2 -10 -2 -6 -2 -4 -5 -8 -1 -8 2 -4 4 -7 3 -4 3 -5 1 -3 -1 -4 -5 -4 -4 -4 -2 -3 -12 2 -9 1 -7 4 -5 0 -4 -4 -4 -4 -6 -2 -11 4 -7 3 -7 5 -2 1 6 5 5 2 6 3 9 3 7 3 4 12 1 7 -2 11 -1 7 -2 1 -8 0 -7 -1 -9 0 -10 2 -8 5 2 5 4 z " />
-                            <path ref="gangseo" id="gangseo" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="gangseo" id="강서구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 134 254 l 3 3 6 4 4 4 4 6 4 3 6 4 5 4 6 4 5 3 4 4 6 5 3 2 6 5 9 6 1 3 6 6 4 3 4 4 6 4 4 2 8 5 11 7 -4 8 3 9 -8 1 -8 -2 -5 -4 -5 -2 -2 8 0 10 1 9 0 7 -1 8 -7 2 -11 1 -7 2 -12 -1 -3 -4 -3 -7 -3 -9 -2 -6 -5 -5 -1 -6 -5 2 -3 7 -10 2 -9 -1 -7 -4 -3 -2 0 1 -9 5 -2 5 -6 2 -2 -6 -4 -5 -5 -4 -7 -2 -9 -2 -7 -4 -4 1 -1 -2 -2 -2 1 -1 -3 -2 -2 -7 8 -4 2 -5 6 -2 -1 -5 -2 -5 0 -3 2 1 0 1 5 -3 3 -3 -1 -2 2 -1 1 -5 8 -4 1 -1 1 1 2 -5 2 -6 1 3 1 2 2 -9 2 -4 2 2 1 -4 5 -5 0 -6 -3 -5 -1 -6 0 -5 3 -4 4 -6 4 2 z " />
-                            <path ref="guro" id="guro" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="guro" id="구로구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 245 419 l 6 7 4 4 5 2 4 4 4 9 -1 9 2 9 1 6 1 5 3 7 5 5 4 3 -3 5 -4 5 -10 1 -7 -3 -4 -5 -5 -4 -5 -3 -2 0 -2 1 -3 -5 -4 -2 3 -2 0 -1 -3 0 -3 2 -1 -5 -2 -6 -2 1 -1 1 1 1 -4 4 -5 3 -4 5 -4 4 -6 6 -9 2 -2 4 -1 10 -6 0 -8 -1 -5 -4 -4 0 -4 2 -9 0 -5 1 -8 1 2 -4 4 -5 2 -8 2 -5 3 -4 -2 -5 -3 -1 -8 -5 -1 -7 6 -3 4 -6 2 -4 2 -6 5 -6 4 2 4 4 4 5 3 1 5 -1 4 -3 7 -3 4 -4 8 -2 8 1 4 5 6 2 10 2 4 2 1 1 2 -6 1 -8 4 -6 2 -7 z " />
-                            <path ref="geumcheon" id="geumcheon" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="geumcheon" id="금천구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 241 486 l 2 -1 2 0 5 3 5 4 4 5 7 3 10 -1 11 -1 6 1 3 10 -3 8 3 6 3 6 1 6 4 8 8 3 3 4 5 4 2 6 -7 7 -2 5 -3 6 -8 1 -5 4 -4 7 -9 -1 -4 -4 -3 -4 -2 -9 -3 -5 -2 -3 1 -3 -1 -3 -3 -4 -6 -3 -4 -6 -1 -9 -4 -4 -1 -4 2 -2 -2 -3 -3 -5 -4 -6 -2 -4 -4 -9 -3 -8 -1 -4 1 -2 z " />
-                            <path ref="yeongdeungpo" id="yeongdeungpo" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="yeongdeungpo" id="영등포구" @click="locationSelect($event), showSortRecent()"
+                                class="OUTLINE"
                                 d="M 249 345 l 5 3 5 4 8 4 8 4 6 6 6 7 5 2 12 0 11 0 6 4 4 -2 4 -1 5 2 5 3 5 4 7 4 6 11 2 8 0 10 -1 5 -11 2 -8 1 -9 1 -8 2 -2 5 -3 8 -2 3 -3 10 -2 8 -9 2 -3 1 -4 7 -4 5 -3 5 -4 6 -4 -3 -5 -5 -3 -7 -1 -5 -1 -6 -2 -9 1 -9 -4 -9 -4 -4 -5 -2 -4 -4 -6 -7 2 -12 3 -4 5 -4 8 -3 0 -2 -2 -2 2 -3 -4 -9 -4 -8 -2 -5 -5 -5 -3 -9 z " />
-                            <path ref="dongjak" id="dongjak" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="dongjak" id="동작구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 367 426 l 6 3 5 3 6 5 6 3 3 1 10 4 7 1 -3 4 0 0 4 5 2 8 -2 11 0 6 -1 11 0 8 0 9 -5 -2 -14 0 -3 -2 -5 -4 -6 -10 0 -11 -2 -6 -7 3 -3 1 -2 -2 -7 -3 -9 1 -7 0 -11 -2 -6 -1 -6 7 -6 1 -10 4 -4 3 -2 1 -12 3 4 -6 3 -5 4 -5 4 -7 3 -1 9 -2 2 -8 3 -10 2 -3 3 -8 2 -5 8 -2 9 -1 8 -1 11 -2 z " />
-                            <path ref="gwanak" id="gwanak" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="gwanak" id="관악구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 323 470 l 6 1 11 2 7 0 9 -1 7 3 2 2 3 -1 7 -3 2 6 0 11 6 10 5 4 3 2 14 0 5 2 2 8 4 6 3 4 0 11 1 5 -9 4 -7 2 -3 1 -5 4 -5 7 -8 5 -2 7 -1 5 -5 2 -9 2 -9 1 -10 2 -4 2 -2 0 -3 -5 -2 -6 -5 -4 -5 -7 -4 -4 -2 -6 -5 -4 -3 -4 -8 -3 -4 -8 -1 -6 -3 -6 -3 -6 3 -8 -3 -10 -6 -1 -11 1 4 -5 3 -5 12 -3 2 -1 4 -3 10 -4 6 -1 z " />
-                            <path ref="seocho" id="seocho" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="seocho" id="서초구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 460 413 l 1 0 2 -3 6 9 1 6 0 1 3 9 5 15 5 13 6 17 7 10 6 -1 5 5 1 3 4 9 7 13 3 5 6 -2 4 0 6 -1 9 -2 8 -4 5 -3 2 -2 11 0 4 8 2 3 5 6 2 7 4 4 1 7 -5 8 -6 10 0 6 -6 4 -4 4 -5 0 -4 -1 -4 0 -2 6 -2 8 -1 4 -1 2 1 3 -4 0 -10 2 -9 0 -8 0 -7 -4 -4 -6 -5 -5 -4 -2 -5 -4 1 -5 2 -4 -1 -8 0 -5 -2 -4 2 -5 0 -1 -3 -4 -2 -9 -2 -6 -5 0 -2 7 -3 6 -6 4 -8 2 -4 1 -2 0 -6 -3 -3 -3 0 0 -1 -2 -3 -6 -2 -8 -8 -2 -5 3 1 3 0 1 -4 4 -6 3 -4 3 -1 -5 0 -11 -3 -4 -4 -6 -2 -8 0 -9 0 -8 1 -11 0 -6 2 -11 -2 -8 -4 -5 0 0 3 -4 7 -3 5 -8 8 -8 5 -3 5 -4 5 -5 5 -4 3 -4 z " />
-                            <path ref="gangnam" id="gangnam" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="gangnam" id="강남구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 503 387 l 10 3 4 4 5 3 7 4 7 4 12 5 0 10 0 4 1 13 1 6 1 10 6 2 7 1 6 2 3 2 12 4 5 2 5 3 6 3 5 4 5 5 3 6 3 5 3 5 4 7 2 2 5 10 3 4 4 5 -10 11 -2 6 -4 0 -3 -4 -9 -2 -4 0 0 2 -1 1 -3 3 -11 3 -1 -7 -4 -4 -2 -7 -5 -6 -2 -3 -4 -8 -11 0 -2 2 -5 3 -8 4 -9 2 -6 1 -4 0 -6 2 -3 -5 -7 -13 -4 -9 -1 -3 -5 -5 -6 1 -7 -10 -6 -17 -5 -13 -5 -15 -3 -9 0 -1 -1 -6 -6 -9 -2 3 -1 0 -7 -6 5 -6 4 -5 4 -5 8 -4 12 0 7 0 z " />
-                            <path ref="songpa" id="songpa" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="songpa" id="송파구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 621 374 l 6 2 4 2 4 4 0 8 -2 5 -1 3 0 7 5 2 8 5 5 3 8 4 3 2 5 3 5 2 -4 3 0 6 -3 10 4 5 5 3 10 0 9 3 5 5 -1 4 -2 7 -3 9 -4 3 -5 4 -5 5 -2 6 -3 7 -5 5 -10 0 -6 0 0 8 -4 5 -6 -2 -2 -1 -1 4 -4 -5 -3 -4 -5 -10 -2 -2 -4 -7 -3 -5 -3 -5 -3 -6 -5 -5 -5 -4 -6 -3 -5 -3 -5 -2 -12 -4 -3 -2 -6 -2 -7 -1 -6 -2 -1 -10 -1 -6 -1 -13 0 -4 0 -10 6 2 5 1 5 1 5 -1 6 -3 8 -5 3 -2 3 -3 11 -12 5 -4 5 -5 4 -5 z " />
-                            <path ref="gangdong" id="gangdong" @click="locationSelect($event)" class="OUTLINE"
+                            <path ref="gangdong" id="강동구" @click="locationSelect($event), showSortRecent()" class="OUTLINE"
                                 d="M 726 320 l 1 7 3 9 0 9 1 9 1 10 1 5 -1 -1 -5 -1 -3 0 -4 2 -11 0 -8 1 -5 6 -4 5 -4 6 -2 4 -1 8 -4 7 -3 2 1 1 -1 2 -6 7 -1 8 -5 -2 -5 -3 -3 -2 -8 -4 -5 -3 -8 -5 -5 -2 0 -7 1 -3 2 -5 0 -8 -4 -4 -4 -2 -6 -2 -7 0 2 -4 2 -5 2 -10 4 -10 1 -1 4 -6 7 -6 5 -3 6 -3 8 -3 4 -1 5 0 11 0 9 -4 7 -5 8 -6 11 -6 11 0 0 7 3 6 z " />
                         </g>
                         <g filter="url(#dropshadow2)"></g>
@@ -108,7 +111,7 @@
                 </div>
                 <div class="mainpage3_third_filters_theme_filter">
                     <button @click="showTheme(), filterBtnClick($event)" class="filter_btn">테마 선택</button>
-                    <div v-if="isShowTheme" class="show_theme">
+                    <div v-show="isShowTheme" class="show_theme">
                         <h4 @click="themeSelect($event)">카페</h4>
                         <h4 @click="themeSelect($event)">식사</h4>
                         <h4 @click="themeSelect($event)">체험</h4>
@@ -123,10 +126,10 @@
                 </div>
             </div>
             <div class="mainpage3_third_sort">
-                <select ref="sort" name="items1">
-                    <option value="최근순">최근순</option>
-                    <option value="인기순">인기순</option>
-                    <option value="조회순">조회순</option>
+                <select v-model="sortvalue" name="items1">
+                    <option :value="'최근순'">최근순</option>
+                    <option :value="'인기순'">인기순</option>
+                    <option :value="'조회순'">조회순</option>
                 </select>
             </div>
             <div class="mainpage3_third_contents">
@@ -164,15 +167,21 @@ export default {
     components: {},
     data() {
         return {
+            sortvalue: '최근순',
+
             isShowLocation: false,
             isShowTheme: false,
-            fill: false,
+
             locationSelectCount: 0,
             themeSelectCount: 0,
+
+            locationData: [],
+            locationSelectData: [],
+
             recentOriginData: [],
             recentData: [],
-            testresult: [],
-            test: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16']
+            recentresult: [],
+            recentDataCount: 1,
         };
     },
 
@@ -183,7 +192,11 @@ export default {
     },
     unmounted() { },
     watch: {
-
+        sortvalue: function () {
+            this.showSortRecent()
+            this.showSortViews()
+            this.showSortLikes()
+        },
     },
     methods: {
         showLocation() { //클릭시 지역선택 보여줌
@@ -191,7 +204,6 @@ export default {
                 this.isShowLocation = true;
             } else {
                 this.isShowLocation = false;
-                this.locationSelectCount = 0;
             }
         },
         showTheme() { //클릭시 테마선택 보여줌
@@ -199,10 +211,9 @@ export default {
                 this.isShowTheme = true;
             } else {
                 this.isShowTheme = false;
-                this.themeSelectCount = 0;
             }
         },
-        filterBtnClick(event) {
+        filterBtnClick(event) { //지역 선택버튼 스타일
             if (event.target.classList.contains('filters_btn')) {
                 event.target.classList.remove("filters_btn");
                 event.target.classList.add("filter_btn");
@@ -215,22 +226,23 @@ export default {
             if (this.locationSelectCount <= 5 - 1) {
                 if (event.target.classList.contains('fill_location')) {
                     event.target.classList.remove("fill_location");
+                    this.locationSelectData.pop(event.target.id);
+                    console.log(this.locationSelectData);
                     this.locationSelectCount -= 1;
-                    console.log(this.locationSelectCount);
                 } else {
                     event.target.classList.add("fill_location");
+                    this.locationSelectData.push(event.target.id);
+                    console.log(this.locationSelectData);
                     this.locationSelectCount += 1;
-                    console.log(this.locationSelectCount);
                 }
             } else if (this.locationSelectCount == 5) {
                 if (event.target.classList.contains('fill_location')) {
                     event.target.classList.remove("fill_location");
                     this.locationSelectCount -= 1;
-                    console.log(this.locationSelectCount);
                 }
             }
         },
-        themeSelect(event) { // 지역선택 5개까지만 가능
+        themeSelect(event) { // 테마선택 5개까지만 가능
             if (this.themeSelectCount <= 5 - 1) {
                 if (event.target.classList.contains('fill_theme')) {
                     event.target.classList.remove("fill_theme");
@@ -249,47 +261,122 @@ export default {
                 }
             }
         },
-        //비로그인시 좋아요버튼 누르면 로그인창으로 이동할건지 물어보기
-        async showSortRecent() {
-            const sortvalue = this.$refs.sort.value;
-            if (sortvalue == "최근순") {
+        //비로그인시 좋아요버튼 누르면 로그인창으로 이동할건지 물어보기 구현해야함
+        async showSortRecent() { // 최근순으로 게시물6개 출력
+            if (this.sortvalue == "최근순") {
                 await axios({
                     url: 'http://localhost:3000/getNewestCourse',
                     method: 'POST'
                 }).then(res => {
-                    this.recentOriginData = res.data;
-                    for (let i = 0; i <= 5; i++) { //게시물 6개 출력
-                        this.recentData.push(this.recentOriginData[i]);
+                    //게시글 데이터 초기화
+                    this.recentData = [];
+                    this.recentOriginData = [];
+                    this.recentresult = [];
+                    this.recentDataCount = 1;
+
+
+                    this.recentOriginData = res.data; // 원본데이터
+
+                    //해시태그 데이터
+                    if (this.locationSelectData.length >= 1) { //지역 선택 하나라도 했을시
+                        
+                        this.locationData = [];
+                        for (const item in this.recentOriginData) { // 원본데이터 만큼 반복
+                            const originHashtag = this.recentOriginData[item].BRD_HASHTAG; // 원본데이터의 n번째(모든 해시태그)
+                            if (originHashtag.includes(this.locationSelectData)) { // 선택한 지역이 원본데이터의 해시태그에 있으면
+                                this.locationData.push(this.recentOriginData[item]); // 선택한 해시태그가 포함된 게시글 locationData에 넣음 
+                                console.log(this.recentOriginData[item],"로케이션 데이터");
+
+                            }
+                        }
+                        
+                        this.recentOriginData = [];
+                        for (var i = 0; i <= this.locationData.length - 1; i++) { // 로케이션 데이터에 해시태그가 "#도봉구"인 데이터 넣음
+                            this.recentOriginData.push(this.locationData[i]);
+                        }
                     }
-                    console.log(this.recentData);
 
-
+                    //게시물 6개씩 출력하는 부분
+                    for (var i = 0; i < this.recentOriginData.length; i += 6) { //최근순게시글 총 갯수를 6개씩 나눠서 묶음
+                        this.recentresult.push(this.recentOriginData.slice(i, i + 6));
+                    }
+                    for (var i = 0; i <= this.recentresult[0].length - 1; i++) { // 게시물 6개 출력
+                        this.recentData.push(this.recentresult[0][i]);
+                    }
                 })
             }
         },
-        async showMoreContent() { //더보기버튼 누를시 게시글 6개 추가 출력
-            await axios({
-                url: 'http://localhost:3000/getNewestCourse',
-                method: 'POST'
-            }).then(res => {
-                // this.recentData = res.data; //16개 데이터 16-6= 12, 7-12
-                // console.log(this.recentData);
-                // this.recentData.slice(0, 13);
-                // console.log(this.recentData);
-                this.testresult = this.test.slice(0, 7);
-                console.log(this.testresult);
-                this.testresult = this.test.slice(0, 13);
-                console.log(this.testresult);
-            })
+        async showSortViews() { // 조회순으로 게시물6개 출력
+            if (this.sortvalue == "조회순") {
+                await axios({
+                    url: 'http://localhost:3000/getViewsCourse',
+                    method: 'POST'
+                }).then(res => {
+                    //게시글 데이터 초기화
+                    this.recentData = [];
+                    this.recentOriginData = [];
+                    this.recentresult = [];
+                    this.recentDataCount = 1;
 
+                    this.recentOriginData = res.data; // 서버데이터를 변수에 저장
+
+                    for (var i = 0; i < this.recentOriginData.length; i += 6) { //조회순게시글 총 갯수를 6개씩 나눠서 묶음
+                        this.recentresult.push(this.recentOriginData.slice(i, i + 6));
+                    }
+                    for (var i = 0; i <= this.recentresult[0].length - 1; i++) { // 게시물 6개 출력
+                        this.recentData.push(this.recentresult[0][i]);
+                    }
+                })
+            }
+        },
+        async showSortLikes() { // 인기순으로 게시물6개 출력
+            if (this.sortvalue == "인기순") {
+                await axios({
+                    url: 'http://localhost:3000/getLikeCourse',
+                    method: 'POST'
+                }).then(res => {
+                    //게시글 데이터 초기화
+                    this.recentData = [];
+                    this.recentOriginData = [];
+                    this.recentresult = [];
+                    this.recentDataCount = 1;
+
+                    this.recentOriginData = res.data; // 서버데이터를 변수에 저장
+
+                    for (var i = 0; i < this.recentOriginData.length; i += 6) { //인기순게시글 총 갯수를 6개씩 나눠서 묶음
+                        this.recentresult.push(this.recentOriginData.slice(i, i + 6));
+                    }
+                    for (var i = 0; i <= this.recentresult[0].length - 1; i++) { // 게시물 6개 출력
+                        this.recentData.push(this.recentresult[0][i]);
+                    }
+                })
+            }
+        },
+        showMoreContent() { //더보기버튼 누를시 게시글 6개 추가 출력
+            for (var i = 0; i < this.recentOriginData.length; i += 6) { //게시글 총 갯수를 6개씩 나눠서 묶음
+                this.recentresult.push(this.recentOriginData.slice(i, i + 6));
+            }
+
+            var remainData = this.recentOriginData.length - this.recentData.length; //전체 글 갯수 - 현재 출력된 글 갯수
+
+            if (remainData < 6) { // 출력해야할 나머지 글 갯수가 6개 미만이면
+                for (var i = 0; i <= remainData - 1; i++) {
+                    this.recentData.push(this.recentresult[this.recentDataCount][i]);
+                }
+            } else { // 출력해야할 나머지 글 갯수가 6개 이상이면
+                for (var i = 0; i <= this.recentresult[0].length - 1; i++) {
+                    this.recentData.push(this.recentresult[this.recentDataCount][i]);
+                }
+                this.recentDataCount++; // 다음 배열(묶음) 출력하기위해 1증가
+            }
         }
     }
 }
+
 </script>
 
 <style scoped>
 .mainpage3 {
-    background-color: tan;
     padding: 5% 15%;
     width: 100%;
     height: 100%;
@@ -297,7 +384,6 @@ export default {
 
 .mainpage3_third {
     width: 100%;
-    background-color: aliceblue;
 }
 
 .mainpage3_third_filters {
@@ -379,13 +465,13 @@ export default {
 .mainpage3_third_filters_keyword_filter img {
     width: 20%;
     height: 20%;
-    margin: auto 5% auto 20%;
+    margin: auto 0 auto 20%;
 }
 
 .keyword_filter {
     border: none;
     border-bottom: 1px solid #ccc;
-    padding: 10%;
+    padding: 5%;
 }
 
 .keyword_filter:focus {
@@ -418,7 +504,6 @@ export default {
 
 
 .mainpage3_third_contents {
-    background-color: aquamarine;
     width: 100%;
     height: 100%;
     display: inline-flex;
@@ -427,18 +512,16 @@ export default {
 }
 
 .mainpage3_third_content {
-    background-color: yellowgreen;
     width: 30%;
     height: 45vh;
     margin: 0 1.6%;
     margin-bottom: 5%;
-
+    box-shadow: 0 0 5px #ccc;
 }
 
 .mainpage3_third_content_img {
     width: 100%;
     height: 65%;
-    background-color: thistle;
     position: relative;
 }
 
@@ -534,6 +617,7 @@ svg {
     z-index: 1;
     top: 70%;
     left: -162%;
+    box-shadow: 0 0 5px #ccc;
 }
 
 .OUTLINE {
