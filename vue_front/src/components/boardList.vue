@@ -3,15 +3,45 @@ export default {
   props: {
     boardList: Object,
     hideBrdOpen: Boolean,
-    editMode: Boolean, // editMode 프롭 추가
+    editMode: Boolean,
   },
+  data() {
+    return {
+      // checkbox의 value와 같은 값 있으면 체크 된 상태로 시작
+      selectedItems: [],
+    };
+  },
+  // data() {
+  //   return {
+  //     selectedItems: [], // 선택한 항목의 BRD_ID 값을 담을 배열로 초기화
+  //   };
+  // },
+  // methods: {
+  //   updateSelectedItems(BRD_ID, checked) {
+  //     if (checked) {
+  //       this.selectedItems.push(BRD_ID);
+  //     } else {
+  //       const index = this.selectedItems.indexOf(BRD_ID);
+  //       if (index !== -1) {
+  //         this.selectedItems.splice(index, 1);
+  //       }
+  //     }
+  //   },
+  // },
 };
 </script>
 
 <template>
   <div>
     <a href="/detail">
-      <input class="mycourse_checkbox" type="checkbox" v-if="editMode" />
+      <input
+        class="mycourse_checkbox"
+        type="checkbox"
+        v-if="editMode"
+        :value="boardList.BRD_ID"
+        v-model="selectedItems"
+      />
+
       <div class="board-list">
         <div class="board_content">
           <div class="hashtag">{{ boardList.BRD_HASHTAG }}</div>
@@ -28,6 +58,7 @@ export default {
           <div v-if="!hideBrdOpen" class="brd_open">
             {{ boardList.BRD_OPEN === 1 ? "공개" : "비공개" }}
           </div>
+          <div>{{ selectedItems }}</div>
         </div>
         <div
           class="mypage_img"

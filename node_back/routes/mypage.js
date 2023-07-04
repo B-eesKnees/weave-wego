@@ -36,7 +36,7 @@ const queries = {
   order by rv.RC_TIME desc;`,
 
   likeListQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT,
+    `select b.BRD_ID, b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
