@@ -23,8 +23,8 @@ router.post('/pullUserData', async(req, res)=> { //회원정보 수정할때 보
                 })
             } else { //결과값이 없으면
                 res.send({
-                    'code':200,
-                    'message':'사용가능한 닉네임입니다.'
+                    'code':204,
+                    
                 })
             }
         }

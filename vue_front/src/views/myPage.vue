@@ -27,7 +27,7 @@
             :style="{ 'background-image': 'url(' + image + ')' }"
           ></div>
         </div>
-        <a href="/updateprofile"
+        <a href="/checkpw"
           ><img
             class="setting_icon"
             src="../assets/img/setting_btn.png"
