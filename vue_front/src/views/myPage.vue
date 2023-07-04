@@ -169,28 +169,27 @@ export default {
       this.editMode = true;
     },
     deleteContent() {
-      const values = [7, 8, 9]; // 삭제할 컨텐츠의 배열 값
+      const values = [10, 11]; // 삭제할 컨텐츠의 배열 값
       if (values.length === 0) {
         console.log("삭제할 컨텐츠가 없습니다");
         return; // 빈 배열이면 종료
       }
-
-      const url = "http://localhost:3000/mypage/delMyCourse";
-      //console.log(values);
-      const options = {
+      axios({
+        url: "/mypage/delMyCourse",
         method: "POST",
-        data: { aaa: JSON.stringify(values) }, // JSON 형식으로 변환하여 전송
-        headers: {
-          "Content-Type": "application/json",
+        data: {
+          values,
         },
-      };
-
-      axios(url, options)
-        .then((response) => {
-          console.log("컨텐츠가 성공적으로 삭제되었습니다", response);
+      })
+        .then((res) => {
+          if (res.data.code == 200) {
+            console.log("성공");
+          }
         })
-        .catch((error) => {
-          console.error("컨텐츠 삭제 중 오류가 발생했습니다", error);
+        .catch((err) => {
+          if (err) {
+            console.log(err);
+          }
         });
     },
     cancelEdit() {

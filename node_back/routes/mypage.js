@@ -103,18 +103,41 @@ router.post('/myCourse', async (request, res) => {
 
 
 // 내 코스 선택 삭제
-router.post('/delMyCourse', async (request, res) => {
-  try {
-    const delBoard = request.body.data;  // 게시판 아이디 어떻게 받아아ㅏㅏ와아아악
-    console.log(delBoard.aaa);
+// router.post('/delMyCourse', async (request, res) => {
+//   try {
+//     const delBoard = request.body.data;  // 게시판 아이디 어떻게 받아아ㅏㅏ와아아악
+//     console.log(delBoard.aaa);
 
-    res.send(await req(queries.delMyCourseQuery, delBoard));
-  } catch (err) {
-    res.status(500).send({
-      error: err
+//     res.send(await req(queries.delMyCourseQuery, delBoard));
+//   } catch (err) {
+//     res.status(500).send({
+//       error: err
+//     });
+//   }
+// });
+
+router.post('/delMyCourse', async (req, res) => {
+  const deleteComments = req.body.values; //ex) [1,2,3] 형식으로 날라오면
+  console.log(deleteComments);
+
+  deleteComments.forEach(values => { //반복문 실행
+    db.query(`delete from weavewego.board where BRD_ID = ?`, values, (err, result) => { //쿼리문 반복 실행
+      if (err) {
+        res.send({ // 에러 발생 시
+          'code': 400,
+          'failed': 'error occurred',
+          'error': err
+        })
+      }
     });
-  }
-});
+  });
+
+  res.send({
+    "code": 200,
+    "message": "삭제 성공",
+    "?": deleteComments
+  })
+})
 
 
 // 최근에 본 코스
@@ -171,6 +194,8 @@ router.get('/delmyComment', async (request, res) => {
     });
   }
 });
+
+
 
 
 // db 설정
