@@ -1,7 +1,6 @@
 <template>
   <div id="map" />
 </template>
-ㅇ
 
 <script setup>
 const props = defineProps({
@@ -38,19 +37,19 @@ const drawMap = () => {
   const Lngs = [];
 
   props.locations.map((location) => {
-    const position = new maps.LatLng(location.Lat, location.Lng);
+    const position = new maps.LatLng(location.LOC_LAT, location.LOC_LNG);
     const marker = new maps.Marker({ position: position });
     const infoWindow = new maps.InfoWindow({
       position: position,
-      content: `<div style="padding:5px;text-align:center;">${location.name}</div>`,
+      content: `<div style="padding:5px;text-align:center;">${location.LOC_NAME}</div>`,
     });
 
     marker.setMap(map.value);
     infoWindow.open(map.value, marker);
 
     linePath.push(position);
-    Lats.push(location.Lat);
-    Lngs.push(location.Lng);
+    Lats.push(location.LOC_LAT);
+    Lngs.push(location.LOC_LNG);
   });
 
   var polyline = new maps.Polyline({

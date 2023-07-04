@@ -7,18 +7,32 @@ const fs = require("fs");
 //게시글 받아오기
 router.get("/board", (req, res) => {
   const { boardId } = req.query;
-  const query = `
-  SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, b.BRD_CREATED_AT., b.BRD_NICK
+  const query = `SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, b.BRD_CREATED_AT, b.BRD_NICK, b.BRD_OPEN
   FROM board b
   LEFT JOIN likelist ll ON b.BRD_ID = ll.LL_NUM
-  WHERE b.BRD_ID =?;`;
+  WHERE b.BRD_ID =2;
+  `;
 
-  db.query(query, (err, results) => {
+  db.query(query, [boardId], (err, results) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "서버 에러" });
     } else {
-      res.json({ board: results[0] });
+      const board = results[0];
+      if (!board) {
+        res.status(404).json({ error: "게시글을 찾을 수 없습니다." });
+      } else {
+        if (board.BRD_OPEN) {
+          res.json({ board });
+        } else {
+          const userId = req.user & req.user.id;
+          if (userId && userId === board.BRD.WRITER) {
+            res.json({ board });
+          } else {
+            res.status(403).json({ error: "비공개 게시글입니다." });
+          }
+        }
+      }
     }
   });
 });
@@ -62,16 +76,28 @@ router.get("/locations", (req, res) => {
 
 //이미지 받아오기
 router.get("/images", (req, res) => {
-  const imagePath = "./";
-  const imageFullPath = path.join(__dirname, imagePath);
+  const { boardId } = req.query;
+  const query = `SELECT * FROM board WHEN BRD_ID = ${boardId};`;
 
-  fs.readFile(imageFullPath, (err, data) => {
+  db.query(query, (err, results) => {
     if (err) {
       console.error(err);
-      res.status(500).json({ error: "이미지를 읽을 수 없습니다." });
+      res.status(500).json({ error: "게시글 정보를 가져올 수 없습니다." });
+    } else if (results.length === 0) {
+      res.status(404).json({ error: "게시글을 찾을 수 없습니다." });
     } else {
-      res.setHeader("Content-Type", "image/jpeg");
-      res.send(data);
+      const imagePath = `../CourseImage/${boardId}`;
+      const imageFullPath = path.join(__dirname, imagePath);
+
+      fs.readFile(imageFullPath, (err, data) => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ error: "이미지를 읽을 수 없습니다." });
+        } else {
+          res.setHeader("Content-Type", "image/jpeg");
+          res.send(data);
+        }
+      });
     }
   });
 });
@@ -108,6 +134,96 @@ router.get("/locationpopimages", (req, res) => {
       res.json.status(500).json({ error: "서버에러" });
     } else {
       res.json({ locationpopimages: results });
+    }
+  });
+});
+
+//게시글 신고 정보 받아오기
+router.get("/report/board/:boardId", (req, res) => {
+  const { boardId } = req.params;
+  const query = `SELECT BRD_ID , BRD_REPORT, BRD_WRITER FROM board WHERE BRD_ID =19;`;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "서버에러" });
+    } else {
+      if (results.length === 0) {
+        //쿼리의 결과문이 없으면
+        res.status(404).json({ error: "해당 게시글 신고를 찾을 수 없습니다." });
+      } else {
+        const reportInfo = results[0];
+        if (reportInfo.BRD_REPORT === 1) {
+          res.json({ reportInfo, isReported: true });
+        } else {
+          res.json({ reportInfo, isReported: false });
+        }
+      }
+    }
+  });
+});
+
+//댓글 신고 정보 받아오기
+router.get("/report/comment/:commentId", (req, res) => {
+  const { commentId } = req.params;
+  const query = `SELECT COM_ID , COM_REPORT, COM_WRITER FROM comment WHERE COM_ID=52;`;
+
+  db.query(query, [commentId], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "서버 에러" });
+    } else {
+      if (results.length === 0) {
+        res
+          .status(404)
+          .json({ error: " 해당 댓글 신고 정보를 찾을 수 없습니다." });
+      } else {
+        const reportInfo = results[0];
+        if (reportInfo.COM_REPORT === 1) {
+          res.json({ reportInfo, isReported: true });
+        } else {
+          res.json({ reportInfo, isReported: false });
+        }
+      }
+    }
+  });
+});
+
+//게시글 신고 당함
+router.put("/updateReport/board/:boardId", (req, res) => {
+  const { boardId } = req.params;
+
+  const updateReport = `UPDATE board SET BRD_REPORT =1 WHERE BRD_ID=3;`;
+
+  db.query(updateReport, [boardId], (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "서버 에러" });
+    } else {
+      if (results.affectedRows === 0) {
+        res.status(404).json({ error: "해당 게시글을 찾을 수 없습니다." });
+      } else {
+        res.json({ message: "게시글이 정상적으로 신고 처리되었습니다." });
+      }
+    }
+  });
+});
+
+//댓글 신고당함
+router.put("/updateReport/comment/:commentId", (req, res) => {
+  const { commentId } = req.params;
+
+  const updateReport = `UPDATE comment SET COM_REPORT =1 WHERE COM_ID=52;`;
+
+  db.query(updateReport, [commentId], (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "서버 에러" });
+    } else {
+      if (results.affectedRows === 0) {
+        res.status(404).json({ error: "해당 댓글을 찾을 수 없습니다." });
+      } else {
+        res.json({ message: "댓글이 정상적으로 신고 처리되었습니다." });
+      }
     }
   });
 });
@@ -179,9 +295,10 @@ router.put("/updateboard", (req, res) => {
     loc5rev,
     locrev,
     createdat,
+    isOpen,
   } = req.body;
 
-  const query = `UPDATE BOARD SET BRD_TITLE = ?, BRD_HASHTAG = ?, BRD_LOC_REV1 = ?, BRD_LOC_REV2 = ?, BRD_LOC_REV3 = ?, BRD_LOC_REV4 = ?, BRD_LOC_REV5 = ?, BRD_REV = ?,BRD_CREATED_AT=NOW() WHERE BRD_ID = ?;`;
+  const query = `UPDATE BOARD SET BRD_TITLE = ?, BRD_HASHTAG = ?, BRD_LOC_REV1 = ?, BRD_LOC_REV2 = ?, BRD_LOC_REV3 = ?, BRD_LOC_REV4 = ?, BRD_LOC_REV5 = ?, BRD_REV = ?,BRD_CREATED_AT=NOW(),BRD_OPEN =? WHERE BRD_ID = ?;`;
 
   const values = [
     title,
@@ -193,6 +310,7 @@ router.put("/updateboard", (req, res) => {
     loc5rev,
     locrev,
     createdat,
+    isOpen,
     boardId,
   ];
   db.query(query, values, (err, results) => {

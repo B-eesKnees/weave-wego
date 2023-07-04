@@ -1,6 +1,8 @@
 <script setup>
 const props = defineProps({
   location: Object,
+  number: Number,
+  rev: String,
 });
 </script>
 
@@ -8,22 +10,26 @@ const props = defineProps({
   <div class="location">
     <!-- Location -->
     <div class="location-left">
-      <div>{{ location.number }}</div>
+      <div>{{ number }}</div>
       <div class="location-info">
         <div>
-          <a data-bs-toggle="offcanvas" :href="`#${location.name}`">{{
-            location.name
+          <a data-bs-toggle="offcanvas" :href="`#${location.LOC_NAME}`">{{
+            location.LOC_NAME
           }}</a>
         </div>
-        <div class="location-location">{{ location.location }}</div>
+        <div class="location-location">
+          {{ location.location }}
+        </div>
       </div>
     </div>
-    <div class="location-comment">{{ location.comment }}</div>
+    <div class="location-comment">
+      {{ rev }}
+    </div>
     <!-- Off canvas -->
     <div
+      :id="location.LOC_NAME"
       class="offcanvas offcanvas-end canvas"
       tabindex="-1"
-      :id="location.name"
     >
       <div class="offcanvas-body canvas-body">
         <!-- 오프캔버스 내부 내용-->
@@ -46,8 +52,12 @@ const props = defineProps({
             </div>
           </div>
         </div>
-        <div class="canvas-name">{{ location.name }}</div>
-        <div class="canvas-location">{{ location.location }}</div>
+        <div class="canvas-name">
+          {{ location.name }}
+        </div>
+        <div class="canvas-location">
+          {{ location.location }}
+        </div>
         <div class="canvas-detail">
           <div>연락처 : 02) 123 - 1234</div>
           <div>홈페이지 : https://www.ezen.co.kr</div>
