@@ -2,6 +2,10 @@
 node_modules
 /dist
 
+uploads
+*.log
+coverage
+
 
 # local env files
 .env.local
