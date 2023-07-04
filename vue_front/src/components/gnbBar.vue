@@ -13,26 +13,64 @@
         <p><a href="/join">회원가입</a></p>
       </div>
       <div v-else-if="provider === 'kakao'" class="gnb_bar_user_login">
-        <a href="/mypage"
-          ><div
-            class="kakao_img"
-            :style="{ 'background-image': 'url(' + image + ')' }"
-          ></div>
-          <!-- <img class="kakao_img" :src="image" alt="profileExample"/> -->
-        </a>
+        <div
+          class="kakao_img"
+          :style="{ 'background-image': 'url(' + image + ')' }"
+          @click="toggleButtons"
+        ></div>
+        <div class="gnbmypage">
+          <div v-if="isButtonsVisible">
+            <div v-for="button in buttonList" :key="button.tab">
+              <button
+                @click="selectTab(button.tab)"
+                :class="{ 'active-button': activeTab === button.tab }"
+              >
+                {{ button.name }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div v-else-if="provider === 'local'" class="gnb_bar_user_login">
-        <a href="/mypage"
-          ><img
-            class="local_img"
-            :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
-            alt="profileExample"
-        /></a>
+        <img
+          class="local_img"
+          :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
+          alt="profileExample"
+          @click="toggleButtons"
+        />
+        <div class="gnbmypage">
+          <div v-if="isButtonsVisible">
+            <div v-for="button in buttonList" :key="button.tab">
+              <button
+                @click="selectTab(button.tab)"
+                :class="{ 'active-button': activeTab === button.tab }"
+              >
+                {{ button.name }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div v-else-if="provider === 'naver'" class="gnb_bar_user_login">
-        <a href="/mypage"
-          ><img class="naver_img" :src="image" alt="profileExample"
-        /></a>
+        <img
+          class="naver_img"
+          :src="image"
+          alt="profileExample"
+          @click="toggleButtons"
+        />
+        <div class="gnbmypage">
+          <div v-if="isButtonsVisible">
+            <div v-for="button in buttonList" :key="button.tab">
+              <button
+                @click="selectTab(button.tab)"
+                :class="{ 'active-button': activeTab === button.tab }"
+              >
+                {{ button.name }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -46,6 +84,16 @@ export default {
       nick: "",
       image: "",
       provider: "",
+      buttonList: [
+        { name: "마이페이지", tab: "myPage" },
+        { name: "내 코스", tab: "myCourse" },
+        { name: "최근에 본 코스", tab: "recentCourse" },
+        { name: "좋아요 리스트", tab: "likeList" },
+        { name: "내가 쓴 댓글", tab: "myComment" },
+        { name: "로그아웃", tab: "logout" },
+      ],
+      isButtonsVisible: false,
+      activeTab: "",
     };
   },
   mounted() {
@@ -53,6 +101,30 @@ export default {
       (this.nick = localStorage.getItem("userNick")),
       (this.image = localStorage.getItem("userImage")),
       (this.provider = localStorage.getItem("userProvider"));
+  },
+  methods: {
+    // 생략
+    toggleButtons() {
+      this.isButtonsVisible = !this.isButtonsVisible;
+    },
+    selectTab(tab) {
+      this.activeTab = tab;
+      if (tab === "logout") {
+        this.logout();
+      } else if (tab === "myPage") {
+        window.location.href = "/mypage";
+      } else if (tab === "myCourse") {
+        window.location.href = "/mypage";
+      }
+    },
+    logout() {
+      localStorage.removeItem("userID");
+      localStorage.removeItem("userNick");
+      localStorage.removeItem("userImage");
+      localStorage.removeItem("userProvider");
+      // localStorage.clear(); // localStorage의 모든 항목 제거
+      window.location.href = "/"; // 메인
+    },
   },
 };
 </script>

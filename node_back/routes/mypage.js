@@ -15,18 +15,18 @@ const queries = {
   where USER_EMAIL = ?;`,
 
   myCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT, b.BRD_OPEN,
-  (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
-  from board b
-  left join likelist ll on b.BRD_ID = ll.LL_NUM
-  where b.BRD_WRITER = ?
-  group by b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
-  order by BRD_CREATED_AT desc;`,
+    `select b.BRD_ID, b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT, b.BRD_OPEN,
+    (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
+    from board b
+    left join likelist ll on b.BRD_ID = ll.LL_NUM
+    where b.BRD_WRITER = ?
+    group by b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
+    order by BRD_CREATED_AT desc;`,
 
-  delMyCourseQuery: `delete from board b where b.BRD_ID = ?`,
+  delMyCourseQuery: `delete from board b where b.BRD_ID in (?)`,
 
   recentCourseQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
+    `select b.BRD_ID, b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -36,7 +36,7 @@ const queries = {
   order by rv.RC_TIME desc;`,
 
   likeListQuery:
-    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, b.BRD_CREATED_AT,
+    `select b.BRD_HASHTAG, b.BRD_TITLE, count(ll.LL_ID) as likecount, b.BRD_VIEWCOUNT, date_format(b.BRD_CREATED_AT, '%Y-%m-%d') as BRD_CREATED_AT,
   (select i.IMG_PATH from image i where i.IMG_NUM = b.BRD_ID limit 1) as IMG_PATH
   from board b
   left join likelist ll on b.BRD_ID = ll.LL_NUM
@@ -45,11 +45,11 @@ const queries = {
   order by ll.LL_TIME desc;`,
 
   myCommentQuery:
-    `select b.BRD_TITLE, com.COM_COMMENT, com.COM_CREATED_AT
-  from comment com
-  left join board b on com.COM_NUM = b.BRD_ID
-  where com.COM_WRITER = ?
-  order by com.COM_CREATED_AT desc;`,
+    `select b.BRD_TITLE, com.COM_COMMENT, date_format(com.COM_CREATED_AT, '%Y-%m-%d') as COM_CREATED_AT
+    from comment com
+    left join board b on com.COM_NUM = b.BRD_ID
+    where com.COM_WRITER = ?
+    order by com.COM_CREATED_AT desc;`,
 
   delmyCommentQuery: `delete from comment com where com.COM_ID in (?)`
 }
@@ -97,22 +97,51 @@ router.post('/myCourse', async (request, res) => {
   }
 });
 
-// 내 코스 선택 삭제
-router.get('/delMyCourse', async (request, res) => {
-  try {
-    const delBoard = [];  // 게시판 아이디 어떻게 받아아ㅏㅏ와아아악
 
-    res.send(await req(queries.delMyCourseQuery, [delBoard]));
-  } catch (err) {
-    res.status(500).send({
-      error: err
+
+
+
+
+// 내 코스 선택 삭제
+// router.post('/delMyCourse', async (request, res) => {
+//   try {
+//     const delBoard = request.body.data;  // 게시판 아이디 어떻게 받아아ㅏㅏ와아아악
+//     console.log(delBoard.aaa);
+
+//     res.send(await req(queries.delMyCourseQuery, delBoard));
+//   } catch (err) {
+//     res.status(500).send({
+//       error: err
+//     });
+//   }
+// });
+
+router.post('/delMyCourse', async (req, res) => {
+  const deleteComments = req.body.values; //ex) [1,2,3] 형식으로 날라오면
+  console.log(deleteComments);
+
+  deleteComments.forEach(values => { //반복문 실행
+    db.query(`delete from weavewego.board where BRD_ID = ?`, values, (err, result) => { //쿼리문 반복 실행
+      if (err) {
+        res.send({ // 에러 발생 시
+          'code': 400,
+          'failed': 'error occurred',
+          'error': err
+        })
+      }
     });
-  }
-});
+  });
+
+  res.send({
+    "code": 200,
+    "message": "삭제 성공",
+    "?": deleteComments
+  })
+})
 
 
 // 최근에 본 코스
-router.post('/recentCourse', async (request, res) => {  
+router.post('/recentCourse', async (request, res) => {
   try {
     const userEmail = request.body.userEmail;
 
@@ -165,6 +194,8 @@ router.get('/delmyComment', async (request, res) => {
     });
   }
 });
+
+
 
 
 // db 설정

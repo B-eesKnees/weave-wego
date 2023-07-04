@@ -77,6 +77,26 @@ app.get("/downloadProfile/:userEmail/:fileName", (req, res) => {
   else fs.createReadStream(filepath).pipe(res); //파일 있으면 vue단으로 전송
 });
 
+app.get("/downloadCourse/:courseId/:fileName", (req, res) => {
+  //게시글 이미지 다운 라우터
+  const {
+    //url에 있는 userEmail, fileName 받아오기
+    courseId,
+    fileName,
+  } = req.params;
+  const filepath = `${__dirname}/CourseImage/${courseId}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/CourseImage/1/image.png
+  res.header(
+    "Content-Type",
+    `image/${fileName.substring(fileName.lastIndexOf("."))}`
+  ); //이미지 보내는 코드인가?
+  if (!fs.existsSync(filepath))
+    res.send(404, {
+      //경로에 이미지가 없으면 에러 처리
+      error: "Can not found file.",
+    });
+  else fs.createReadStream(filepath).pipe(res); //파일 있으면 vue단으로 전송
+});
+
 app.post("/uploadProfile/:userEmail/:fileName", async (req, res) => {
   //이용자 이미지 받아오는 라우터
   let { userEmail, fileName } = req.params; //url에 있는 userEmail, fileName 받아오기
@@ -203,25 +223,7 @@ app.post("/uploadCourse/:boardID/:fileName", async (req, res) => {
   });
 });
 
-app.get("/downloadProfile/:userEmail/:fileName", (req, res) => {
-  //프로필 이미지 다운 라우터
-  const {
-    //url에 있는 userEmail, fileName 받아오기
-    userEmail,
-    fileName,
-  } = req.params;
-  const filepath = `${__dirname}/userProfile/${userEmail}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/userProfile/test@test.com/image.png
-  res.header(
-    "Content-Type",
-    `image/${fileName.substring(fileName.lastIndexOf("."))}`
-  ); //이미지 보내는 코드인가?
-  if (!fs.existsSync(filepath))
-    res.send(404, {
-      //경로에 이미지가 없으면 에러 처리
-      error: "Can not found file.",
-    });
-  else fs.createReadStream(filepath).pipe(res); //파일 있으면 vue단으로 전송
-});
+
 
 //---------------------------------------------------------------------------------
 //게시글 수정 (이미지 추가 업로드)
@@ -322,8 +324,8 @@ app.delete("/deleteImage/:boardID/:imgID/:fileName", (req, res) => {
   });
 });
 
-const adminRouter = require("./routes/admin");
-app.use("/admin", adminRouter);
+const adminRouter = require('./routes/admin'); //어드민 관련 라우터
+app.use('/admin', adminRouter); 
 
 // 마이페이지
 app.post("/mypage", (req, res) => {
