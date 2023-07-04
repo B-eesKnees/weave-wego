@@ -13,9 +13,9 @@ const props = defineProps({
       </div>
       <div class="comment-body">
         <div class="comment-nickname">
-          <div>{{ comment.nickname }}</div>
+          <div>{{ comment.COM_NICK }}</div>
           <div class="comment-date">
-            <div>{{ comment.date }}</div>
+            <div>{{ comment.COM_UPDATED_AT }}</div>
             <div>
               <button
                 type="button"
@@ -39,6 +39,7 @@ const props = defineProps({
             </div>
           </div>
         </div>
+        <div class="comment-content">{{ comment.COM_COMMENT }}</div>
       </div>
     </div>
   </div>

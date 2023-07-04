@@ -1,4 +1,7 @@
 <script setup>
+import axios from "axios";
+import { useRoute } from "vue-router"; // 라우터 1번 일단 임포트
+//
 import { ref } from "vue";
 import Comment from "@/components/Comment.vue";
 import Location from "@/components/Location.vue";
@@ -6,6 +9,40 @@ import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import KakaoMap from "@/components/KakaoMap.vue";
 import gnbBar from "@/components/gnbBar.vue";
+
+const boardData = ref({
+  BRD_CREATED_AT: "",
+  BRD_HASHTAG: "",
+  BRD_ID: 0,
+  BRD_LOC_REV1: "",
+  BRD_LOC_REV2: "",
+  BRD_LOC_REV3: "",
+  BRD_LOC_REV4: "",
+  BRD_LOC_REV5: "",
+  BRD_NICK: "",
+  BRD_OPEN: "",
+  BRD_REPORT: "",
+  BRD_REV: "",
+  BRD_TITLE: "",
+  BRD_UPDATED_AT: "",
+  BRD_VIEWCOUNT: 0,
+  BRD_WRITER: "",
+});
+
+const commentData = ref([
+  // 댓글 데이터
+  {
+    COM_COMMENT: "",
+    COM_CREATED_AT: "",
+    COM_ID: 0,
+    COM_IMAGE: "",
+    COM_NICK: "",
+    COM_NUM: 0,
+    COM_REPORT: "",
+    COM_UPDATED_AT: "",
+    COM_WRITER: "",
+  },
+]);
 
 const images = ref([
   "https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg",
@@ -59,102 +96,145 @@ const location = ref([
     Lng: 126.978658,
   },
 ]);
+
+const route = useRoute(); // 라우터 2번 route 변수 만들어주기
+
+axios
+  .get("http://127.0.0.1:3000/postdata/board", {
+    params: {
+      boardId: route.params.boardId, // router -> :boardId
+    },
+  })
+  .then((result) => {
+    boardData.value = result.data.board;
+    console.log("success", result);
+  })
+  .catch((error) => {
+    console.log("error", error);
+  });
+
+axios
+  .get("http://127.0.0.1:3000/postdata/comments", {
+    params: {
+      boardId: route.params.boardId, // router -> :boardId
+    },
+  })
+  .then((result) => {
+    commentData.value = result.data.comments;
+    console.log("success", result);
+  })
+  .catch((error) => {
+    console.log("error", error);
+  });
 </script>
 
 <template>
-  <div class="gnb"><gnb-bar></gnb-bar></div>
-  <div class="detail">
-    <div class="hashtag">#종로 #식사 #카페 #전시</div>
-    <div class="title">
-      <div>서울에서 우리의 전통 문화를 체험해보세요</div>
-      <div class="time">2023.06.20</div>
+  <div>
+    <div class="gnb">
+      <gnb-bar />
     </div>
-    <div class="name-info">
-      <div>작성자</div>
-      <div class="name-info-right">
-        <div>좋아요</div>
-        <div>조회수</div>
-        <div>
-          <button
-            type="button"
-            class="dropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
-          </button>
-          <ul class="dropdown-menu">
-            <li><button class="dropdown-item" type="button">수정</button></li>
-            <li>
-              <button class="dropdown-item" type="button">삭제</button>
-            </li>
-            <li>
-              <button class="dropdown-item" type="button">신고</button>
-            </li>
-          </ul>
+    <div class="detail">
+      <div class="hashtag">
+        {{ boardData.BRD_HASHTAG }}
+      </div>
+      <div class="title">
+        <div>{{ boardData.BRD_TITLE }}</div>
+        <div class="time">
+          {{ boardData.BRD_CREATED_AT }}
         </div>
       </div>
-    </div>
-    <!-- 본문 구역 -->
-    <div class="content-main">
-      <div class="map-wrapper">
-        <div class="map">
-          <kakao-map :locations="location" />
-        </div>
-      </div>
-      <!-- 장소 컴포넌트 -->
-      <location v-for="item in location" :location="item" :key="item.id">
-      </location>
-      <!-- 이미지 슬라이드 -->
-      <div class="imageslider">
-        <carousel :items-to-show="1" :wrapAround="true">
-          <slide v-for="image in images" :key="image">
-            <div class="carousel_item">
-              <img :src="image" />
-            </div>
-          </slide>
-
-          <template #addons>
-            <navigation />
-          </template>
-        </carousel>
-      </div>
-      <!-- 본문 본문 본문 -->
-      <div class="main">
-        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-      </div>
-      <div>
-        <!-- 댓글 구역 시작 -->
-        <div>
-          <div>댓글</div>
-          <div class="comment-write">
-            <div>
-              <input
-                type="text"
-                placeholder="좋은 댓글을 씁시다"
-                font-size="2rem"
-                style="width: 1000px; height: 100px"
-              />
-            </div>
-            <div>
-              <button
-                class="comment-submit"
-                type="submit"
-                id="comment-submit"
-                width="100px"
-              >
-                댓글 달기
-              </button>
-            </div>
+      <div class="name-info">
+        <div>{{ boardData.BRD_WRITER }}</div>
+        <div class="name-info-right">
+          <div>좋아요</div>
+          <div>조회수</div>
+          <div>
+            <button
+              type="button"
+              class="dropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <button class="dropdown-item" type="button">수정</button>
+              </li>
+              <li>
+                <button class="dropdown-item" type="button">삭제</button>
+              </li>
+              <li>
+                <button class="dropdown-item" type="button">신고</button>
+              </li>
+            </ul>
           </div>
-          <!--댓글 컴포넌트 -->
-          <comment v-for="item in comment" :comment="item" :key="item.id">
-          </comment>
+        </div>
+      </div>
+      <!-- 본문 구역 -->
+      <div class="content-main">
+        <div class="map-wrapper">
+          <div class="map">
+            <kakao-map :locations="location" />
+          </div>
+        </div>
+        <!-- 장소 컴포넌트 -->
+        <location v-for="item in location" :key="item.id" :location="item" />
+        <!-- 이미지 슬라이드 -->
+        <div class="imageslider">
+          <carousel :items-to-show="1" :wrap-around="true">
+            <slide v-for="image in images" :key="image">
+              <div class="carousel_item">
+                <img :src="image" />
+              </div>
+            </slide>
+
+            <template #addons>
+              <navigation />
+            </template>
+          </carousel>
+        </div>
+        <!-- 본문 본문 본문 -->
+        <div class="main">
+          Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
+          ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+          Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
+          ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+          Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
+          ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+          Lorem ipsum
+        </div>
+        <div>
+          <!-- 댓글 구역 시작 -->
+          <div>
+            <div>댓글</div>
+            <div class="comment-write">
+              <div>
+                <input
+                  type="text"
+                  placeholder="좋은 댓글을 씁시다"
+                  font-size="2rem"
+                  style="width: 1000px; height: 100px"
+                />
+              </div>
+              <div>
+                <button
+                  id="comment-submit"
+                  class="comment-submit"
+                  type="submit"
+                  width="100px"
+                >
+                  댓글 달기
+                </button>
+              </div>
+            </div>
+            <!--댓글 컴포넌트 -->
+            <comment
+              v-for="comment in commentData"
+              :key="comment.COM_ID"
+              :comment="comment"
+            />
+          </div>
         </div>
       </div>
     </div>
