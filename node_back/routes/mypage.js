@@ -116,6 +116,29 @@ router.post('/myCourse', async (request, res) => {
 //   }
 // });
 
+router.post('/delMyCourse', async (req, res) => {
+  const deleteComments = req.body.values; //ex) [1,2,3] 형식으로 날라오면
+  console.log(deleteComments);
+
+  deleteComments.forEach(values => { //반복문 실행
+    db.query(`delete from weavewego.board where BRD_ID = ?`, values, (err, result) => { //쿼리문 반복 실행
+      if (err) {
+        res.send({ // 에러 발생 시
+          'code': 400,
+          'failed': 'error occurred',
+          'error': err
+        })
+      }
+    });
+  });
+
+  res.send({
+    "code": 200,
+    "message": "삭제 성공",
+    "?": deleteComments
+  })
+})
+
 
 // 최근에 본 코스
 router.post('/recentCourse', async (request, res) => {
@@ -172,28 +195,7 @@ router.get('/delmyComment', async (request, res) => {
   }
 });
 
-router.post('/delMyCourse', async(req, res)=>{
-  const deleteComments = req.body.values; //ex) [1,2,3] 형식으로 날라오면
-  console.log(deleteComments);
 
-  deleteComments.forEach(values=>{ //반복문 실행
-      db.query(`delete from weavewego.board where BRD_ID = ?`, values, (err, result)=>{ //쿼리문 반복 실행
-          if(err) {
-              res.send({ // 에러 발생 시
-                  'code':400,
-                  'failed': 'error occurred',
-                  'error': err
-              }) 
-          } 
-      });
-  });
-
-  res.send({
-      "code": 200,
-      "message" : "삭제 성공",
-      "?" : deleteComments
-  })
-})
 
 
 // db 설정

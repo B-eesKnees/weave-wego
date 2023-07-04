@@ -169,7 +169,7 @@ export default {
       this.editMode = true;
     },
     deleteContent() {
-      const values = [25,26]; // 삭제할 컨텐츠의 배열 값
+      const values = [10, 11]; // 삭제할 컨텐츠의 배열 값
       if (values.length === 0) {
         console.log("삭제할 컨텐츠가 없습니다");
         return; // 빈 배열이면 종료
@@ -178,17 +178,19 @@ export default {
         url: "/mypage/delMyCourse",
         method: "POST",
         data: {
-          values
-        }
-      }).then((res)=>{
-        if(res.data.code == 200) {
-          console.log('성공');
-        }
-      }).catch((err)=>{
-        if(err) {
-          console.log(err);
-        }
+          values,
+        },
       })
+        .then((res) => {
+          if (res.data.code == 200) {
+            console.log("성공");
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
     },
     cancelEdit() {
       this.editMode = false;
