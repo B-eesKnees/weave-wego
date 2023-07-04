@@ -62,7 +62,7 @@ router.get("/locations", (req, res) => {
   const query = `SELECT b.BRD_ID, b.BRD_TITLE, l.LOC_NAME, l.LOC_LAT, l.LOC_LNG
                   FROM board b
                   JOIN location l ON b.BRD_ID = l.LOC_ID
-                  WHERE b.BRD_ID=?;`;
+                  WHERE b.BRD_ID=${boardId};`;
 
   db.query(query, (err, results) => {
     if (err) {
