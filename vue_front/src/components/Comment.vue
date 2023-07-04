@@ -39,7 +39,7 @@ const props = defineProps({
             </div>
           </div>
         </div>
-        <div class="comment-content">{{ comment.COM_COMMENT }}</div>
+        <div>{{ comment.COM_COMMENT }}</div>
       </div>
     </div>
   </div>
