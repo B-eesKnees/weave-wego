@@ -134,6 +134,38 @@ router.post("/login", async (req, res) => {
         }
     });
 });
+//-------비밀번호 확인---------
+router.post('/checkPW', async(req, res)=>{
+    const email = req.body.email;
+    const pw = req.body.password;
+
+    db.query(`select * from weavewego.user where USER_EMAIL = ?`, email, async(error, results) => { //이메일이 존재하는지 확인
+        if(error) {
+            res.send({ //에러발생시
+                'code': 400,
+                'failed': 'error occurred',
+                'error': error
+            })
+        } else {
+            if(results.length > 0) { //이메일이 존재하면 비밀번호 bcrypt이용해서 확인
+                const comparison = await bcrypt.compare(pw, results[0].USER_PW) //bcrypt 이용하여 비교 //배열이라 [0]을 사용하여 해야함 [0]빼면 작동안함
+
+                if(comparison) { //확인한게 성공이면? 데이터가 있다면?
+                    res.send({
+                        "code": 200
+                    });
+                    
+                } else { //비밀번호가 다르면
+                    res.send({
+                        'code' : 204,
+                        'error' : '비밀번호 오류',
+                        'message' : "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."
+                    })
+                } 
+            } 
+        }
+    });
+})
 //-------카카오 로그인----------
 router.post('/kakaologin', async(req, res)=> {
     let sex = '';

@@ -49,6 +49,12 @@ const routes = [
     name: "updateProfile",
     component: () =>
       import(/* webpackChunkName: "updateprofile" */ "../views/updateProfile.vue"),
+  },
+  {
+    path: "/checkpw",
+    name: "checkpw",
+    component: () =>
+      import(/* webpackChunkName: "checkpw" */ "../views/checkPw.vue"),
   }
 ];
 

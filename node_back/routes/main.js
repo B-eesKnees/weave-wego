@@ -19,6 +19,61 @@ router.post("/getLikeCourse", async (req, res) => {
       }
     })
 });
+//좋아요 수 순서대로 필터링..?
+router.post('/getLikeFilter', async (req, res) => {
+  const hashtags = req.body.hashtags; // 해시태그 배열 받기
+  const search = req.body.search; // 검색어 받기
+
+  const query = `
+    SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE, b.BRD_REV,
+      DATE_FORMAT(b.BRD_CREATED_AT, '%Y-%m-%d') AS CREATED_AT, b.BRD_VIEWCOUNT,
+      (SELECT IMG_PATH FROM weavewego.image WHERE weavewego.image.IMG_NUM = b.BRD_ID LIMIT 1) AS IMG_PATH,
+      COUNT(l.LL_ID) AS likecount
+    FROM weavewego.board b
+    LEFT JOIN weavewego.likelist l ON b.BRD_ID = l.LL_NUM
+    WHERE BRD_OPEN = 'Y'
+      ${generateHashtagConditions(hashtags)}
+      ${generateSearchCondition(search)}
+    GROUP BY b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
+    ORDER BY likecount DESC;
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    res.status(200).send(results);
+  });
+});
+
+// 해시태그 조건 생성 함수
+function generateHashtagConditions(hashtags) { //ai는 무적이다
+  let conditions = '';
+
+  if (hashtags.length > 0) {
+    conditions = 'AND ('; //쿼리 시작점
+    const likeConditions = hashtags.map((tag) => `BRD_HASHTAG LIKE '%${tag}%'`).join(' AND '); //배열에서 꺼내서 넣기 2개 이상이어야 join으로 ' and ' 로 묶음
+    conditions += likeConditions; //넣고
+    conditions += ')'; //쿼리 마무리
+  }
+
+  return conditions; //만들어진 쿼리 리턴
+}
+
+// 검색어 조건 생성 함수
+function generateSearchCondition(search) { //제목과 내용 검색 관련
+  let condition = ''; //쿼리 생성
+
+  if (search) { //req.bodt에 serch가 있다면 
+    condition = `AND (board.BRD_TITLE LIKE '%${search}%' OR board.BRD_REV LIKE '%${search}%')`;
+  } //이 쿼리 추가
+
+  return condition; //만들어진 쿼리 추가
+}
+
+
 //조회수 순대로 가져오기
 router.post("/getViewsCourse", async (req, res) => {
   db.query(sql.getViewsCourse.query, (err, results) => {
@@ -35,6 +90,58 @@ router.post("/getViewsCourse", async (req, res) => {
       }
     })
 });
+//조회수 수 순서대로 필터링..?
+router.post('/getViewsFilter', async (req, res) => {
+  const hashtags = req.body.hashtags; // 해시태그 배열 받기
+  const search = req.body.search; // 검색어 받기
+
+  const query = `
+    SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE, b.BRD_REV,
+    DATE_FORMAT(b.BRD_CREATED_AT, '%Y-%m-%d') AS CREATED_AT, b.BRD_VIEWCOUNT,
+    (SELECT IMG_PATH FROM weavewego.image WHERE weavewego.image.IMG_NUM = b.BRD_ID LIMIT 1) AS IMG_PATH,
+    COUNT(l.LL_ID) AS likecount
+    FROM weavewego.board b
+    LEFT JOIN weavewego.likelist l ON b.BRD_ID = l.LL_NUM
+    WHERE BRD_OPEN = 'Y'
+    ${generateHashtagConditions(hashtags)}
+    ${generateSearchCondition(search)}
+    GROUP BY b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
+    order by b.BRD_VIEWCOUNT desc;`;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    res.status(200).send(results);
+  });
+});
+
+// 해시태그 조건 생성 함수
+function generateHashtagConditions(hashtags) { //ai는 무적이다
+  let conditions = '';
+
+  if (hashtags.length > 0) {
+    conditions = 'AND ('; //쿼리 시작점
+    const likeConditions = hashtags.map((tag) => `BRD_HASHTAG LIKE '%${tag}%'`).join(' AND '); //배열에서 꺼내서 넣기 2개 이상이어야 join으로 ' and ' 로 묶음
+    conditions += likeConditions; //넣고
+    conditions += ')'; //쿼리 마무리
+  }
+
+  return conditions; //만들어진 쿼리 리턴
+}
+
+// 검색어 조건 생성 함수
+function generateSearchCondition(search) { //제목과 내용 검색 관련
+  let condition = ''; //쿼리 생성
+
+  if (search) { //req.bodt에 serch가 있다면 
+    condition = `AND (board.BRD_TITLE LIKE '%${search}%' OR board.BRD_REV LIKE '%${search}%')`;
+  } //이 쿼리 추가
+
+  return condition; //만들어진 쿼리 추가
+}
 //최신순으로 가져오기
 router.post("/getNewestCourse", async (req, res) => {
   db.query(sql.getNewestCourse.query, (err, results) => {
@@ -51,6 +158,58 @@ router.post("/getNewestCourse", async (req, res) => {
       }
     })
 });
+//최신순으로 필터링..?
+router.post('/getNewestFilter', async (req, res) => {
+  const hashtags = req.body.hashtags; // 해시태그 배열 받기
+  const search = req.body.search; // 검색어 받기
+
+  const query = `
+    SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE, b.BRD_REV,
+    DATE_FORMAT(b.BRD_CREATED_AT, '%Y-%m-%d') AS CREATED_AT, b.BRD_VIEWCOUNT,
+    (SELECT IMG_PATH FROM weavewego.image WHERE weavewego.image.IMG_NUM = b.BRD_ID LIMIT 1) AS IMG_PATH,
+    COUNT(l.LL_ID) AS likecount
+    FROM weavewego.board b
+    LEFT JOIN weavewego.likelist l ON b.BRD_ID = l.LL_NUM
+    WHERE BRD_OPEN = 'Y'
+    ${generateHashtagConditions(hashtags)}
+    ${generateSearchCondition(search)}
+    GROUP BY b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
+    order by b.BRD_CREATED_AT ASC;`;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    res.status(200).send(results);
+  });
+});
+
+// 해시태그 조건 생성 함수
+function generateHashtagConditions(hashtags) { //ai는 무적이다
+  let conditions = '';
+
+  if (hashtags.length > 0) {
+    conditions = 'AND ('; //쿼리 시작점
+    const likeConditions = hashtags.map((tag) => `BRD_HASHTAG LIKE '%${tag}%'`).join(' AND '); //배열에서 꺼내서 넣기 2개 이상이어야 join으로 ' and ' 로 묶음
+    conditions += likeConditions; //넣고
+    conditions += ')'; //쿼리 마무리
+  }
+
+  return conditions; //만들어진 쿼리 리턴
+}
+
+// 검색어 조건 생성 함수
+function generateSearchCondition(search) { //제목과 내용 검색 관련
+  let condition = ''; //쿼리 생성
+
+  if (search) { //req.bodt에 serch가 있다면 
+    condition = `AND (board.BRD_TITLE LIKE '%${search}%' OR board.BRD_REV LIKE '%${search}%')`;
+  } //이 쿼리 추가
+
+  return condition; //만들어진 쿼리 추가
+}
 //좋아요 관련 쿼리???
 router.post("/likeCourse", async (req, res) => {
   const LL_ID = req.body.email;
