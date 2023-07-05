@@ -67,7 +67,7 @@ function generateSearchCondition(search) { //제목과 내용 검색 관련
   let condition = ''; //쿼리 생성
 
   if (search) { //req.bodt에 serch가 있다면 
-    condition = `AND (board.BRD_TITLE LIKE '%${search}%' OR board.BRD_REV LIKE '%${search}%')`;
+    condition = `AND (b.BRD_TITLE LIKE '%${search}%' OR b.BRD_REV LIKE '%${search}%')`;
   } //이 쿼리 추가
 
   return condition; //만들어진 쿼리 추가
@@ -137,7 +137,7 @@ function generateSearchCondition(search) { //제목과 내용 검색 관련
   let condition = ''; //쿼리 생성
 
   if (search) { //req.bodt에 serch가 있다면 
-    condition = `AND (board.BRD_TITLE LIKE '%${search}%' OR board.BRD_REV LIKE '%${search}%')`;
+    condition = `AND (b.BRD_TITLE LIKE '%${search}%' OR b.BRD_REV LIKE '%${search}%')`;
   } //이 쿼리 추가
 
   return condition; //만들어진 쿼리 추가
@@ -205,7 +205,7 @@ function generateSearchCondition(search) { //제목과 내용 검색 관련
   let condition = ''; //쿼리 생성
 
   if (search) { //req.bodt에 serch가 있다면 
-    condition = `AND (board.BRD_TITLE LIKE '%${search}%' OR board.BRD_REV LIKE '%${search}%')`;
+    condition = `AND (b.BRD_TITLE LIKE '%${search}%' OR b.BRD_REV LIKE '%${search}%')`;
   } //이 쿼리 추가
 
   return condition; //만들어진 쿼리 추가
@@ -236,30 +236,29 @@ router.post("/likeCourse", async (req, res) => {
   });
 });
 //좋아요 확인 쿼리?
-// router.post('/checkLike', async (req, res) => {
-//   const email = req.body.email;
-//   let likeresult = '';
-//   db.query(
-//     `SELECT GROUP_CONCAT(LL_NUM SEPARATOR ',') AS "likeNum" FROM weavewego.likelist WHERE LL_ID = ?`,
-//     [email],
-//     (err, results) => {
-//       if (err) {
-//         res.send({
-//           code: 400,
-//           failed: "error occurred",
-//           error: err,
-//         });
-//       } else {
-//         for(i=0;results.length>i;i++) {
-//           likeresult += results[i].likeNum;  //이러면 4,5 이런식으로 보내주는데 이게 맞나? 배열형식으로 보내야하나...
-//         }
-//         res.send(
-//           likeresult
-//         );
-//       }
-//     }
-//   );
-// });
+router.post('/checkLike', async (req, res) => {
+  const email = req.body.email;
+  let likeresult = '';
+  db.query(
+    `SELECT LL_NUM FROM weavewego.likelist WHERE LL_ID = ?`,
+    [email],
+    (err, results) => {
+      if (err) {
+        res.send({
+          code: 400,
+          failed: "error occurred",
+          error: err,
+        });
+      } else {
+        res.send(
+          results
+        );
+        // const likeArray = results.map(row => row.LL_NUM); // 결과를 LL_NUM으로 이루어진 배열로 변환
+        // res.send(likeArray);
+      }
+    }
+  );
+});
 //좋아요 확인 쿼리 예비용
 router.post('/checkLike', async(req, res)=>{
   const email = req.body.email;

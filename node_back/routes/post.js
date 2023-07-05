@@ -5,37 +5,37 @@ const path = require("path");
 const fs = require("fs");
 
 //게시글 받아오기
-router.get("/board", (req, res) => {
-  const { boardId } = req.query;
-  const query = `SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, b.BRD_CREATED_AT, b.BRD_NICK, b.BRD_OPEN
-  FROM board b
-  LEFT JOIN likelist ll ON b.BRD_ID = ll.LL_NUM
-  WHERE b.BRD_ID =2;
-  `;
+// router.get("/board", (req, res) => {
+//   const { boardId } = req.query;
+//   const query = `SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, b.BRD_CREATED_AT, b.BRD_NICK, b.BRD_OPEN
+//   FROM board b
+//   LEFT JOIN likelist ll ON b.BRD_ID = ll.LL_NUM
+//   WHERE b.BRD_ID =2;
+//   `;
 
-  db.query(query, [boardId], (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "서버 에러" });
-    } else {
-      const board = results[0];
-      if (!board) {
-        res.status(404).json({ error: "게시글을 찾을 수 없습니다." });
-      } else {
-        if (board.BRD_OPEN) {
-          res.json({ board });
-        } else {
-          const userId = req.user & req.user.id;
-          if (userId && userId === board.BRD.WRITER) {
-            res.json({ board });
-          } else {
-            res.status(403).json({ error: "비공개 게시글입니다." });
-          }
-        }
-      }
-    }
-  });
-});
+//   db.query(query, [boardId], (err, results) => {
+//     if (err) {
+//       console.error(err);
+//       res.status(500).json({ error: "서버 에러" });
+//     } else {
+//       const board = results[0];
+//       if (!board) {
+//         res.status(404).json({ error: "게시글을 찾을 수 없습니다." });
+//       } else {
+//         if (board.BRD_OPEN) {
+//           res.json({ board });
+//         } else {
+//           const userId = req.user & req.user.id;
+//           if (userId && userId === board.BRD.WRITER) {
+//             res.json({ board });
+//           } else {
+//             res.status(403).json({ error: "비공개 게시글입니다." });
+//           }
+//         }
+//       }
+//     }
+//   });
+// });
 
 //댓글 받아오기
 router.get("/comments", (req, res) => {

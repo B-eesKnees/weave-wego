@@ -27,10 +27,10 @@ app.use(cors(corsOption));
 app.set("port", process.env.PORT || 3000); //포트 3000번으로 설정
 
 app.use(morgan("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser());
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(
   session({
     resave: false,
@@ -101,7 +101,7 @@ app.post("/uploadProfile/:userEmail/:fileName", async (req, res) => {
   //이용자 이미지 받아오는 라우터
   let { userEmail, fileName } = req.params; //url에 있는 userEmail, fileName 받아오기
 
-  const dir = `${__dirname}/profiles/${userEmail}`;
+  const dir = `${__dirname}/userProfile/${userEmail}`;
   const file = `${dir}/${fileName}`; //경로 만들기 ex)/profiles/test@test.com/image.png
 
   if (!req.body.data) {

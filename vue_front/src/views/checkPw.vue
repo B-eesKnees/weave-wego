@@ -28,17 +28,19 @@ export default {
     data() {
         return {
             email: "",
-            password: ""
+            password: "",
+            provider: "",
         }
     },
     mounted() {
         this.email = localStorage.getItem("userID"),
+        this.provider = localStorage.getItem("userProvider"),
         this.checkLogin()
     },
     methods: {
         checkPW() {
             axios({
-                url: "auth/checkPW",
+                url: "http://localhost:3000/auth/checkPW",
                 method: "POST",
                 data: {
                     email: this.email,
@@ -58,6 +60,9 @@ export default {
             console.log(this.email);
             if(this.email == null) {
                 window.location.href = "/login"
+            }
+            if(this.provider == 'kakao' || this.provider == 'naver') {
+                window.location.href = "/updateprofile"
             }
         }
     }
