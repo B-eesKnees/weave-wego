@@ -7,7 +7,7 @@ const fs = require("fs");
 //게시글 받아오기
 router.get("/board", (req, res) => {
   const { boardId } = req.query;
-  const query = `SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, b.BRD_CREATED_AT, b.BRD_NICK, b.BRD_OPEN
+  const query = `SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, DATE_FORMAT(b.BRD_CREATED_AT, '%Y-%m-%d') AS BRD_CREATED_AT, b.BRD_NICK, b.BRD_OPEN
   FROM board b
   LEFT JOIN likelist ll ON b.BRD_ID = ll.LL_NUM
   WHERE b.BRD_ID =2;
@@ -44,7 +44,7 @@ router.get("/comments", (req, res) => {
                   FROM board b
                   JOIN comment c ON b.BRD_ID = c.COM_NUM
                   JOIN user u ON (b.BRD_WRITER = u.USER_EMAIL OR c.COM_WRITER = u.USER_EMAIL)
-                  where b.BRD_ID=3;`;
+                  where b.BRD_ID=${boardId};`;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -75,29 +75,18 @@ router.get("/locations", (req, res) => {
 });
 
 //이미지 받아오기
-router.get("/images", (req, res) => {
-  const { boardId } = req.query;
-  const query = `SELECT * FROM board WHEN BRD_ID = ${boardId};`;
 
-  db.query(query, (err, results) => {
+router.get("/images", (req, res) => {
+  const imagePath = "../CourseImage/2/푸바오1.jpg";
+  const imageFullPath = path.join(__dirname, imagePath);
+
+  fs.readFile(imageFullPath, (err, data) => {
     if (err) {
       console.error(err);
-      res.status(500).json({ error: "게시글 정보를 가져올 수 없습니다." });
-    } else if (results.length === 0) {
-      res.status(404).json({ error: "게시글을 찾을 수 없습니다." });
+      res.status(500).json({ error: "이미지를 읽을 수 없습니다." });
     } else {
-      const imagePath = `../CourseImage/${boardId}`;
-      const imageFullPath = path.join(__dirname, imagePath);
-
-      fs.readFile(imageFullPath, (err, data) => {
-        if (err) {
-          console.error(err);
-          res.status(500).json({ error: "이미지를 읽을 수 없습니다." });
-        } else {
-          res.setHeader("Content-Type", "image/jpeg");
-          res.send(data);
-        }
-      });
+      res.setHeader("Content-Type", "image/jpeg");
+      res.send(data);
     }
   });
 });
@@ -110,7 +99,7 @@ router.get("/locationpoptime", (req, res) => {
                   ORDER BY rand()
                   LIMIT 1;`;
 
-  db.query(query, (err, results) => {
+  db.query(query, [boardId], (err, results) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "서버 에러" });
@@ -128,7 +117,7 @@ router.get("/locationpopimages", (req, res) => {
                 ORDER BY rand()
                 LIMIT ?;`;
 
-  db.query(query, (err, results) => {
+  db.query(query, [boardId], (err, results) => {
     if (err) {
       console.error(err);
       res.json.status(500).json({ error: "서버에러" });
@@ -143,7 +132,7 @@ router.get("/report/board/:boardId", (req, res) => {
   const { boardId } = req.params;
   const query = `SELECT BRD_ID , BRD_REPORT, BRD_WRITER FROM board WHERE BRD_ID =19;`;
 
-  db.query(query, (err, results) => {
+  db.query(query, [boardId], (err, results) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "서버에러" });
