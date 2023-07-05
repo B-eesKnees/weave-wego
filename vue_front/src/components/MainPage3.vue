@@ -180,8 +180,9 @@
                     </div>
                 </div>
                 <div class="mainpage3_third_filters_keyword_filter">
-                    <img src="../assets/img/search.png" alt=""><input class="keyword_filter" type="text"
-                        placeholder="키워드 검색" />
+                    <img src="../assets/img/search.png" alt=""><input
+                        @input="search = $event.target.value, PostHashtagsNewes(), showSortRecent()" class="keyword_filter"
+                        type="text" placeholder="키워드 검색" />
                 </div>
             </div>
             <div class="mainpage3_third_sort">
@@ -194,18 +195,20 @@
             <div class="mainpage3_third_contents">
                 <h2 id="nodata" v-if="nodata">데이터가 없습니다.</h2>
                 <div v-for="(item, i) in Data" :key="i" class="mainpage3_third_content">
-                    <div class="mainpage3_third_content_img">
-                        <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
-                        <div id="opacity_glass"></div>
-                        <div class="mainpage3_third_content_like">
-                            <img src="../assets/img/like.png" alt="" />
+                    <a ref="alink" :href="`/detail/${Data[i].BRD_ID}`">
+                        <div class="mainpage3_third_content_img">
+                            <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
+                            <div id="opacity_glass"></div>
+                            <div class="mainpage3_third_content_like">
+                                <img @click="likeToggle($event)" src="../assets/img/like.png" alt="" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="mainpage3_third_content_detail">
-                        <h5>{{ item.BRD_TITLE }}</h5>
-                        <div class="border"></div>
-                        <p>{{ item.BRD_REV }}</p>
-                    </div>
+                        <div class="mainpage3_third_content_detail">
+                            <h5>{{ item.BRD_TITLE }}</h5>
+                            <div class="border"></div>
+                            <p>{{ item.BRD_REV }}</p>
+                        </div>
+                    </a>
                 </div>
 
             </div>
@@ -247,8 +250,13 @@ export default {
 
             //백으로 보낼 데이터
             hashtags: [],
+            search: '',
             newhashtags: [],
 
+            //로그인여부 데이터
+            email: "",
+            //좋아요한 게시물
+            likelist: [],
 
         };
     },
@@ -257,6 +265,8 @@ export default {
     created() { },
     mounted() {
         this.sortvalue = '최근순'
+        this.email = localStorage.getItem("userID")
+        this.postLoginUser()
     },
     unmounted() { },
     watch: {
@@ -265,8 +275,48 @@ export default {
             this.showSortViews()
             this.showSortLikes()
         },
+        search: function () {
+            this.PostHashtagsNewes()
+        }
+
     },
     methods: {
+        //로그인 여부에 따른 좋아요기능
+        postLoginUser() {
+            axios({
+                url: "/checkLike",
+                method: "POST",
+                data: {
+                    email: this.email
+                }
+            }).then((res) => {
+                const resdata = res.data;
+                for (var i in resdata) {
+                    this.likelist.push(resdata[i].LL_NUM);
+                }
+
+                console.log(this.likelist, "likeList");
+            })
+        },
+        likeToggle(event) {
+            if (event.target.tagName == "IMG") {
+                event.preventDefault()
+
+                if (this.email == null) {
+                    if (!confirm("로그인이 필요합니다.  로그인하시겠습니까?")) { //취소시
+                    } else {
+                        window.location.href = '/login';
+                    }
+                } else { // this.email == true면
+
+                    if (this.likelist)
+                        event.target.classList.add('fill_like');
+                }
+            }
+
+
+        },
+
         PostHashtagsNewes() {
             if (this.sortvalue == '최근순') {
                 axios({
@@ -274,6 +324,7 @@ export default {
                     method: "POST",
                     data: {
                         hashtags: this.hashtags,
+                        search: this.search
                     },
                 })
                     .then((res) => {
@@ -301,6 +352,32 @@ export default {
                         this.newhashtags = [];
                         for (var i in res.data) {
                             this.newhashtags.push(res.data[i]);
+                        }
+                    })
+                    .catch((err) => {
+                        alert(err);
+                    });
+            } else if (this.sortvalue == '조회순') {
+                axios({
+                    url: "http://localhost:3000/getViewsFilter",
+                    method: "POST",
+                    data: {
+                        hashtags: this.hashtags,
+                    },
+                })
+                    .then((res) => {
+                        console.log(res.data, "res데이터");
+
+                        this.newhashtags = [];
+                        for (var i in res.data) {
+                            this.newhashtags.push(res.data[i]);
+                        }
+
+
+                        for(const i in this.Data) {
+                            if(this.Data[i].BRD_ID.some((l) => this.likelist.includes(l))) {
+                                likelistResult.push()
+                            }
                         }
                     })
                     .catch((err) => {
@@ -374,30 +451,6 @@ export default {
                 }
             }
         },
-        //                                          ***갈아엎을 코드지만 아까워서 주석.***
-        // locationHashData() { // 지역선택 필터링 함수
-        //     //해시태그 데이터
-        //     try {
-        //         this.nodata = false;
-        //         if (this.locationSelectData.length >= 1) { // 지역선택 하나라도 했으면
-        //             this.locationData = []; // 데이터 초기화
-        //             //해당지역 선택한 데이터를 삽입
-        //             for (const item in this.OriginData) {
-        //                 const originHashtag = this.OriginData[item].BRD_HASHTAG;
-        //                 if (this.locationSelectData.some((l) => originHashtag.includes(l))) {
-        //                     this.locationData.push(this.OriginData[item]);
-        //                 }
-        //             }
-        //             this.OriginData = []; // 기존 데이터(최근순)에 덮어쓰지 않게 초기화
-        //             //배열안에 배열을 꺼내기 위해 loop
-        //             for (const i in this.locationData) {
-        //                 this.Data.push(this.locationData[i]);
-        //             }
-        //         }
-        //     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
-        //         this.nodata = true; // "데이터가 없습니다 출력"
-        //     }
-        // },
         async showSortRecent() { // 최근순으로 게시물6개 출력
             if (this.sortvalue == "최근순") {
                 await axios({
@@ -413,13 +466,12 @@ export default {
                         this.result = [];
                         this.dataCount = 1;
 
-
                         this.OriginData = res.data; // 원본데이터
 
                         console.log(this.OriginData, "오리지날데이터");
                         console.log(this.newhashtags, "백에서 받은 데이터");
 
-                        if (this.hashtags.length >= 1) { // 선택 하나라도 했으면
+                        if (this.hashtags.length >= 1 || this.search) { // 선택 하나라도 했으면
                             this.OriginData = [];
 
                             for (var i in this.newhashtags) {
@@ -436,6 +488,7 @@ export default {
                         for (var i = 0; i <= this.result[0].length - 1; i++) { // 게시물 6개 출력
                             this.Data.push(this.result[0][i]);
                         }
+                        console.log(this.Data,"데이터");
                     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
                         this.nodata = true; // "데이터가 없습니다 출력"
                     }
@@ -698,6 +751,10 @@ export default {
     box-shadow: 0 0 5px #ccc;
 }
 
+.mainpage3_third_content a {
+    text-decoration: none;
+}
+
 .mainpage3_third_content_img {
     width: 100%;
     height: 65%;
@@ -742,6 +799,7 @@ export default {
 .mainpage3_third_content_detail p {
     padding-top: 2%;
     font-size: small;
+    font-weight: normal;
     width: 100%;
     height: 2.8em;
     display: -webkit-box;
@@ -776,6 +834,14 @@ export default {
     background-color: white;
 }
 
+.fill_like {
+    filter: invert(50%) sepia(100%) saturate(9999%) hue-rotate(354deg) brightness(89%) contrast(500%);
+}
+
+.fill_like:focus {
+    scale: 1.5;
+}
+
 #opacity_glass {
     width: 100%;
     height: 100%;
@@ -789,6 +855,7 @@ export default {
 #nodata {
     margin: 10% auto;
 }
+
 
 /* svg스타일 코드 */
 
