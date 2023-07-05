@@ -4,15 +4,18 @@
         <h2>추천 코스</h2>
         <div class="mainpage2_second">
             <div class="mainpage2_second_left">
-                <div v-for="(item, i) in recommendData" :key="i" class="mainpage2_second_left_img">
-                    <img v-if="i == 0" :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`"
+                <div class="mainpage2_second_left_img">
+                    <img :src="`http://localhost:3000/downloadCourse/${recommendData.BRD_ID}/${recommendData.IMG_PATH}`"
                         alt="" />
                 </div>
-                <div id="opacity_glass"></div>
-                <div v-for="(item, i) in recommendData" :key="i" class="mainpage2_second_left_content">
-                    <h3 v-if="i == 0" class="mainpage2_second_left_content_name">{{ item.BRD_TITLE }}</h3>
-                    <p v-if="i == 0" class="mainpage2_second_left_content_hashtag">{{ item.BRD_HASHTAG }}</p>
-                    <span v-if="i == 0" class="mainpage2_second_left_content_user">{{ item.BRD_NICK }}
+                <a :href="`/detail/${recommendData.BRD_ID}`">
+                    <div id="opacity_glass"></div>
+                </a>
+
+                <div class="mainpage2_second_left_content">
+                    <h3 class="mainpage2_second_left_content_name">{{ recommendData.BRD_TITLE }}</h3>
+                    <p class="mainpage2_second_left_content_hashtag">{{ recommendData.BRD_HASHTAG }}</p>
+                    <span class="mainpage2_second_left_content_user">{{ recommendData.BRD_NICK }}
                         <p>님의 코스</p>
                     </span>
                 </div>
@@ -20,17 +23,19 @@
             <div class="mainpage2_second_right">
                 <div class="mainpage2_second_right_rows">
                     <div v-for="(item, i) in recommendData2" :key="i" class="mainpage2_second_right_row">
-                        <div class="mainpage2_second_right_row_img">
-                            <img v-if="i<=2" :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
-                            <div id="opacity_glass2"></div>
-                        </div>
-                        <div class="mainpage2_second_right_row_content">
-                            <h3 class="mainpage2_second_right_row_content_name">{{ item.BRD_TITLE }}</h3>
-                            <p class="mainpage2_second_right_row_content_hashtag">{{ item.BRD_HASHTAG }}</p>
-                            <span class="mainpage2_second_right_row_content_user">{{ item.BRD_NICK }}
-                                <p class="nim">님의 코스</p>
-                            </span>
-                        </div>
+                        <a :href="`/detail/${recommendData2[i].BRD_ID}`">
+                            <div class="mainpage2_second_right_row_img">
+                                <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
+                                <div id="opacity_glass2"></div>
+                            </div>
+                            <div class="mainpage2_second_right_row_content">
+                                <h3 class="mainpage2_second_right_row_content_name">{{ item.BRD_TITLE }}</h3>
+                                <p class="mainpage2_second_right_row_content_hashtag">{{ item.BRD_HASHTAG }}</p>
+                                <span class="mainpage2_second_right_row_content_user">{{ item.BRD_NICK }}
+                                    <p class="nim">님의 코스</p>
+                                </span>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -66,10 +71,11 @@ export default {
                 url: 'http://localhost:3000/getLikeCourse',
                 method: 'POST'
             }).then(res => {
-                this.recommendData = res.data;
+                this.recommendData = res.data[0];
                 for (let i = 1; i <= 3; i++) {
                     this.recommendData2.push(res.data[i]);
                 }
+                console.log(this.recommendData, "recommendData");
             })
         }
     }
@@ -99,10 +105,12 @@ export default {
     width: 100%;
     height: 100%;
 }
+
 .mainpage2_second p {
     font-size: small;
     line-height: 200%;
 }
+
 .mainpage2_second_left {
     width: 49%;
     height: 100%;
@@ -175,6 +183,7 @@ export default {
     box-sizing: border-box;
     position: relative;
 }
+
 .mainpage2_second_right_row_img img {
     width: 100%;
     height: 100%;
@@ -205,6 +214,7 @@ export default {
 .mainpage2_second_right_row_content_hashtag {
     margin-top: -10%;
     font-size: small;
+    font-weight: normal;
     z-index: 5;
 }
 
