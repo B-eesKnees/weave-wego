@@ -6,14 +6,14 @@
       <div class="filter">필터 구역</div>
       <!-- 필터 들어갈 곳 -->
       <div class="select">
-        <input id="public" v-model="picked" type="radio" value="Public" />
+        <input id="public" v-model="open" type="radio" :value="1" />
         <label for="public" style="margin-right: 1rem">공개</label>
-        <input id="private" v-model="picked" type="radio" value="Private" />
+        <input id="private" v-model="open" type="radio" :value="0" />
         <label for="private">비공개</label>
       </div>
       <div class="title">
         <div>제목</div>
-        <input id="title" type="text" placeholder="제목 입력" />
+        <input id="title" v-model="title" type="text" placeholder="제목 입력" />
       </div>
       <div class="map">
         <p>지도에서 검색 후 선택하기</p>
@@ -64,7 +64,7 @@
       <!-- 장소와 코멘트 들어갈 곳 -->
       <div class="summary">
         <p>총 평</p>
-        <textarea placeholder="코멘트 입력" />
+        <textarea v-model="review" placeholder="코멘트 입력" />
       </div>
       <div>
         이미지 업로드
@@ -86,7 +86,7 @@
       </div>
       <!-- 사진 첨부하는 버튼 들어갈 곳-->
       <div class="buttons">
-        <button>작성완료</button>
+        <button @click="createPost">작성완료</button>
         <button>취소</button>
       </div>
     </div>
@@ -95,33 +95,43 @@
 
 <script setup>
 import gnbBar from "@/components/gnbBar.vue";
+import axios from "axios";
 import { ref, onMounted } from "vue";
-
-const picked = ref("Public");
+///
+const open = ref(0);
+const title = ref("");
+const review = ref("");
+///
 const map = ref(null);
 const infowindow = ref(null);
 const keyword = ref("경복궁");
 const markers = ref([]);
-const locations = ref([
-  {
-    id: 1,
-    title: "경복궁",
-    coord: {
-      La: 126.976896737645,
-      Ma: 37.5776087830657,
-    },
-    content: "",
-  },
-  {
-    id: 2,
-    title: "경복궁주유소",
-    coord: {
-      La: 126.980660310529,
-      Ma: 37.575382201454005,
-    },
-    content: "",
-  },
-]);
+const locations = ref([]);
+
+const createPost = () => {
+  console.log(locations.value);
+  axios
+    .post("http://127.0.0.1:3000/boardCreate", {
+      writer: "유저",
+      title: title.value,
+      loc_rev1: locations.value[0] ? locations.value[0].content : "",
+      loc_rev2: locations.value[1] ? locations.value[1].content : "",
+      loc_rev3: locations.value[2] ? locations.value[2].content : "",
+      loc_rev4: locations.value[3] ? locations.value[3].content : "",
+      loc_rev5: locations.value[4] ? locations.value[4].content : "",
+      rev: review.value,
+      hashtag: "#지역",
+      nick: "유저닉네임",
+      open: open.value,
+    })
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 const images = ref([]); // 이미지 업로드 하는 스크립트
 
 const addImage = (e) => {
