@@ -181,8 +181,8 @@
                 </div>
                 <div class="mainpage3_third_filters_keyword_filter">
                     <img src="../assets/img/search.png" alt=""><input
-                        @input="search = $event.target.value, PostHashtagsNewes(), showSortRecent()" class="keyword_filter"
-                        type="text" placeholder="키워드 검색" />
+                        @input="search = $event.target.value, PostHashtagsNewes(), showSortRecent(), showSortViews(), showSortLikes()"
+                        class="keyword_filter" type="text" placeholder="키워드 검색" />
                 </div>
             </div>
             <div class="mainpage3_third_sort">
@@ -200,7 +200,10 @@
                             <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
                             <div id="opacity_glass"></div>
                             <div class="mainpage3_third_content_like">
-                                <img @click="likeToggle($event)" src="../assets/img/like.png" alt="" />
+                                <img :id="`content${i}`" v-if="this.likelist.includes(item.BRD_ID)"
+                                    @click="likeToggle($event)" :src="imgsrc[0]" alt="" />
+                                <img v-if="!this.likelist.includes(item.BRD_ID)" @click="likeToggle($event)" :src="imgsrc[1]"
+                                    alt="" />
                             </div>
                         </div>
                         <div class="mainpage3_third_content_detail">
@@ -257,7 +260,9 @@ export default {
             email: "",
             //좋아요한 게시물
             likelist: [],
-
+            imgbrdID: true,
+            imgsrc: [require("../assets/img/like2.png"),
+                    require("../assets/img/like.png"),],
         };
     },
 
@@ -281,41 +286,7 @@ export default {
 
     },
     methods: {
-        //로그인 여부에 따른 좋아요기능
-        postLoginUser() {
-            axios({
-                url: "/checkLike",
-                method: "POST",
-                data: {
-                    email: this.email
-                }
-            }).then((res) => {
-                const resdata = res.data;
-                for (var i in resdata) {
-                    this.likelist.push(resdata[i].LL_NUM);
-                }
 
-                console.log(this.likelist, "likeList");
-            })
-        },
-        likeToggle(event) {
-            if (event.target.tagName == "IMG") {
-                event.preventDefault()
-
-                if (this.email == null) {
-                    if (!confirm("로그인이 필요합니다.  로그인하시겠습니까?")) { //취소시
-                    } else {
-                        window.location.href = '/login';
-                    }
-                } else { // this.email == true면
-
-                    if (this.likelist)
-                        event.target.classList.add('fill_like');
-                }
-            }
-
-
-        },
 
         PostHashtagsNewes() {
             if (this.sortvalue == '최근순') {
@@ -334,6 +305,7 @@ export default {
                         for (var i in res.data) {
                             this.newhashtags.push(res.data[i]);
                         }
+
                     })
                     .catch((err) => {
                         alert(err);
@@ -344,6 +316,7 @@ export default {
                     method: "POST",
                     data: {
                         hashtags: this.hashtags,
+                        search: this.search
                     },
                 })
                     .then((res) => {
@@ -363,6 +336,7 @@ export default {
                     method: "POST",
                     data: {
                         hashtags: this.hashtags,
+                        search: this.search
                     },
                 })
                     .then((res) => {
@@ -373,12 +347,6 @@ export default {
                             this.newhashtags.push(res.data[i]);
                         }
 
-
-                        for(const i in this.Data) {
-                            if(this.Data[i].BRD_ID.some((l) => this.likelist.includes(l))) {
-                                likelistResult.push()
-                            }
-                        }
                     })
                     .catch((err) => {
                         alert(err);
@@ -488,7 +456,8 @@ export default {
                         for (var i = 0; i <= this.result[0].length - 1; i++) { // 게시물 6개 출력
                             this.Data.push(this.result[0][i]);
                         }
-                        console.log(this.Data,"데이터");
+
+                        console.log(this.Data, "데이터");
                     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
                         this.nodata = true; // "데이터가 없습니다 출력"
                     }
@@ -516,7 +485,7 @@ export default {
                         console.log(this.OriginData, "오리지날데이터");
                         console.log(this.newhashtags, "백에서 받은 데이터");
 
-                        if (this.hashtags.length >= 1) { // 선택 하나라도 했으면
+                        if (this.hashtags.length >= 1 || this.search) { // 선택 하나라도 했으면
                             this.OriginData = [];
 
                             for (var i in this.newhashtags) {
@@ -560,7 +529,7 @@ export default {
                         console.log(this.OriginData, "오리지날데이터");
                         console.log(this.newhashtags, "백에서 받은 데이터");
 
-                        if (this.hashtags.length >= 1) { // 선택 하나라도 했으면
+                        if (this.hashtags.length >= 1 || this.search) { // 선택 하나라도 했으면
                             this.OriginData = [];
 
                             for (var i in this.newhashtags) {
@@ -602,6 +571,54 @@ export default {
             }
         },
 
+        //로그인 여부에 따른 좋아요기능
+        postLoginUser() {
+            axios({
+                url: "http://localhost:3000/checkLike",
+                method: "POST",
+                data: {
+                    email: this.email
+                }
+            }).then((res) => {
+                const resdata = res.data;
+
+                for (var i in resdata) {
+                    this.likelist.push(resdata[i].LL_NUM);
+                }
+
+                console.log(this.likelist, "likeList");
+                console.log(this.Data, "Data");
+
+                for (i in this.Data) {
+                    this.abcd[i] = Data[i].BRD_ID;
+                }
+                console.log(this.abcd);
+            })
+        },
+        likeToggle(event) {
+
+            if (event.target.tagName == "IMG") {
+                event.preventDefault()
+                const contentID = event.target.id;
+                if (this.email == null) { //비로그인시
+                    if (!confirm("로그인이 필요합니다.  로그인하시겠습니까?")) { //취소시
+                    } else {
+                        window.location.href = '/login';
+                    }
+
+                } else { // 로그인시
+
+                    if (contentID === 'content1') {
+                        this.imgsrc[0] = require("../assets/img/like.png");
+                    }
+                    // else if(contentID == contentID[i] && this.imgsrc == require("../assets/img/like2.png")){
+                    //     this.imgsrc = require("../assets/img/like.png")
+                    // }
+
+                }
+
+            }
+        },
     }
 }
 
