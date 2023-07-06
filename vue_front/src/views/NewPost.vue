@@ -109,7 +109,9 @@ const markers = ref([]);
 const locations = ref([]);
 
 const handleSubmit = () => {
-  if (!locations.value[1]) {
+  if (title.value === "") {
+    alert("제목을 입력해주세요.");
+  } else if (!locations.value[1]) {
     alert("장소를 2개 이상 선택해주세요.");
   } else if (images.value.length === 0) {
     alert("이미지를 업로드해주세요.");
