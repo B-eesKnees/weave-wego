@@ -153,7 +153,7 @@ export default {
             this.inputAllCheck()
             this.emailCheckForm()
             this.nicknameCheckForm()
-            console.log(this.allcheck);
+            
         },
         movetomain() {
             window.location.href = '/';
@@ -266,10 +266,6 @@ export default {
                     this.emailcheck = 3;
                 }
 
-
-
-                console.log(this.emailcheck);
-
             }).catch(error => {
                 alert(error);
             })
@@ -283,7 +279,6 @@ export default {
                 },
             }).then(async (res) => {
                 if (res.data.message == '사용가능한 닉네임입니다.' && this.nickname) {
-                    console.log(res.data.message);
                     this.nicknamecheck = 2;
                 } else if (res.data.message == '존재하는 닉네임입니다.') {
                     this.nicknamecheck = 1;
