@@ -69,11 +69,15 @@ a {
 
   
   .local_img, .naver_img {
-    width: 100%;
+    width: 50px;
+    height: 50px;
+    max-width: 50px;
+    max-height: 50px;
     border-radius: 100%;
     border: 0.5px solid #424242;
     overflow: hidden;
-
+    background-size: cover;
+    background-position: center top;
   }
   
   .kakao_img {

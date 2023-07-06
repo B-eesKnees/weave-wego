@@ -9,11 +9,12 @@
     <div class="myprofile">
       <div class="profileimg">
         <div v-if="provider === 'local'">
-          <img
+          <div
             class="profile"
-            :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
-            alt="profileExample"
-          />
+            :style="{
+              'background-image': `url(http://localhost:3000/downloadProfile/${email}/${image})`,
+            }"
+          ></div>
         </div>
         <div v-else-if="provider === 'kakao'">
           <div
@@ -42,28 +43,33 @@
   </section>
   <section>
     <TabsWrapper>
-      <TabItem title="내코스" @click="">
+      <TabItem title="내코스">
         <!-- 내코스--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
-        <div>
-          <button v-if="!editMode" class="edit" @click="toggleEditMode">
-            &nbsp;&nbsp;편집&nbsp;&nbsp;
-          </button>
-          <button v-if="editMode" class="delete" @click="deleteContent">
-            &nbsp;&nbsp;삭제&nbsp;&nbsp;
-          </button>
-          <button v-if="editMode" class="cancel" @click="cancelEdit">
-            &nbsp;&nbsp;취소&nbsp;&nbsp;
-          </button>
-        </div>
+        <div v-if="boardListData">
+          <div>
+            <button v-if="!editMode" class="edit" @click="toggleEditMode">
+              &nbsp;&nbsp;편집&nbsp;&nbsp;
+            </button>
+            <button v-if="editMode" class="delete" @click="deleteContent">
+              &nbsp;&nbsp;삭제&nbsp;&nbsp;
+            </button>
+            <button v-if="editMode" class="cancel" @click="cancelEdit">
+              &nbsp;&nbsp;취소&nbsp;&nbsp;
+            </button>
+          </div>
 
-        <div class="course">
-          <boardList
-            v-for="item in boardList"
-            :boardList="item"
-            :key="item.BRD_ID"
-            :editMode="editMode"
-          ></boardList>
+          <div class="course">
+            <boardList
+              v-for="item in boardList"
+              :boardList="item"
+              :key="item.BRD_ID"
+              :editMode="editMode"
+            ></boardList>
+          </div>
+        </div>
+        <div v-else>
+          <div class="nonboardList">게시글 없음</div>
         </div>
       </TabItem>
 
@@ -228,34 +234,58 @@ export default {
       this.editMode = true;
     },
     deleteContent() {
-      // 선택된 항목들을 삭제하는 로직을 구현합니다.
-      if (!this.selectedItems) {
-        return; // 선택된 항목이 없으면 종료합니다.
-      }
+      // // 선택된 항목들을 삭제하는 로직을 구현합니다.
+      // if (!this.selectedItems) {
+      //   return; // 선택된 항목이 없으면 종료합니다.
+      // }
 
-      // 선택된 항목을 서버에 삭제 요청합니다.
-      axios
-        .post("/mypage/delMyCourse", { selectedItems })
-        .then((response) => {
-          // 서버로부터 응답을 받으면 클라이언트에서도 해당 항목을 삭제합니다.
-          if (response.data.success) {
-            // 삭제 요청이 성공한 경우
-            this.selectedItems.forEach((item) => {
-              const index = this.boardList.findIndex(
-                (board) => board.BRD_ID === item
-              );
-              if (index !== -1) {
-                this.boardList.splice(index, 1); // 선택된 항목을 배열에서 제거합니다.
+      // // 선택된 항목을 서버에 삭제 요청합니다.
+      // axios
+      //   .post("/mypage/delMyCourse", { selectedItems })
+      //   .then((response) => {
+      //     // 서버로부터 응답을 받으면 클라이언트에서도 해당 항목을 삭제합니다.
+      //     if (response.data.success) {
+      //       // 삭제 요청이 성공한 경우
+      //       this.selectedItems.forEach((item) => {
+      //         const index = this.boardList.findIndex(
+      //           (board) => board.BRD_ID === item
+      //         );
+      //         if (index !== -1) {
+      //           this.boardList.splice(index, 1); // 선택된 항목을 배열에서 제거합니다.
+      //         }
+      //       });
+      //       this.selectedItems = []; // 선택된 항목 배열을 초기화합니다.
+      //     } else {
+      //       console.error(response.data.error);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   });
+      function deleteUsers() {
+        const values = selectedUsers.value.map((user) => user.member_id); // 선택된 유저의 member_id를 가져옵니다
+
+        location.reload();
+        if (values.length === 0) {
+          console.log("삭제할 컨텐츠가 없습니다");
+          return;
+        }
+
+        if (window.confirm("정말로 선택된 회원을 삭제하시겠습니까?")) {
+          axios
+            .post("http://localhost:9212/api/manager_user", { values })
+            .then((res) => {
+              if (res.data.code === 200) {
+                console.log("삭제 성공");
               }
+            })
+            .catch((err) => {
+              console.log(err);
             });
-            this.selectedItems = []; // 선택된 항목 배열을 초기화합니다.
-          } else {
-            console.error(response.data.error);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        } else {
+          console.log("삭제 취소");
+        }
+      }
     },
     cancelEdit() {
       this.editMode = false;

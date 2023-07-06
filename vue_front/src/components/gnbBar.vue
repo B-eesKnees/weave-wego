@@ -32,12 +32,14 @@
         </div>
       </div>
       <div v-else-if="provider === 'local'" class="gnb_bar_user_login">
-        <img
+        <div
           class="local_img"
-          :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
-          alt="profileExample"
+          :style="{
+            'background-image': `url(http://localhost:3000/downloadProfile/${email}/${image})`,
+          }"
           @click="toggleButtons"
-        />
+        ></div>
+
         <div class="gnbmypage">
           <div v-if="isButtonsVisible">
             <div v-for="button in buttonList" :key="button.tab">
