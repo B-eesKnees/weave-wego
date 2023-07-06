@@ -53,8 +53,8 @@
       <TabItem title="내코스">
         <!-- 내코스--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
-        <h2 id="nodata" v-if="nodata">데이터가 없습니다.</h2>
-        <div>
+        {{ nodata }}
+        <div v-if="!nodata">
           <button v-if="!editMode" class="edit" @click="toggleEditMode">
             &nbsp;&nbsp;편집&nbsp;&nbsp;
           </button>
@@ -65,9 +65,10 @@
             &nbsp;&nbsp;취소&nbsp;&nbsp;
           </button>
         </div>
-
+        <div id="nodata" class="nodata">작성한 게시글이 없습니다</div>
         <div class="course">
           <boardList
+            v-if="!nodata"
             v-for="item in boardList"
             :boardList="item"
             :key="item.BRD_ID"
@@ -187,17 +188,22 @@ export default {
     // 보드리스트 불러오기-------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------
     async boardListData() {
+      this.nodata = false;
       try {
-        this.nodata = false;
         const response = await axios.post("/mypage/myCourse", {
           userEmail: this.email,
         });
-        console.log(this.boardListData);
-        console.log(this.nodata);
+
+        // console.log(this.nodata);
 
         this.boardList = response.data;
-      } catch (error) {
-        console.error(error);
+        console.log(response.data);
+        if (this.boardList.length != 0) {
+          this.nodata = false;
+        } else {
+          this.nodata = true;
+        }
+      } catch {
         this.nodata = true;
         console.log(this.nodata);
       }
