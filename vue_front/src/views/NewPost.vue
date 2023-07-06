@@ -123,7 +123,7 @@ const createPost = () => {
   console.log(locations.value);
   axios
     .post("http://127.0.0.1:3000/boardCreate", {
-      writer: "유저",
+      writer: localStorage.getItem("userID"),
       title: title.value,
       loc_rev1: locations.value[0] ? locations.value[0].content : "",
       loc_rev2: locations.value[1] ? locations.value[1].content : "",
@@ -132,7 +132,7 @@ const createPost = () => {
       loc_rev5: locations.value[4] ? locations.value[4].content : "",
       rev: review.value,
       hashtag: "#지역",
-      nick: "유저닉네임",
+      nick: localStorage.getItem("userNick"),
       open: open.value,
     })
     .then((result) => {
@@ -141,6 +141,7 @@ const createPost = () => {
     .catch((error) => {
       console.log(error);
     });
+  axios.post("http://127.0.0.1:3000/boardCreate", {});
 };
 
 const images = ref([]); // 이미지 업로드 하는 스크립트

@@ -54,6 +54,7 @@ const locationData = ref([
     LOC_NAME: "",
     LOC_LAT: 0,
     LOC_LNG: 0,
+    LOC_ADD: "",
   },
 ]);
 
