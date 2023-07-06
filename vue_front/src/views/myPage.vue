@@ -53,7 +53,6 @@
       <TabItem title="내코스">
         <!-- 내코스--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
-        {{ nodata }}
         <div v-if="!nodata">
           <button v-if="!editMode" class="edit" @click="toggleEditMode">
             &nbsp;&nbsp;편집&nbsp;&nbsp;
@@ -65,8 +64,9 @@
             &nbsp;&nbsp;취소&nbsp;&nbsp;
           </button>
         </div>
-        <div id="nodata" class="nodata">작성한 게시글이 없습니다</div>
+
         <div class="course">
+          <div id="nodata" class="nodata">작성한 게시글이 없습니다</div>
           <boardList
             v-if="!nodata"
             v-for="item in boardList"

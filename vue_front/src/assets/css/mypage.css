@@ -126,7 +126,7 @@ a {
 
 /* tab css ------------------------------------------------------------- */
 .course {
-  margin-top: 7vh;
+  margin-top: 2vh;
   
 }
 .tabs__content {
@@ -140,7 +140,7 @@ a {
 .edit {
   position: absolute;
   right: 0;
-  top: -5vh;
+  top: 0;
   width: 100px;
   background: #fafafa;
   border: none;
@@ -154,7 +154,7 @@ a {
 .delete{
   position: absolute;
   right: 80px;
-  top: -5vh;
+  top: 0;
   width: 100px;
   background: #fafafa;
   border: none;
@@ -167,7 +167,7 @@ a {
 .cancel{
   position: absolute;
   right: 0;
-  top: -5vh;
+  top: 0;
   width: 100px;
   background: #fafafa;
   border: none;
