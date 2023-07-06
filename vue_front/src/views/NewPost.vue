@@ -86,7 +86,7 @@
       </div>
       <!-- 사진 첨부하는 버튼 들어갈 곳-->
       <div class="buttons">
-        <button @click="createPost">작성완료</button>
+        <button @click="handleSubmit">작성완료</button>
         <button>취소</button>
       </div>
     </div>
@@ -107,6 +107,15 @@ const infowindow = ref(null);
 const keyword = ref("경복궁");
 const markers = ref([]);
 const locations = ref([]);
+
+const handleSubmit = () => {
+  if (!locations.value[1]) {
+    alert("장소를 2개 이상 선택해주세요.");
+  } else if (images.value.length === 0) {
+    alert("이미지를 업로드해주세요.");
+    return;
+  } else createPost;
+};
 
 const createPost = () => {
   console.log(locations.value);
