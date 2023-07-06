@@ -59,7 +59,7 @@ router.get("/comments", (req, res) => {
 //장소 받아오기
 router.get("/locations", (req, res) => {
   const { boardId } = req.query;
-  const query = `SELECT b.BRD_ID, b.BRD_TITLE, l.LOC_NAME, l.LOC_LAT, l.LOC_LNG
+  const query = `SELECT b.BRD_ID, b.BRD_TITLE, l.LOC_NAME, l.LOC_LAT, l.LOC_LNG ,l.LOC_ADD
                   FROM board b
                   JOIN location l ON b.BRD_ID = l.LOC_ID
                   WHERE b.BRD_ID=${boardId};`;
@@ -74,19 +74,41 @@ router.get("/locations", (req, res) => {
   });
 });
 
-//이미지 받아오기
-
+//이미지 받아오기 (여러장)
 router.get("/images", (req, res) => {
-  const imagePath = "../CourseImage/2/푸바오1.jpg";
-  const imageFullPath = path.join(__dirname, imagePath);
+  const boardId = req.body.boardId;
+  const query = `SELECT IMG_PATH FROM image WHERE IMG_NUM = ?`;
 
-  fs.readFile(imageFullPath, (err, data) => {
+  db.query(query, [boardId], (err, results) => {
     if (err) {
       console.error(err);
-      res.status(500).json({ error: "이미지를 읽을 수 없습니다." });
+      res.status(500).json({ error: "이미지 조회 중 오류가 발생했습니다." });
     } else {
-      res.setHeader("Content-Type", "image/jpeg");
-      res.send(data);
+      if (results.length === 0) {
+        res.status(404).json({ error: "이미지를 찾을 수 없습니다. " });
+      } else {
+        const imagePaths = results.map((result) => result.IMG_PATH);
+        const imageFolder = `C:/새 폴더/weavewego/weavewego/node_back/CourseImage/${boardId}`;
+
+        const imagesData = [];
+
+        for (let i = 1; i < imagePaths.length; i++) {
+          const imagePath = path.join(imageFolder, imagePaths[i]);
+
+          try {
+            const data = fs.readFileSync(imagePath);
+            const imageData = {
+              fileName: imagePaths[i],
+              data: data.toString("base64"),
+            };
+            imageData.push(imageData);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+        res.setHeader("content-Type", "application/json");
+        res.json(imagesData);
+      }
     }
   });
 });
@@ -130,7 +152,7 @@ router.get("/locationpopimages", (req, res) => {
 //게시글 신고 정보 받아오기
 router.get("/report/board/:boardId", (req, res) => {
   const { boardId } = req.params;
-  const query = `SELECT BRD_ID , BRD_REPORT, BRD_WRITER FROM board WHERE BRD_ID =19;`;
+  const query = `SELECT BRD_ID , BRD_REPORT, BRD_WRITER FROM board WHERE BRD_ID =?;`;
 
   db.query(query, [boardId], (err, results) => {
     if (err) {
@@ -155,7 +177,7 @@ router.get("/report/board/:boardId", (req, res) => {
 //댓글 신고 정보 받아오기
 router.get("/report/comment/:commentId", (req, res) => {
   const { commentId } = req.params;
-  const query = `SELECT COM_ID , COM_REPORT, COM_WRITER FROM comment WHERE COM_ID=52;`;
+  const query = `SELECT COM_ID , COM_REPORT, COM_WRITER FROM comment WHERE COM_ID=?;`;
 
   db.query(query, [commentId], (err, results) => {
     if (err) {
@@ -181,7 +203,7 @@ router.get("/report/comment/:commentId", (req, res) => {
 router.put("/updateReport/board/:boardId", (req, res) => {
   const { boardId } = req.params;
 
-  const updateReport = `UPDATE board SET BRD_REPORT =1 WHERE BRD_ID=3;`;
+  const updateReport = `UPDATE board SET BRD_REPORT =1 WHERE BRD_ID=?;`;
 
   db.query(updateReport, [boardId], (err, results) => {
     if (err) {
@@ -201,7 +223,7 @@ router.put("/updateReport/board/:boardId", (req, res) => {
 router.put("/updateReport/comment/:commentId", (req, res) => {
   const { commentId } = req.params;
 
-  const updateReport = `UPDATE comment SET COM_REPORT =1 WHERE COM_ID=52;`;
+  const updateReport = `UPDATE comment SET COM_REPORT =1 WHERE COM_ID=?;`;
 
   db.query(updateReport, [commentId], (err, results) => {
     if (err) {
@@ -255,7 +277,7 @@ router.put("/updatecomments/", (req, res) => {
   const query = `update comment 
                 set COM_COMMENT = ?, COM_CREATED_AT = NOW() 
                 where COM_ID = ?`;
-  db.query(query, (err, results) => {
+  db.query(query, [commentId], (err, results) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "서버에러" });
