@@ -31,7 +31,10 @@
           </div>
         </div>
       </div>
-      <div v-else-if="provider === 'local'" class="gnb_bar_user_login">
+      <div
+        v-else-if="provider === 'local' && image !== 'default'"
+        class="gnb_bar_user_login"
+      >
         <div
           class="local_img"
           :style="{
@@ -58,6 +61,27 @@
         <img
           class="naver_img"
           :src="image"
+          alt="profileExample"
+          @click="toggleButtons"
+        />
+        <div class="gnbmypage">
+          <div v-if="isButtonsVisible">
+            <div v-for="button in buttonList" :key="button.tab">
+              <button
+                @click="selectTab(button.tab)"
+                :class="{ 'active-button': activeTab === button.tab }"
+              >
+                {{ button.name }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="image === 'default'" class="gnb_bar_user_login">
+        <img
+          class="naver_img"
+          src="../assets/img/profileExample.png"
           alt="profileExample"
           @click="toggleButtons"
         />

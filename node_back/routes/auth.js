@@ -1,10 +1,11 @@
 const express = require('express');
 const db = require('../db'); //db연결
 const bcrypt = require('bcrypt'); //암호화 관련 모듈
+const jwt = require('jsonwebtoken');
 
 
 const router = express.Router();
-
+const jwtKey = "abc1234567";
 
 
 //----------------------회원가입 코드------------------------------
@@ -277,5 +278,20 @@ router.post('/naverData', async(req, res)=> {
         }
     })
 });
+router.post('/defaultImage', async(req, res)=>{
+    const email = req.body.email;
+    
+    db.query(`update weavewego.user set USER_IMAGE = 'default' where USER_EMAIL = ?`, email, async(err)=>{
+        if(err) {
+            res.send({ // 에러 발생 시
+                'code':400,
+                'failed': 'error occurred',
+                'error': err
+            })
+        } else {
+            res.send({'code': 200});
+        }
+    })
+})
 
 module.exports = router;

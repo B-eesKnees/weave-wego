@@ -316,7 +316,13 @@ export default {
                 },
             }).then(async (res) => {
                 alert(res.data.message);
-                await this.uploadFile(this.image);
+                if(this.image) {
+                    await this.uploadFile(this.image);
+                } else {
+                    this.defaultImage(this.email);
+                    window.location.href='/';
+                }
+                // await this.uploadFile(this.image);
             }).catch(error => {
                 alert(error);
             })
@@ -354,6 +360,15 @@ export default {
 
             }
         },
+        defaultImage(email) {
+            axios({
+                url: 'auth/defaultImage',
+                method: 'POST',
+                data: {
+                    email
+                }
+            })
+        }
     }
 }
 </script> 

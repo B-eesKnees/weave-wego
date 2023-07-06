@@ -8,13 +8,12 @@
     <h1 class="mypage_title">마이페이지</h1>
     <div class="myprofile">
       <div class="profileimg">
-        <div v-if="provider === 'local'">
-          <div
-            class="profile"
-            :style="{
-              'background-image': `url(http://localhost:3000/downloadProfile/${email}/${image})`,
-            }"
-          ></div>
+        <div v-if="provider === 'local' && image !== 'default'">
+          <img
+            class="local_img"
+            :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
+            alt="profileExample"
+          />
         </div>
         <div v-else-if="provider === 'kakao'">
           <div
