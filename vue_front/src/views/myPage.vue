@@ -81,7 +81,9 @@
         <!-- 최근에 본 코스--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
         <div class="course">
+          <div id="norecentData" class="nodata">최근에 본 코스가 없습니다</div>
           <recentBoardList
+            v-if="!norecentData"
             v-for="item in recentBoardList"
             :recentBoardList="item"
             :key="item.BRD_ID"
@@ -91,7 +93,9 @@
         <!-- 좋아요리스트--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
         <div class="course">
+          <div id="noLikeData" class="nodata">좋아요 한 코스가 없습니다</div>
           <likeBoardList
+            v-if="!noLikeData"
             v-for="item in likeBoardList"
             :likeBoardList="item"
             :key="item.id"
@@ -101,7 +105,7 @@
       <TabItem title="내가 쓴 댓글">
         <!-- 내가 쓴 댓글--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
-        <div>
+        <div v-if="!noCommentData">
           <button
             v-if="!comment_editMode"
             class="edit"
@@ -120,10 +124,12 @@
             &nbsp;&nbsp;취소&nbsp;&nbsp;
           </button>
         </div>
-        <button class="comment_edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button>
+        <!-- <button class="comment_edit">&nbsp;&nbsp;편집&nbsp;&nbsp;</button> -->
 
         <div class="commentlist">
+          <div id="noCommentData" class="nodata">작성한 댓글이 없습니다</div>
           <commentList
+            v-if="!noCommentData"
             v-for="item in commentList"
             :commentList="item"
             :key="item.COM_ID"
@@ -145,6 +151,7 @@ import commentList from "../components/commentList.vue";
 import recentBoardList from "../components/recentBoardList.vue";
 import likeBoardList from "../components/likeBoardList.vue";
 import axios from "axios";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -172,6 +179,9 @@ export default {
       likeBoardList: [],
       commentList: [],
       nodata: false,
+      norecentData: false,
+      noLikeData: false,
+      noCommentData: false,
     };
   },
   created() {
@@ -211,23 +221,35 @@ export default {
     // 최근에 본 게시글 리스트 불러오기-------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------
     async recentBoardListData() {
+      this.norecentData = false;
       try {
         const response = await axios.post("/mypage/recentCourse", {
           userEmail: this.email,
         });
         this.recentBoardList = response.data;
-      } catch (error) {
-        console.error(error);
+        if (this.norecentData.length != 0) {
+          this.norecentData = false;
+        } else {
+          this.norecentData = true;
+        }
+      } catch {
+        this.norecentData = true;
       }
     },
     // 좋아요 리스트 불러오기-------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------
     async likeBoardListData() {
+      this.noLikeData = false;
       try {
         const response = await axios.post("/mypage/likeList", {
           userEmail: this.email,
         });
         this.likeBoardList = response.data;
+        if (this.noLikeData.length != 0) {
+          this.noLikeData = false;
+        } else {
+          this.noLikeData = true;
+        }
       } catch (error) {
         console.error(error);
       }
@@ -235,11 +257,17 @@ export default {
     // 댓글 불러오기-------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------
     async commentListData() {
+      this.noCommentData = false;
       try {
         const response = await axios.post("/mypage/myComment", {
           userEmail: this.email,
         });
         this.commentList = response.data;
+        if (this.noCommentData.length != 0) {
+          this.noCommentData = false;
+        } else {
+          this.noCommentData = true;
+        }
       } catch (error) {
         console.error(error);
       }
