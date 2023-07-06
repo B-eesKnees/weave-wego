@@ -277,5 +277,20 @@ router.post('/naverData', async(req, res)=> {
         }
     })
 });
+router.post('/defaultImage', async(req, res)=>{
+    const email = req.body.email;
+
+    db.query(`update weavewego.user set USER_IMAGE = 'default' where USER_EMAIL = ?`, email, async(err)=> {
+        if(err) {
+            res.send({ // 에러 발생 시
+                'code':400,
+                'failed': 'error occurred',
+                'error': err
+            })
+        } else {
+            res.status(200);
+        } 
+    })
+})
 
 module.exports = router;
