@@ -317,19 +317,29 @@ a {
 .com_brd_title{
   position: relative;
   display: inline-block;
+  color: #bebebe;
+  font-size: 1.2em;
+  font-weight: 300;
+  margin-bottom: 10px;
 }
 
 .com_created_at{
-  position: relative;
+  position: absolute;
   display: inline-block;
+  right: 5%;
 }
 
 .com_list_icon{
   position: relative;
   display: block;
+  left: 10px;
+  width: 15px;
 }
 
 .com_comment{
   position: relative;
   display: inline-block;
+  left: 3%;
+  top: -20px;
+  font-size: 1.6em;
 }

@@ -10,11 +10,12 @@
       <div class="profileimg">
         <div v-if="provider === 'local' && image !== 'default'">
           <img
-            class="local_img"
+            class="kakao_profile_img"
             :src="`http://localhost:3000/downloadProfile/${email}/${image}`"
             alt="profileExample"
           />
         </div>
+
         <div v-else-if="provider === 'kakao'">
           <div
             class="kakao_profile_img"
@@ -26,6 +27,13 @@
             class="naver_profile_img"
             :style="{ 'background-image': 'url(' + image + ')' }"
           ></div>
+        </div>
+        <div v-else-if="image === 'default'">
+          <img
+            class="kakao_profile_img"
+            src="../assets/img/profileExample.png"
+            alt="profileExample"
+          />
         </div>
         <a href="/checkpw"
           ><img
@@ -45,30 +53,26 @@
       <TabItem title="내코스">
         <!-- 내코스--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
-        <div v-if="boardListData">
-          <div>
-            <button v-if="!editMode" class="edit" @click="toggleEditMode">
-              &nbsp;&nbsp;편집&nbsp;&nbsp;
-            </button>
-            <button v-if="editMode" class="delete" @click="deleteContent">
-              &nbsp;&nbsp;삭제&nbsp;&nbsp;
-            </button>
-            <button v-if="editMode" class="cancel" @click="cancelEdit">
-              &nbsp;&nbsp;취소&nbsp;&nbsp;
-            </button>
-          </div>
-
-          <div class="course">
-            <boardList
-              v-for="item in boardList"
-              :boardList="item"
-              :key="item.BRD_ID"
-              :editMode="editMode"
-            ></boardList>
-          </div>
+        <h2 id="nodata" v-if="nodata">데이터가 없습니다.</h2>
+        <div>
+          <button v-if="!editMode" class="edit" @click="toggleEditMode">
+            &nbsp;&nbsp;편집&nbsp;&nbsp;
+          </button>
+          <button v-if="editMode" class="delete" @click="deleteContent">
+            &nbsp;&nbsp;삭제&nbsp;&nbsp;
+          </button>
+          <button v-if="editMode" class="cancel" @click="cancelEdit">
+            &nbsp;&nbsp;취소&nbsp;&nbsp;
+          </button>
         </div>
-        <div v-else>
-          <div class="nonboardList">게시글 없음</div>
+
+        <div class="course">
+          <boardList
+            v-for="item in boardList"
+            :boardList="item"
+            :key="item.BRD_ID"
+            :editMode="editMode"
+          ></boardList>
         </div>
       </TabItem>
 
@@ -166,6 +170,7 @@ export default {
       recentBoardList: [],
       likeBoardList: [],
       commentList: [],
+      nodata: false,
     };
   },
   created() {
@@ -183,12 +188,18 @@ export default {
     // ---------------------------------------------------------------------------------------------------------------------
     async boardListData() {
       try {
+        this.nodata = false;
         const response = await axios.post("/mypage/myCourse", {
           userEmail: this.email,
         });
+        console.log(this.boardListData);
+        console.log(this.nodata);
+
         this.boardList = response.data;
       } catch (error) {
         console.error(error);
+        this.nodata = true;
+        console.log(this.nodata);
       }
     },
     // 최근에 본 게시글 리스트 불러오기-------------------------------------------------------------------------------------------------------
