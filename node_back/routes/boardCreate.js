@@ -2,103 +2,77 @@ const express = require("express");
 const db = require("../db"); //db연결
 
 const router = express.Router();
-//본문
-router.post("/boardform", (req, res) => {
-  const {
-    writer,
-    title,
-    loc_rev1,
-    loc_rev2,
-    loc_rev3,
-    loc_rev4,
-    loc_rev5,
-    rev,
-    hashtag,
-    nick,
-    open,
-    created_at,
-  } = req.body;
 
-  const course = {
-    BRD_WRITER: writer,
-    BRD_TITLE: title,
-    BRD_LOC_REV1: loc_rev1,
-    BRD_LOC_REV2: loc_rev2,
-    BRD_LOC_REV3: loc_rev3,
-    BRD_LOC_REV4: loc_rev4,
-    BRD_LOC_REV5: loc_rev5,
-    BRD_REV: rev,
-    BRD_HASHTAG: hashtag,
-    BRD_NICK: nick,
-    BRD_OPEN: open,
-    BRD_CREATED_AT: created_at,
+router.post("/", (req, res) => {
+  // Step 1. 프론트에서 게시글, 장소들, 이미지 데이터를 받을게요
+  const { postData, locationData, imageData } = req.body;
+  // Step 2. DB의 board 테이블에 맞게 데이터를 가공할게요
+  const boardRow = {
+    // ID는 INSERT 할 때 결정됩니다.
+    BRD_WRITER: postData.writer,
+    BRD_TITLE: postData.title,
+    BRD_LOC_REV1: locationData[0] ? locationData[0].content : "", // 이것들은
+    BRD_LOC_REV2: locationData[1] ? locationData[1].content : "", // 장소 정보에서
+    BRD_LOC_REV3: locationData[2] ? locationData[2].content : "", // 뽑을게요
+    BRD_LOC_REV4: locationData[3] ? locationData[3].content : "", // 삼항연산자는
+    BRD_LOC_REV5: locationData[4] ? locationData[4].content : "", // 장소가 무조건 5개가 아니기에
+    // 비어있을 가능성이 있어서 런타임 에러 방지를 위해 사용했어요
+    BRD_REV: postData.review,
+    BRD_HASHTAG: postData.hashtag,
+    // Created, Updated는 front의 정보를 받아오면 위험해요
+    // Front의 요청은 악의적으로 변조될 수 있으니
+    // 백 혹은 DB에서 정해주는 것이 좋아요
+    BRD_OPEN: postData.open,
+    BRD_REPORT: "0", // defalt가 X겠네요
+    BRD_NICK: postData.nick,
+    BRD_VIEWCOUNT: 0, // default가 0이겠네요
   };
-  const query = `INSERT INTO board (BRD_WRITER, BRD_TITLE, BRD_LOC_REV1, BRD_LOC_REV2, BRD_LOC_REV3, BRD_LOC_REV4, BRD_LOC_REV5, BRD_REV, BRD_HASHTAG, BRD_NICK, BRD_OPEN,BRD_CREATED_AT) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d'))`;
-
-  db.query(query, course, (err) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: " 글 작성 중 오류가 발생했습니다." });
-    } else {
-      const redirectPath = "/어쩌고";
-      res.redirect(redirectPath);
+  // Step 3. board 테이블에 데이터를 INSERT
+  // 서브 쿼리를 활용해 ID를 명시적으로 지정할게요
+  db.query(
+    "INSERT INTO board SET `BRD_ID` = (SELECT IFNULL(MAX(BRD_ID) + 1, 1) FROM board b), ? ",
+    boardRow,
+    (err, results) => {
+      if (err) {
+        console.error(err); // 오류처리 하세용
+        res.status(500).json({ message: "DB ERROR" });
+      } else {
+        // Step 4. 방금 삽입한 Row의 ID는 results 객체 안에 있어요.
+        const postId = results.insertId;
+        // Step 5. location 테이블에 넣을 데이터를 가공할게요
+        // location 테이블의 컬럼이 json 형태를 요구하니 그에 맞춰줄게요
+        // json 자료형은 필요할때만 지정하세요 ^^
+        const locationRow = {
+          LOC_ID: postId, // 방금 받아온 새 글의 ID
+          LOC_NAME: JSON.stringify(
+            locationData.map((l) => ({ name: l.title }))
+          ), // locationData 중 이름만 추출
+          LOC_ADD: JSON.stringify(
+            locationData.map((l) => ({ name: l.address }))
+          ), // locationData 중 주소만 추출
+          LOC_LAT: JSON.stringify(
+            locationData.map((l) => ({ name: l.coord.La }))
+          ), // locationData 중 latitude만 추출
+          LOC_LNG: JSON.stringify(
+            locationData.map((l) => ({ name: l.coord.Ma }))
+          ), // locationData 중 longitude만 추출
+        };
+        // Step 6. 다음 Locations Insert를 진행합니다.
+        db.query("INSERT INTO location SET ?", locationRow, (err, results) => {
+          if (err) {
+            console.error(err); // 오류처리 하세용
+            res.status(500).json({ message: "DB ERROR" });
+          } else {
+            // Step 7. 이미지 업로드 작성 구역
+            // 조금만 기다려주세용~
+            res.status(200).json({
+              message: "INSERT COMPLETE",
+            });
+          }
+        });
+      }
     }
-  });
+  );
 });
-
-//댓글
-
-router.post("/commentform", (req, res) => {
-  const { num, writer, created_at, nick, image, comment } = req.body;
-
-  const courseComment = {
-    COM_NUM: num,
-    COM_WRITER: writer,
-    COM_CREATED_AT: created_at,
-    COM_NICK: nick,
-    COM_IMAGE: image,
-    COM_COMMENT: comment,
-  };
-
-  const query = `insert into comment (COM_NUM, COM_WRITER,  COM_CREATED_AT, COM_NICK, COM_IMAGE, COM_COMMENT) VALUES (?,?,?,DATE_FORMAT(NOW(), '%Y-%m-%d'),?,?,?)`;
-
-  // 댓글을 데이터베이스에 저장하는 코드
-  db.query(query, courseComment, (err) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "댓글 작성 중 오류가 발생했습니다." });
-    } else {
-      const redirectPath = "/저쩌고";
-      res.redirect(redirectPath);
-    }
-  });
-});
-
-//장소
-router.post("/locationform", (req, res) => {
-  const { id, name, lat, lng, add } = req.body;
-
-  const courseLocation = {
-    LOC_ID: id,
-    LOC_NAME: name,
-    LOC_LAT: lat,
-    LOC_LNG: lng,
-    LOC_ADD: add,
-  };
-
-  const query = `insert into location (LOC_ID, LOC_NAME ,LOC_LAT ,LOC_LNG ,LOC_ADD) VALUES (?,?,?,?,?)`;
-
-  db.query(query, courseLocation, (err) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "에러발생" });
-    } else {
-      res.end();
-    }
-  });
-});
-//이미지
-router.post("/imageform", (req, res) => {});
 
 module.exports = router;
