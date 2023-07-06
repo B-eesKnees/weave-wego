@@ -16,6 +16,7 @@ module.exports = defineConfig({
         target: 'http://nid.naver.com'
       }
     },
-    headers: { "Access-Control-Allow-Origin": "*" }
+    headers: { "Access-Control-Allow-Origin": "*" },
+    allowedHosts: "all",
   }
 })
