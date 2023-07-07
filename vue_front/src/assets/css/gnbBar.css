@@ -20,7 +20,7 @@ a {
   }
   .gnb_bar_logo {
     position: absolute;
-    left: 40vw;
+    margin: 0 44%;
   }
   .gnb_bar_logo a {
     padding: 3vh;
@@ -33,12 +33,13 @@ a {
     display: flex;
     margin-right: 10%;
     margin-top: 15px;
+    max-height: 100%;
 
   }
   .gnb_bar_user a {
     position: relative;
     width: 100%;
-    padding: 25px;
+    padding: 15% 25px;
     text-decoration: none;
     color: black;
   }
