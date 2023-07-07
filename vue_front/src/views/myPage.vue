@@ -73,7 +73,7 @@
             :boardList="item"
             :key="item.BRD_ID"
             :editMode="editMode"
-            @addlist="(id) => addToselectedItems(id)" 
+            @addlist="(id) => addToselectedItems(id)"
             @removelist="(id) => deleteToselectedItems(id)"
           ></boardList>
         </div>
@@ -142,6 +142,7 @@
       </TabItem>
     </TabsWrapper>
   </section>
+  <footerContent />
 </template>
 
 <script>
@@ -153,6 +154,7 @@ import boardList from "../components/boardList.vue";
 import commentList from "../components/commentList.vue";
 import recentBoardList from "../components/recentBoardList.vue";
 import likeBoardList from "../components/likeBoardList.vue";
+import footerContent from "@/components/footer.vue";
 import axios from "axios";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 axios.defaults.baseURL = "http://localhost:3000";
@@ -168,6 +170,7 @@ export default {
     recentBoardList,
     likeBoardList,
     commentList,
+    footerContent,
   },
   data() {
     return {
@@ -185,7 +188,7 @@ export default {
       norecentData: false,
       noLikeData: false,
       noCommentData: false,
-      selectedItems: []
+      selectedItems: [],
     };
   },
   created() {
@@ -281,37 +284,42 @@ export default {
     toggleEditMode() {
       this.editMode = true;
     },
-    addToselectedItems(id) { //selectedItems 배열에 받아온 BRD_ID push
+    addToselectedItems(id) {
+      //selectedItems 배열에 받아온 BRD_ID push
       this.selectedItems.push(id);
       console.log(this.selectedItems);
     },
-    deleteToselectedItems(id) { //selectedItems 배열에서 받아온 BRD_ID 필터로 제거 아마? 삭제되긴함
+    deleteToselectedItems(id) {
+      //selectedItems 배열에서 받아온 BRD_ID 필터로 제거 아마? 삭제되긴함
       this.selectedItems = this.selectedItems.filter((item) => item !== id);
       console.log(this.selectedItems);
     },
-    async deleteContent() { //테스트하느라 콘솔이 많습니다..
+    async deleteContent() {
+      //테스트하느라 콘솔이 많습니다..
       // 삭제 버튼을 누른다면
-      if (this.selectedItems.length === 0) { //배열길이가 0이면 !this.selectedItems는 왜인지 작동이 안됌
+      if (this.selectedItems.length === 0) {
+        //배열길이가 0이면 !this.selectedItems는 왜인지 작동이 안됌
         console.log(this.selectedItems);
-        alert(' 선택된거없음');
+        alert(" 선택된거없음");
         return; // 선택된 항목이 없으면 종료합니다.
-      } else { 
-      // 선택된 항목을 서버에 삭제 요청합니다.
-      console.log(this.selectedItems);
-      axios({
-        url: "/mypage/delMyCourse",
-        method: "POST",
-        data: this.selectedItems
-      }).then(async (res)=>{
-        alert(res.data.code);
-        this.selectedItems = []; //삭제후 배열 비우기 안비우면 계속 남아있음
+      } else {
+        // 선택된 항목을 서버에 삭제 요청합니다.
         console.log(this.selectedItems);
-        await this.boardListData(); //삭제후 새롭게 게시글 받아오기
-      }).catch(error => {
-          alert(error);
-      })
+        axios({
+          url: "/mypage/delMyCourse",
+          method: "POST",
+          data: this.selectedItems,
+        })
+          .then(async (res) => {
+            alert(res.data.code);
+            this.selectedItems = []; //삭제후 배열 비우기 안비우면 계속 남아있음
+            console.log(this.selectedItems);
+            await this.boardListData(); //삭제후 새롭게 게시글 받아오기
+          })
+          .catch((error) => {
+            alert(error);
+          });
       }
-
     },
     cancelEdit() {
       this.editMode = false;
@@ -329,7 +337,6 @@ export default {
       console.log("cancelCommentEdit 호출됨");
       this.comment_editMode = false;
     },
-
   },
 };
 </script>
