@@ -1,7 +1,7 @@
 <template>
     <div>
       <!-- 버튼 -->
-      <button @click="scrollToTop" v-if="showButton" class="scroll-to-top">위로</button>
+      <button @click="scrollToTop" v-if="showButton" class="scroll-to-top" :class="{ 'show': showButton }"><img src="../assets/img/toup.png" class="uparrow" alt="위로가기" height ="40" width="40"></button>
     </div>
   </template>
   
@@ -29,24 +29,39 @@
         // 페이지 맨 위로 스크롤
         window.scrollTo({
           top: 0,
-          behavior: 'instant' // 스크롤 애니메이션 적용
+          behavior: 'smooth' // 스크롤 애니메이션 적용
         });
       }
     }
   };
   </script>
   
-  <style>
+  <style scoped>
   .scroll-to-top {
     position: fixed;
     right: 20px;
-    bottom: 20px;
+    bottom: 40px;
     z-index: 9999;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #429775;
     border: none;
     padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
+    width: 48px;
+    height: 46px;
+    background-position: 0 -324px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 1px 1px 3px 1px rgb(209, 209, 209);
+    opacity: 0;
+    transition: opacity 1s ease;
   }
+  .uparrow {
+    vertical-align: middle
+  }
+  .scroll-to-top.show {
+  /* 등장할 때 투명도 */
+  opacity: 1;
+}
   </style>

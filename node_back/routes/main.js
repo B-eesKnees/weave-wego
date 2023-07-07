@@ -250,8 +250,9 @@ router.post('/checkLike', async (req, res) => {
           error: err,
         });
       } else {
+        const likeArray = results.map(row => row.LL_NUM); // 결과를 LL_NUM으로 이루어진 배열로 변환
         res.send(
-          results
+          likeArray
         );
         // const likeArray = results.map(row => row.LL_NUM); // 결과를 LL_NUM으로 이루어진 배열로 변환
         // res.send(likeArray);
@@ -260,30 +261,30 @@ router.post('/checkLike', async (req, res) => {
   );
 });
 //좋아요 확인 쿼리 예비용
-router.post('/checkLike', async(req, res)=>{
-  const email = req.body.email;
+// router.post('/checkLike', async(req, res)=>{
+//   const email = req.body.email;
 
-  db.query(`select group_concat(LL_NUM) as "좋아요누른 게시글 번호" from weavewego.likelist where LL_ID = ?;`, email, (err, results)=>{
-    if(err) {
-      res.send({
-        // 에러 발생 시
-        code: 400,
-        failed: "error occurred",
-        error: err,
-      });
-    } else {
-      res.send(
-        results
-      )
-    }
-  })
-})
+//   db.query(`select group_concat(LL_NUM) as "좋아요누른 게시글 번호" from weavewego.likelist where LL_ID = ?;`, email, (err, results)=>{
+//     if(err) {
+//       res.send({
+//         // 에러 발생 시
+//         code: 400,
+//         failed: "error occurred",
+//         error: err,
+//       });
+//     } else {
+//       res.send(
+//         results
+//       )
+//     }
+//   })
+// })
 //좋아요 취소 쿼리?
-router.post("/dislikeCoures", async (req, res) => {
+router.post("/dislikeCourse", async (req, res) => {
   const LL_ID = req.body.email;
   const LL_NUM = req.body.brdID;
 
-  db.query(sql.dislikeCoures.query, [LL_ID, LL_NUM], (err) => {
+  db.query(sql.dislikeCourse.query, [LL_ID, LL_NUM], (err) => {
       if (err) {
         res.send({
           code: 400,

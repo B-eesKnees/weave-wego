@@ -8,26 +8,21 @@ export default {
   data() {
     return {
       // checkbox의 value와 같은 값 있으면 체크 된 상태로 시작
-      selectedItems: [],
+      isChecked: false
     };
   },
-  // data() {
-  //   return {
-  //     selectedItems: [], // 선택한 항목의 BRD_ID 값을 담을 배열로 초기화
-  //   };
-  // },
-  // methods: {
-  //   updateSelectedItems(BRD_ID, checked) {
-  //     if (checked) {
-  //       this.selectedItems.push(BRD_ID);
-  //     } else {
-  //       const index = this.selectedItems.indexOf(BRD_ID);
-  //       if (index !== -1) {
-  //         this.selectedItems.splice(index, 1);
-  //       }
-  //     }
-  //   },
-  // },
+  methods: {
+    sendSelectedItems() {
+      console.log(this.isChecked);
+      if (this.isChecked) {
+        // 체크하면 부모한테 addlist로 this.boardList.BRD_ID 전달 this.isChecked = true
+        this.$emit('addlist', this.boardList.BRD_ID);
+      } else {
+        // 체크해제하면 부모한테 removelist로 this.boardList.BRD_ID 전달 this.isChecked = false
+        this.$emit('removelist', this.boardList.BRD_ID);
+      }
+    },
+  }
 };
 </script>
 
@@ -39,8 +34,9 @@ export default {
         type="checkbox"
         v-if="editMode"
         :value="boardList.BRD_ID"
-        v-model="selectedItems"
-      />
+        v-model="isChecked"
+        @change="sendSelectedItems"
+      /> <!-- @change="sendSelectedItems" 이벤트 추가 -->
 
       <div class="board-list">
         <div class="board_content">
@@ -58,7 +54,7 @@ export default {
           <div v-if="!hideBrdOpen" class="brd_open">
             {{ boardList.BRD_OPEN === 1 ? "공개" : "비공개" }}
           </div>
-          <div>{{ selectedItems }}</div>
+          
         </div>
         <div
           class="mypage_img"

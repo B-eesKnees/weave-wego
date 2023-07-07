@@ -27,7 +27,7 @@ module.exports = {
     likeCourse: {
         query: `insert into weavewego.likelist set ?`
     },
-    dislikeCoures: {
+    dislikeCourse: {
         query: `delete from weavewego.likelist where LL_ID = ? AND LL_NUM = ?`
     },
     increase: {

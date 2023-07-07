@@ -73,8 +73,11 @@
             :boardList="item"
             :key="item.BRD_ID"
             :editMode="editMode"
+            @addlist="(id) => addToselectedItems(id)" 
+            @removelist="(id) => deleteToselectedItems(id)"
           ></boardList>
         </div>
+        <!-- 자식 컴포넌트에서 넘어온 것들 받기 / 받아온 값들(id) 두 함수에 전달 -->
       </TabItem>
 
       <TabItem title="최근에 본 코스">
@@ -182,6 +185,7 @@ export default {
       norecentData: false,
       noLikeData: false,
       noCommentData: false,
+      selectedItems: []
     };
   },
   created() {
@@ -277,59 +281,37 @@ export default {
     toggleEditMode() {
       this.editMode = true;
     },
-    deleteContent() {
-      // // 선택된 항목들을 삭제하는 로직을 구현합니다.
-      // if (!this.selectedItems) {
-      //   return; // 선택된 항목이 없으면 종료합니다.
-      // }
-
-      // // 선택된 항목을 서버에 삭제 요청합니다.
-      // axios
-      //   .post("/mypage/delMyCourse", { selectedItems })
-      //   .then((response) => {
-      //     // 서버로부터 응답을 받으면 클라이언트에서도 해당 항목을 삭제합니다.
-      //     if (response.data.success) {
-      //       // 삭제 요청이 성공한 경우
-      //       this.selectedItems.forEach((item) => {
-      //         const index = this.boardList.findIndex(
-      //           (board) => board.BRD_ID === item
-      //         );
-      //         if (index !== -1) {
-      //           this.boardList.splice(index, 1); // 선택된 항목을 배열에서 제거합니다.
-      //         }
-      //       });
-      //       this.selectedItems = []; // 선택된 항목 배열을 초기화합니다.
-      //     } else {
-      //       console.error(response.data.error);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   });
-      function deleteUsers() {
-        const values = selectedUsers.value.map((user) => user.member_id); // 선택된 유저의 member_id를 가져옵니다
-
-        location.reload();
-        if (values.length === 0) {
-          console.log("삭제할 컨텐츠가 없습니다");
-          return;
-        }
-
-        if (window.confirm("정말로 선택된 회원을 삭제하시겠습니까?")) {
-          axios
-            .post("http://localhost:9212/api/manager_user", { values })
-            .then((res) => {
-              if (res.data.code === 200) {
-                console.log("삭제 성공");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          console.log("삭제 취소");
-        }
+    addToselectedItems(id) { //selectedItems 배열에 받아온 BRD_ID push
+      this.selectedItems.push(id);
+      console.log(this.selectedItems);
+    },
+    deleteToselectedItems(id) { //selectedItems 배열에서 받아온 BRD_ID 필터로 제거 아마? 삭제되긴함
+      this.selectedItems = this.selectedItems.filter((item) => item !== id);
+      console.log(this.selectedItems);
+    },
+    async deleteContent() { //테스트하느라 콘솔이 많습니다..
+      // 삭제 버튼을 누른다면
+      if (this.selectedItems.length === 0) { //배열길이가 0이면 !this.selectedItems는 왜인지 작동이 안됌
+        console.log(this.selectedItems);
+        alert(' 선택된거없음');
+        return; // 선택된 항목이 없으면 종료합니다.
+      } else { 
+      // 선택된 항목을 서버에 삭제 요청합니다.
+      console.log(this.selectedItems);
+      axios({
+        url: "/mypage/delMyCourse",
+        method: "POST",
+        data: this.selectedItems
+      }).then(async (res)=>{
+        alert(res.data.code);
+        this.selectedItems = []; //삭제후 배열 비우기 안비우면 계속 남아있음
+        console.log(this.selectedItems);
+        await this.boardListData(); //삭제후 새롭게 게시글 받아오기
+      }).catch(error => {
+          alert(error);
+      })
       }
+
     },
     cancelEdit() {
       this.editMode = false;
@@ -347,6 +329,7 @@ export default {
       console.log("cancelCommentEdit 호출됨");
       this.comment_editMode = false;
     },
+
   },
 };
 </script>
