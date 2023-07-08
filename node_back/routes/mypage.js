@@ -130,25 +130,22 @@ const deleteUsers = async (req, res) => {
 
 router.post('/delMyCourse', async (req, res) => { //07.07 성공..
   const deleteComments = req.body; //ex) [1,2,3] 형식으로 날라오면
-  console.log(req.body);
+  // console.log(req.body);
   console.log(deleteComments);
 
-  deleteComments.forEach(values => { //반복문 실행
-    db.query(`delete from weavewego.board where BRD_ID = ?`, values, (err, result) => { //쿼리문 반복 실행
+    db.query(`delete from weavewego.board where BRD_ID in (?)`, [deleteComments], (err)=>{ //반복문 안쓰고 가능
       if (err) {
         res.send({ // 에러 발생 시
-          'code': 400,
-          'failed': 'error occurred',
-          'error': err
+            'code': 400,
+            'failed': 'error occurred',
+            'error': err
         })
-      }
-    });
-  });
-
-  res.send({
-    "code": 200,
-    "message": "삭제 성공",
-    "?": deleteComments
+    } else {
+        res.send({
+          "code": 200,
+          "message": "삭제 성공",
+      })
+    }
   })
 })
 
