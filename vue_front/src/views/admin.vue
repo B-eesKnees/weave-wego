@@ -1,60 +1,93 @@
 <template>
     <gnbBar />
-    <br/><br/><br/><br/>
-    <div>
-        <button type="button" @click="viewReport">버튼1</button> <button type="button" @click="reset1">취소버튼1</button>
-        <div v-if="reportCourse.length > 0"> 
-            <!-- 신고당한 게시글이 있다면 -->
-        <h2>신고당한 게시글:</h2>
-            <ul>
-                <li v-for="course in reportCourse" :key="course.id"> <!--반복문-->
-                <h3>{{ course.BRD_ID }}</h3>
-                <p>{{ course.BRD_TITLE }}</p>
-                <p>{{ course.BRD_WRITER }}</p>
-                </li>
-            </ul>
+    <h2 class="admin_h2">관리자 페이지</h2>
+    <div class="admin">
+        <div class="reportCourse">
+            <div class="reportCourse_titles">
+                <h5 class="reportCourse_title">신고 글</h5>
+                <div>
+                    <span class="reportCourse_titles_number">{{ reportCourse.length }}</span>
+                    <a class="reportCourse_titles_link" href="#">></a>
+                </div>
+            </div>
+            <div class="reportCourse_info">
+                <p>글번호</p>
+                <p>글제목</p>
+                <p>유저이메일</p>
+            </div>
+            <div class="reportCourse_contents">
+                <div v-for="course in reportCourse.slice(0, 4)" :key="course.id" class="reportCourse_content">
+                    <p class="reportCourse_content_num">{{ course.BRD_ID }}</p>
+                    <p class="reportCourse_content_title">{{ course.BRD_TITLE }}</p>
+                    <p class="reportCourse_content_writer">{{ course.BRD_WRITER }}</p>
+                </div>
+            </div>
         </div>
-    </div>
-    <div>
-        <button type="button" @click="viewReportComment">버튼2</button> <button type="button" @click="reset2">취소버튼2</button>
-        <div v-if="reportComment.length > 0"> 
-            <!-- 신고당한 댓글이 있다면 -->
-        <h2>신고당한 댓글:</h2>
-            <ul>
-                <li v-for="com in reportComment" :key="com.id"> <!--반복문-->
-                <h3>{{ com.COM_ID }}</h3>
-                <p>{{ com.COM_NICK }}</p>
-                <p>{{ com.COM_WRITER }}</p>
-                </li>
-            </ul>
+
+        <div class="reportCourse">
+            <div class="reportCourse_titles">
+                <h5 class="reportCourse_title">전체 게시글</h5>
+                <div>
+                    <span class="reportCourse_titles_number">{{ totalCourse.length }}</span>
+                    <a class="reportCourse_titles_link" href="/admin/boardlist">></a>
+                </div>
+            </div>
+            <div class="reportCourse_info">
+                <p>글번호</p>
+                <p>글제목</p>
+                <p>유저이메일</p>
+            </div>
+            <div class="reportCourse_contents">
+                <div v-for="course in totalCourse.slice(0, 4)" :key="course.id" class="reportCourse_content">
+                    <p class="reportCourse_content_num">{{ course.BRD_ID }}</p>
+                    <p class="reportCourse_content_title">{{ course.BRD_TITLE }}</p>
+                    <p class="reportCourse_content_writer">{{ course.BRD_WRITER }}</p>
+                </div>
+            </div>
         </div>
-    </div>
-    <div>
-        <button type="button" @click="viewCourse">버튼3</button> <button type="button" @click="reset3">취소버튼3</button>
-        <div v-if="totalCourse.length > 0"> 
-            <!-- 전체 글 보기 -->
-        <h2>전체 글 보기:</h2>
-            <ul>
-                <li v-for="course in totalCourse" :key="course.id"> <!--반복문-->
-                <h3>{{ course.BRD_ID }}</h3>
-                <p>{{ course.BRD_TITLE }}</p>
-                <p>{{ course.BRD_WRITER }}</p>
-                </li>
-            </ul>
+
+        <div class="reportCourse">
+            <div class="reportCourse_titles">
+                <h5 class="reportCourse_title">신고 댓글</h5>
+                <div>
+                    <span class="reportCourse_titles_number">{{ reportComment.length }}</span>
+                    <a class="reportCourse_titles_link" href="#">></a>
+                </div>
+            </div>
+            <div class="reportComment_info">
+                <p>댓글번호</p>
+                <p>댓글제목</p>
+                <p>유저닉네임</p>
+            </div>
+            <div  class="reportCourse_contents">
+                <div v-for="com in reportComment" :key="com.id" class="reportCourse_content">
+                    <p class="reportComment_content_num">{{ com.COM_ID }}</p>
+                    <p class="reportComment_content_title">{{ com.COM_NICK }}</p>
+                    <p class="reportComment_content_writer">{{ com.COM_WRITER }}</p>
+                </div>
+            </div>
         </div>
-    </div>
-    <div>
-        <button type="button" @click="viewUser">버튼4</button> <button type="button" @click="reset4">취소버튼4</button>
-        <div v-if="userData.length > 0"> 
-            <!-- 유저 보기 -->
-        <h2>유저 보기:</h2>
-            <ul>
-                <li v-for="user in userData" :key="user.id"> <!--반복문-->
-                <h3>{{ user.USER_EMAIL }}</h3>
-                <p>{{ user.USER_NICKNAME }}</p>
-                <p>{{ user.USER_PROVIDER }}</p>
-                </li>
-            </ul>
+
+        <div class="reportCourse">
+            <div class="reportCourse_titles">
+                <h5 class="reportCourse_title">유저목록</h5>
+                <div>
+                    <span class="reportCourse_titles_number">{{ userData.length }}</span>
+                    <a class="reportCourse_titles_link" href="#">></a>
+                </div>
+            </div>
+            <div class="user_info">
+                <p>유저이메일</p>
+                <p>유저닉네임</p>
+                <p>가입경로</p>
+            </div>
+            <div class="reportCourse_contents">
+                <div v-for="user in userData.slice(0, 4)" :key="user.id" class="user_content">
+                    <p class="user_content_num">{{ user.USER_EMAIL }}</p>
+                    <p class="user_content_title">{{ user.USER_NICKNAME }}</p>
+                    <p class="user_content_writer">{{ user.USER_PROVIDER }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -78,12 +111,21 @@ export default {
             userData: [] //유저데이터
         }
     },
+    created() {
+        this.viewReport()
+        this.viewReportComment()
+        this.viewCourse()
+        this.viewUser()
+    },
+    mounted() {
+
+    },
     methods: {
         viewReport() { //신고당한 게시글 달라고 요청
             axios({
                 url: '/admin/reportCourse',
                 method: 'POST'
-            }).then(async(res)=>{
+            }).then(async (res) => {
                 this.reportCourse = res.data;
             })
         },
@@ -91,7 +133,7 @@ export default {
             axios({
                 url: '/admin/reportComment',
                 method: 'POST'
-            }).then(async(res)=>{
+            }).then(async (res) => {
                 this.reportComment = res.data;
             })
         },
@@ -99,7 +141,7 @@ export default {
             axios({
                 url: '/admin/viewBoardlist',
                 method: 'POST'
-            }).then(async (res)=>{
+            }).then(async (res) => {
                 this.totalCourse = res.data;
             })
         },
@@ -107,7 +149,7 @@ export default {
             axios({
                 url: '/admin/viewUserlist',
                 method: 'POST'
-            }).then(async (res)=>{
+            }).then(async (res) => {
                 this.userData = res.data;
             })
         },
@@ -126,3 +168,175 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.admin_h2 {
+    margin: 10% 65% 0 17%;
+}
+
+.admin {
+    max-width: 80%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1% auto 0 auto;
+}
+
+.reportCourse {
+    width: 40%;
+    height: 35vh;
+    line-height: normal;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #ccc;
+    margin: 2% 1%;
+}
+
+.reportCourse p,
+.reportCourse h5 {
+    margin: 0;
+}
+
+.reportCourse_titles {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2% 2%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.reportCourse_titles_number {
+    color: #388265;
+    margin-left: -15%;
+    margin-right: 5%;
+}
+
+.reportCourse_titles_link {
+    font-size: large;
+    text-decoration: none;
+    padding: 2% 4%;
+}
+
+.reportCourse_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 2%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.reportCourse_info p:nth-child(2) {
+    margin-left: -42%;
+}
+
+.reportCourse_contents {}
+
+.reportCourse_content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2% 2%;
+}
+
+.reportCourse_content_num {
+    font-size: small;
+    width: 12%;
+    overflow: hidden;
+}
+
+.reportCourse_content_title {
+    width: 20%;
+    padding-right: 40%;
+    overflow: hidden;
+}
+
+.reportCourse_content_writer {
+    width: 30%;
+    overflow: hidden;
+    font-size: small;
+}
+
+
+/* 신고 댓글 */
+.reportComment_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 2%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.reportComment_info p:nth-child(2) {
+    margin-left: -35%;
+}
+.reportComment_content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2% 2%;
+}
+
+.reportComment_content_num {
+    font-size: small;
+    width: 12%;
+    overflow: hidden;
+}
+
+.reportComment_content_title {
+    width: 40%;
+    padding-right: 20%;
+    overflow: hidden;
+}
+
+.reportComment_content_writer {
+    width: 30%;
+    overflow: hidden;
+    font-size: small;
+}
+
+
+/* 유저목록 */
+.user_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 2%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.user_info p:nth-child(2) {
+    margin-left: -15%;
+}
+.user_content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2% 2%;
+}
+
+.user_content_num {
+    font-size: small;
+    width: 30%;
+    height: 22px;
+    overflow: hidden;
+}
+
+.user_content_title {
+    width: 45%;
+    height: 22px;
+    padding-right: 5%;
+    overflow: hidden;
+}
+
+.user_content_writer {
+    width: 10%;
+    height: 22px;
+    overflow: hidden;
+    font-size: small;
+}
+</style>
