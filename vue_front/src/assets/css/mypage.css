@@ -353,3 +353,20 @@ a {
   margin: 0 auto;
   text-align: center;
 }
+
+
+.more_btn {
+  text-align: center;
+}
+
+.more_btn button {
+  padding: 1% 5%;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 0 5px #ccc;
+  background-color: white;
+  margin-top: 50px;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 200px;
+}

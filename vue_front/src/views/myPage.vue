@@ -66,16 +66,21 @@
         </div>
 
         <div class="course">
-          <div id="nodata" class="nodata">작성한 게시글이 없습니다</div>
+          <div v-if="boardList.length === 0">
+            <div id="nodata" class="nodata">작성한 게시글이 없습니다</div>
+          </div>
           <boardList
             v-if="!nodata"
-            v-for="item in boardList"
+            v-for="item in visibleBoardList"
             :boardList="item"
             :key="item.BRD_ID"
             :editMode="editMode"
             @addlist="(id) => addToselectedItems(id)"
             @removelist="(id) => deleteToselectedItems(id)"
           ></boardList>
+        </div>
+        <div v-if="boardList.length > 3" class="more_btn">
+          <button @click="showMoreContent">더보기</button>
         </div>
         <!-- 자식 컴포넌트에서 넘어온 것들 받기 / 받아온 값들(id) 두 함수에 전달 -->
       </TabItem>
@@ -142,7 +147,10 @@
       </TabItem>
     </TabsWrapper>
   </section>
-  <footerContent />
+  <footer>
+    <footerContent />
+  </footer>
+  <ToUp />
 </template>
 
 <script>
@@ -155,6 +163,7 @@ import commentList from "../components/commentList.vue";
 import recentBoardList from "../components/recentBoardList.vue";
 import likeBoardList from "../components/likeBoardList.vue";
 import footerContent from "@/components/footer.vue";
+import ToUp from "@/components/ToUp.vue";
 import axios from "axios";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 axios.defaults.baseURL = "http://localhost:3000";
@@ -171,6 +180,7 @@ export default {
     likeBoardList,
     commentList,
     footerContent,
+    ToUp,
   },
   data() {
     return {
@@ -189,6 +199,8 @@ export default {
       noLikeData: false,
       noCommentData: false,
       selectedItems: [],
+
+      visibleCount: 3, // 초기에 보여줄 목록 개수
     };
   },
   created() {
@@ -200,6 +212,12 @@ export default {
     this.recentBoardListData();
     this.likeBoardListData();
     this.commentListData();
+  },
+  computed: {
+    visibleBoardList() {
+      return this.boardList.slice(0, this.visibleCount);
+    },
+    // 생략
   },
   methods: {
     // 보드리스트 불러오기-------------------------------------------------------------------------------------------------------
@@ -224,6 +242,9 @@ export default {
         this.nodata = true;
         console.log(this.nodata);
       }
+    },
+    showMoreContent() {
+      this.visibleCount += 3; // 3개씩 추가적으로 보여주기
     },
     // 최근에 본 게시글 리스트 불러오기-------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------
