@@ -1,9 +1,7 @@
 <script setup>
 import axios from "axios";
-import { useRoute } from "vue-router"; // 라우터 1번 일단 임포트
-//
-
 import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router"; // 라우터 1번 일단 임포트
 import Comment from "@/components/Comment.vue";
 import Location from "@/components/Location.vue";
 import "vue3-carousel/dist/carousel.css";
@@ -32,97 +30,117 @@ const boardData = ref({
   BRD_WRITER: "",
 });
 
-const commentData = ref([
-  // 댓글 더미데이터
-  {
-    COM_COMMENT: "",
-    COM_CREATED_AT: "",
-    COM_ID: 0,
-    COM_IMAGE: "",
-    COM_NICK: "",
-    COM_NUM: 0,
-    COM_REPORT: "",
-    COM_UPDATED_AT: "",
-    COM_WRITER: "",
-  },
-]);
+const commentData = ref([]);
 
-const locationData = ref([
-  // 댓글 더미데이터
-  {
-    LOC_ID: 0,
-    LOC_NAME: "",
-    LOC_LAT: 0,
-    LOC_LNG: 0,
-    LOC_ADD: "",
-  },
-]);
+const locationData = ref([]);
 
 const locationRevData = ref([""]);
 
-const images = ref([
-  "https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg",
-  "https://cdn.pixabay.com/photo/2016/02/17/23/03/usa-1206240_1280.jpg",
-  "https://cdn.pixabay.com/photo/2016/12/04/19/30/berlin-cathedral-1882397_1280.jpg",
-]);
+const images = ref([]);
 
 const route = useRoute(); // 라우터 2번 route 변수 만들어주기
+const router = useRouter();
 
-axios
-  .get("http://127.0.0.1:3000/postdata/board", {
-    params: {
-      boardId: route.params.boardId, // router -> :boardId
-    },
-  })
-  .then((result) => {
-    boardData.value = result.data.board;
-    locationRevData.value = [
-      boardData.value.BRD_LOC_REV1,
-      boardData.value.BRD_LOC_REV2,
-      boardData.value.BRD_LOC_REV3,
-      boardData.value.BRD_LOC_REV4,
-      boardData.value.BRD_LOC_REV5,
-    ];
-    console.log(result.data.board);
-  })
-  .catch((error) => {
-    console.log("board_error", error);
-  });
+const getBoard = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/board", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      boardData.value = result.data.board;
+      locationRevData.value = [
+        boardData.value.BRD_LOC_REV1,
+        boardData.value.BRD_LOC_REV2,
+        boardData.value.BRD_LOC_REV3,
+        boardData.value.BRD_LOC_REV4,
+        boardData.value.BRD_LOC_REV5,
+      ];
+    })
+    .catch((error) => {
+      console.log("board_error", error);
+      alert("글이 없어용");
+      router.push({
+        path: `/`,
+      });
+    });
+};
 
-axios
-  .get("http://127.0.0.1:3000/postdata/comments", {
-    params: {
-      boardId: route.params.boardId, // router -> :boardId
-    },
-  })
-  .then((result) => {
-    commentData.value = result.data.comments;
-  })
-  .catch((error) => {
-    console.log("comments_error", error);
-  });
+const getComments = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/comments", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      commentData.value = result.data.comments;
+    })
+    .catch((error) => {
+      console.log("comments_error", error);
+    });
+};
 
-axios
-  .get("http://127.0.0.1:3000/postdata/locations", {
-    params: {
-      boardId: route.params.boardId, // router -> :boardId
-    },
-  })
-  .then((result) => {
-    const temp = result.data.locations;
+const getLocations = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/locations", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      const temp = result.data.locations;
+      for (let i = 0; i < JSON.parse(temp.LOC_ADD).length; i++) {
+        locationData.value.push({
+          LOC_ID: i,
+          LOC_NAME: JSON.parse(temp.LOC_NAME)[i].name,
+          LOC_ADD: JSON.parse(temp.LOC_ADD)[i].add,
+          LOC_LAT: JSON.parse(temp.LOC_LAT)[i].lat,
+          LOC_LNG: JSON.parse(temp.LOC_LNG)[i].lng,
+        });
+      }
+    })
+    .catch((error) => {
+      console.log("locations_error", error);
+    });
+};
 
-    locationData.value = temp.map((t) => ({
-      LOC_ID: t.LOC_ID,
-      LOC_NAME: JSON.parse(t.LOC_NAME).name,
-      LOC_LAT: JSON.parse(t.LOC_LAT).lat,
-      LOC_LNG: JSON.parse(t.LOC_LNG).lng,
-    }));
-  })
-  .catch((error) => {
-    console.log("locations_error", error);
-  });
+const getImages = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/images", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      images.value = result.data.images.map(
+        (i) => `http://127.0.0.1:3000/postdata/image/${i.IMG_PATH}`
+      );
+    })
+    .catch((error) => {
+      console.log("images_error", error);
+    });
+};
 
-const createComment = () => {};
+const createComment = () => {
+  axios
+    .post("http://127.0.0.1:3000/boardCreate/comment", {
+      boardId: route.params.boardId,
+      writer: "test@test.com",
+      nick: "nick",
+      comment: newComment.value,
+    })
+    .then(() => {
+      newComment.value = "";
+      getComments();
+    });
+};
+
+getBoard();
+getLocations();
+getComments();
+getImages();
 </script>
 
 <template>
@@ -156,7 +174,13 @@ const createComment = () => {};
             </button>
             <ul class="dropdown-menu">
               <li>
-                <button class="dropdown-item" type="button">수정</button>
+                <a
+                  class="dropdown-item"
+                  type="button"
+                  :href="`/detail/edit/${route.params.boardId}`"
+                >
+                  수정
+                </a>
               </li>
               <li>
                 <button class="dropdown-item" type="button">삭제</button>
@@ -172,12 +196,13 @@ const createComment = () => {};
       <div class="content-main">
         <div class="map-wrapper">
           <div class="map">
-            <kakao-map :locations="locationData" />
+            <kakao-map v-if="locationData.length" :locations="locationData" />
           </div>
         </div>
         <!-- 장소 컴포넌트 -->
         <location
           v-for="(item, index) in locationData"
+          v-if="locationData.length"
           :key="index"
           :location="item"
           :number="index + 1"
@@ -220,6 +245,7 @@ const createComment = () => {};
                   class="comment-submit"
                   type="submit"
                   width="100px"
+                  @click="createComment"
                 >
                   댓글 달기
                 </button>
@@ -317,10 +343,14 @@ const createComment = () => {};
 }
 .carousel {
   width: 70%;
+  border: 1px solid black;
 }
-.carousel_item {
+.carousel_item,
+.carousel_item > img {
   width: 100%;
   height: 450px;
+
+  object-fit: cover;
 }
 .imageslider {
   display: flex;

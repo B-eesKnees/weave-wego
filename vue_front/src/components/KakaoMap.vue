@@ -26,7 +26,7 @@ const drawMap = () => {
 
   const container = document.getElementById("map");
   const options = {
-    center: new maps.LatLng(0, 0),
+    center: new maps.LatLng(37.5776087830657, 126.976896737645),
     level: 6,
   };
 

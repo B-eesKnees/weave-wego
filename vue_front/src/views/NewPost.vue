@@ -86,7 +86,7 @@
       </div>
       <!-- 사진 첨부하는 버튼 들어갈 곳-->
       <div class="buttons">
-        <button @click="handleSubmit">작성완료</button>
+        <button @click="createPost">작성완료</button>
         <button>취소</button>
       </div>
     </div>
@@ -97,6 +97,9 @@
 import gnbBar from "@/components/gnbBar.vue";
 import axios from "axios";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+///
+const router = useRouter();
 ///
 const open = ref(0);
 const title = ref("");
@@ -107,52 +110,47 @@ const infowindow = ref(null);
 const keyword = ref("경복궁");
 const markers = ref([]);
 const locations = ref([]);
-
-const handleSubmit = () => {
-  if (title.value === "") {
-    alert("제목을 입력해주세요.");
-  } else if (!locations.value[1]) {
-    alert("장소를 2개 이상 선택해주세요.");
-  } else if (images.value.length === 0) {
-    alert("이미지를 업로드해주세요.");
-    return;
-  } else createPost;
-};
+const images = ref([]); // 이미지 업로드 하는 스크립트
 
 const createPost = () => {
-  console.log(locations.value);
-  axios
-    .post("http://127.0.0.1:3000/boardCreate", {
-      writer: localStorage.getItem("userID"),
+  const formData = new FormData();
+  formData.append(
+    "postData",
+    JSON.stringify({
+      writer: "test@test.com",
       title: title.value,
-      loc_rev1: locations.value[0] ? locations.value[0].content : "",
-      loc_rev2: locations.value[1] ? locations.value[1].content : "",
-      loc_rev3: locations.value[2] ? locations.value[2].content : "",
-      loc_rev4: locations.value[3] ? locations.value[3].content : "",
-      loc_rev5: locations.value[4] ? locations.value[4].content : "",
-      rev: review.value,
-      hashtag: "#지역",
-      nick: localStorage.getItem("userNick"),
+      review: review.value,
+      hashtag: "해시태그",
       open: open.value,
+      nick: "test",
     })
+  );
+  formData.append("locationData", JSON.stringify(locations.value));
+  images.value.map((i) => {
+    formData.append("imageData", i.file);
+  });
+  axios({
+    method: "post",
+    url: "http://127.0.0.1:3000/boardCreate",
+    headers: { "Content-Type": "multipart/form-data" },
+    data: formData,
+  })
     .then((result) => {
-      console.log(result);
+      router.push({
+        path: `/detail/${result.data.boardId}`,
+      });
     })
     .catch((error) => {
       console.log(error);
     });
-  axios.post("http://127.0.0.1:3000/boardCreate", {});
 };
-
-const images = ref([]); // 이미지 업로드 하는 스크립트
 
 const addImage = (e) => {
   images.value.push({
-    ...e.target.files[0],
     id: Math.max(...images.value.map((i) => i.id), 0) + 1,
     preview: URL.createObjectURL(e.target.files[0]),
+    file: e.target.files[0],
   });
-  console.log(images.value[0]);
 };
 
 const removeImage = (id) => {
@@ -169,13 +167,15 @@ const prepareMap = () => {
   document.head.appendChild(script);
 };
 
-const addLocation = (marker, title) => {
+const addLocation = (marker, title, address) => {
+  console.log("geo", address);
   if (locations.value.length < 5) {
     if (!locations.value.some((l) => l.title === title))
       locations.value.push({
         id: Math.max(...locations.value.map((l) => l.id), 0) + 1,
         title: title,
         coord: marker.getPosition(),
+        address: address,
         content: "",
       });
   }
@@ -314,6 +314,7 @@ const displayPlaces = (places) => {
     // 마커를 생성하고 지도에 표시합니다
     const placePosition = new maps.LatLng(places[i].y, places[i].x);
     const marker = addMarker(placePosition, i);
+    const address = places[i].road_address_name;
     const itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
     // LatLngBounds 객체에 좌표를 추가합니다
@@ -324,12 +325,11 @@ const displayPlaces = (places) => {
     // mouseout 했을 때는 인포윈도우를 닫습니다
     (function (marker, title) {
       maps.event.addListener(marker, "click", function () {
-        addLocation(marker, title);
+        addLocation(marker, title, address);
       });
 
       maps.event.addListener(marker, "mouseover", function () {
         displayInfowindow(marker, title);
-        console.log(locations.value);
       });
 
       maps.event.addListener(marker, "mouseout", function () {
@@ -337,7 +337,7 @@ const displayPlaces = (places) => {
       });
 
       itemEl.onclick = function () {
-        addLocation(marker, title);
+        addLocation(marker, title, address);
       };
 
       itemEl.onmouseover = function () {
