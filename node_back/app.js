@@ -70,6 +70,7 @@ app.use("/postdata", postDataRouter);
 app.use("/profile", changeProfileRouter);
 
 app.use("/updatelike", updateLikeRouter);
+app.use("/updatelikecount", updateLikeCount);
 
 app.get("/downloadProfile/:userEmail/:fileName", (req, res) => {
   //프로필 이미지 다운 라우터

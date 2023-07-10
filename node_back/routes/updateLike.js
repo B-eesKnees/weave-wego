@@ -44,7 +44,7 @@ router.post("/like/:boardId", (req, res) => {
                         countResults.length > 0
                           ? countResults[0].like_count
                           : 0;
-                      updateLikeCount(boardId, likeCount);
+                      updateLikeCount(io, boardId, likeCount);
                       res.status(200).json({
                         message: "좋아요 취소 완료",
                         like_count: likeCount,
@@ -78,7 +78,7 @@ router.post("/like/:boardId", (req, res) => {
                         countResults.length > 0
                           ? countResults[0].like_count
                           : 0;
-                      updateLikeCount(boardId, likeCount);
+                      updateLikeCount(io, boardId, likeCount);
                       res.status(200).json({
                         message: "좋아요 추가 완료",
                         like_count: likeCount,
