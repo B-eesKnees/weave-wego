@@ -668,7 +668,7 @@ export default {
                     }
                 }).then((res) => {
                     if (res.status == 200) {
-                        onsole.log('최근본 게시글');
+                        console.log('최근본 게시글');
                     }
                 }).catch((error) => {
                     console.error(error);
