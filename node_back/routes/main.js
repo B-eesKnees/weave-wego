@@ -31,7 +31,7 @@ router.post('/getLikeFilter', async (req, res) => {
       COUNT(l.LL_ID) AS likecount
     FROM weavewego.board b
     LEFT JOIN weavewego.likelist l ON b.BRD_ID = l.LL_NUM
-    WHERE BRD_OPEN = 'Y'
+    WHERE BRD_OPEN = 1
       ${generateHashtagConditions(hashtags)}
       ${generateSearchCondition(search)}
     GROUP BY b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
@@ -102,7 +102,7 @@ router.post('/getViewsFilter', async (req, res) => {
     COUNT(l.LL_ID) AS likecount
     FROM weavewego.board b
     LEFT JOIN weavewego.likelist l ON b.BRD_ID = l.LL_NUM
-    WHERE BRD_OPEN = 'Y'
+    WHERE BRD_OPEN = 1
     ${generateHashtagConditions(hashtags)}
     ${generateSearchCondition(search)}
     GROUP BY b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
@@ -170,7 +170,7 @@ router.post('/getNewestFilter', async (req, res) => {
     COUNT(l.LL_ID) AS likecount
     FROM weavewego.board b
     LEFT JOIN weavewego.likelist l ON b.BRD_ID = l.LL_NUM
-    WHERE BRD_OPEN = 'Y'
+    WHERE BRD_OPEN = 1
     ${generateHashtagConditions(hashtags)}
     ${generateSearchCondition(search)}
     GROUP BY b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
