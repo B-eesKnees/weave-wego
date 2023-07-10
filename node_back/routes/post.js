@@ -75,14 +75,14 @@ router.get('/images', (req, res) => {
     db.query(query, [boardId], (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: '서버 에러' });
+            res.status(500).json({ error: "서버 에러" });
         } else {
             res.json({ images: results });
         }
     });
 });
 //이미지 받아오기
-router.get('/image/:filename', (req, res) => {
+router.get("/image/:filename", (req, res) => {
     const filename = req.params.filename;
 
     fs.readFile(
@@ -90,9 +90,9 @@ router.get('/image/:filename', (req, res) => {
         (err, data) => {
             if (err) {
                 console.error(err);
-                res.status(500).json({ error: '이미지를 읽을 수 없습니다.' });
+                res.status(500).json({ error: "이미지를 읽을 수 없습니다." });
             } else {
-                res.setHeader('Content-Type', 'image/jpeg');
+                res.setHeader("Content-Type", "image/jpeg");
                 res.send(data);
             }
         }
@@ -305,30 +305,46 @@ router.put('/updateboard', (req, res) => {
         BRD_OPEN: postData.open,
     };
 
-    const query = `UPDATE BOARD SET BRD_TITLE = ?, BRD_HASHTAG = ?, BRD_LOC_REV1 = ?, BRD_LOC_REV2 = ?, BRD_LOC_REV3 = ?, BRD_LOC_REV4 = ?, BRD_LOC_REV5 = ?, BRD_REV = ?,BRD_CREATED_AT=NOW(),BRD_OPEN =? WHERE BRD_ID = ?;`;
+    db.query(
+        "UPDATE board SET ? WHERE BRD_ID=?",
+        [boardRow, postData.id],
+        (err, results) => {
+            if (err) {
+                console.error(err);
+                res.status(500).json({ error: "서버에러" });
+            } else {
+                res.status(200).json({
+                    updateboard: results,
+                    message: "게시글 수정이 완료되었습니다.",
+                });
+            }
+        }
+    );
+});
 
-    const values = [
-        title,
-        hashtag,
-        loc1rev,
-        loc2rev,
-        loc3rev,
-        loc4rev,
-        loc5rev,
-        locrev,
-        createdat,
-        isOpen,
-        boardId,
-    ];
-    db.query(query, values, (err, results) => {
+//공개,비공개 설정 시 내가 쓴 게시글은 비공개여도 볼 수 있도록
+
+router.get("/board/:boardId", (req, res) => {
+    const { boardId } = req.params;
+    const userEmail = req.body ? req.body.email : null;
+
+    const query = "SELECT * FROM board WHERE brd_id = ?";
+
+    db.query(query, [boardId], (err, results) => {
         if (err) {
             console.error(err);
-            res.status(500).json({ error: "서버에러" });
+            res.status(500).json({ error: "내용 조회 오류" });
         } else {
-            res.status(200).json({
-                updateboard: results,
-                message: "게시글 수정이 완료되었습니다.",
-            });
+            if (results.length > 0) {
+                const board = results[0];
+                if (board.BRD_OPEN === 0 && board.BRD_USER_EMAIL !== userEmail) {
+                    res.status(403).json({ message: "접근 권한이 없습니다." });
+                    return;
+                }
+                res.json(board);
+            } else {
+                res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+            }
         }
     });
 });
