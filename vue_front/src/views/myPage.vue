@@ -300,7 +300,7 @@ export default {
       if (this.selectedItems.length === 0) {
         //배열길이가 0이면 !this.selectedItems는 왜인지 작동이 안됌
         console.log(this.selectedItems);
-        alert(" 선택된거없음");
+        alert("삭제 할 게시글 없음");
         return; // 선택된 항목이 없으면 종료합니다.
       } else {
         // 선택된 항목을 서버에 삭제 요청합니다.
@@ -311,7 +311,7 @@ export default {
           data: this.selectedItems,
         })
           .then(async (res) => {
-            alert(res.data.code);
+            alert(res.data.message);
             this.selectedItems = []; //삭제후 배열 비우기 안비우면 계속 남아있음
             console.log(this.selectedItems);
             await this.boardListData(); //삭제후 새롭게 게시글 받아오기

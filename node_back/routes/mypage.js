@@ -133,18 +133,18 @@ router.post('/delMyCourse', async (req, res) => { //07.07 성공..
   // console.log(req.body);
   console.log(deleteComments);
 
-    db.query(`delete from weavewego.board where BRD_ID in (?)`, [deleteComments], (err)=>{ //반복문 안쓰고 가능
-      if (err) {
-        res.send({ // 에러 발생 시
-            'code': 400,
-            'failed': 'error occurred',
-            'error': err
-        })
-    } else {
-        res.send({
-          "code": 200,
-          "message": "삭제 성공",
+  db.query(`delete from weavewego.board where BRD_ID in (?)`, [deleteComments], (err) => { //반복문 안쓰고 가능
+    if (err) {
+      res.send({ // 에러 발생 시
+        'code': 400,
+        'failed': 'error occurred',
+        'error': err
       })
+    } else {
+      res.status(200).json({
+        "code": 200,
+        "message": "삭제 성공"
+      });
     }
   })
 })
