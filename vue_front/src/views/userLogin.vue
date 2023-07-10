@@ -36,10 +36,12 @@
       </form>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import gnbBar from "../components/gnbBar.vue";
+import Footer from '../components/footer.vue'
 
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3000";
@@ -61,7 +63,7 @@ export default {
       allcheck2: true,
     };
   },
-  components: { gnbBar },
+  components: { gnbBar, Footer },
 
   watch: {
     email: function () {

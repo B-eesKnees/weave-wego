@@ -14,8 +14,9 @@
   
   <style scoped>
   .footer {
+    margin-top: 10%;
     background-color: #D9D9D9;
-    padding: 20px;
+    padding: 3% 0;
   }
   
   .footer_1 {
@@ -24,7 +25,6 @@
   
   .footer_img {
     vertical-align: middle;
-    margin-left: 20px;
     width: 20vh;
     
   }
