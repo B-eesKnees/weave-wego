@@ -14,6 +14,16 @@ const session = require("express-session");
 const fs = require("fs");
 const util = require("util");
 const writeFileAsync = util.promisify(fs.writeFile);
+const server = require("http").createServer(app);
+const io = rquire("socket.io")(server);
+
+io.on("connection", (socket) => {
+  console.log("새로운 클라이언트가 연결되었습니다.");
+
+  socket.on("disconnect", () => {
+    console.log("클라이언트가 연결을 끊었습니다.");
+  });
+});
 
 dotenv.config();
 //git 테스트
@@ -27,10 +37,10 @@ app.use(cors(corsOption));
 app.set("port", process.env.PORT || 3000); //포트 3000번으로 설정
 
 app.use(morgan("dev"));
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb', extended: true}));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
   session({
     resave: false,
@@ -56,6 +66,7 @@ app.use("/boardCreate", boardMakeRouter); //임시
 app.use("/mypage", myPageRouter); // 마이페이지 관련 라우터
 app.use("/postdata", postDataRouter);
 app.use("/profile", changeProfileRouter);
+app.use();
 
 app.get("/downloadProfile/:userEmail/:fileName", (req, res) => {
   //프로필 이미지 다운 라우터
@@ -223,8 +234,6 @@ app.post("/uploadCourse/:boardID/:fileName", async (req, res) => {
   });
 });
 
-
-
 //---------------------------------------------------------------------------------
 //게시글 수정 (이미지 추가 업로드)
 app.post("/updateCourse/:boardID/:fileName", async (req, res) => {
@@ -324,8 +333,8 @@ app.delete("/deleteImage/:boardID/:imgID/:fileName", (req, res) => {
   });
 });
 
-const adminRouter = require('./routes/admin'); //어드민 관련 라우터
-app.use('/admin', adminRouter); 
+const adminRouter = require("./routes/admin"); //어드민 관련 라우터
+app.use("/admin", adminRouter);
 
 // 마이페이지
 app.post("/mypage", (req, res) => {
