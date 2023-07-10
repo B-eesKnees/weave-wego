@@ -93,10 +93,9 @@ app.get("/downloadCourse/:courseId/:fileName", (req, res) => {
     `image/${fileName.substring(fileName.lastIndexOf("."))}`
   ); //이미지 보내는 코드인가?
   if (!fs.existsSync(filepath))
-    res.send(404, {
-      //경로에 이미지가 없으면 에러 처리
-      error: "Can not found file.",
-    });
+    res.status(404).send(
+      error = "Can not found file.",
+    );
   else fs.createReadStream(filepath).pipe(res); //파일 있으면 vue단으로 전송
 });
 
@@ -324,7 +323,67 @@ app.delete("/deleteImage/:boardID/:imgID/:fileName", (req, res) => {
     }
   });
 });
+//---------------------------------------------------------------------------------------------------------
+//--대댓글 삽입 쿼리
+app.post('/insertRecomment', (req, res)=>{
+  const recomment = {
+    RCOM_NUM : req.body.com_id,
+    RCOM_WRITER : req.body.email,
+    RCOM_COMMENT : req.body.comment
+  }
 
+  db.query(`insert into weavewego.recomment set ?`, recomment, (err)=>{
+    if(err) {
+      res.status(401).send(err);
+    } else {
+      res.status(200).send("대댓글 달기 성공");
+    }
+  })
+});
+//--대댓글 수정 쿼리
+app.post('/updateRecomment', (req, res)=>{
+  const recomment = {
+    RCOM_COMMENT : req.body.comment
+  }
+
+  const recommentID = req.body.rcom_id;
+
+  db.query(`update weavewego.recomment set ? ,RCOM_CREATED_AT = NOW() where RCOM_ID = ?`, [recomment, recommentID], (err)=>{
+    if(err) {
+      res.status(401).send(err);
+    } else {
+      res.status(200).send("수정 완료");
+    }
+  })
+});
+//--대댓글 삭제 쿼리
+app.post('/deleteRecomment', (req, res)=>{
+  const recom = req.body.rcom_id;
+
+  db.query(`delete from weavewego.recomment where RCOM_ID = ?`, recom, (err)=>{
+    if(err) {
+      res.status(401).send(err);
+    } else {
+      res.status(200).send("삭제 완료");
+    }
+  })
+})
+//--특정댓글에 대한 대댓글 불러오기
+app.post('/getRecomment', (req,res)=>{
+  const comId = req.body.comId;
+
+  db.query(`select r.RCOM_ID, r.RCOM_WRITER, r.RCOM_COMMENT, date_format(r.RCOM_CREATED_AT, "%Y-%m-%d") as 시간, u.USER_IMAGE, u.USER_NICKNAME
+            from recomment r join user u on r.RCOM_WRITER = u.USER_EMAIL
+            where r.RCOM_NUM = ? 
+            order by 시간 asc`, comId, (err, results)=>{
+    if(err) {
+      res.status(401).send(err);
+    } else {
+      res.status(200).send(results);
+    }
+  })
+});
+//---------------------------------------------------------------------------------------------------------
 const adminRouter = require("./routes/admin"); //어드민 관련 라우터
 app.use("/admin", adminRouter);
 

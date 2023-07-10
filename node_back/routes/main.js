@@ -328,16 +328,19 @@ router.post('/recentView', async (req, res)=>{
     RC_NUM,
     RC_VIEWER
   }
+  console.log(view);
 
   db.query(sql.recentView.query, view, (err)=>{
     if(err) {
+      console.log('실패!!!!!!!');
       res.send({
         code: 400,
         failed: "error occurred",
         error: err,
       });
     } else {
-      res.status(200).send("ok")
+      res.status(200).send({"message": "성공"})
+      console.log('성공!!!!!!!');
     }
   })
 })

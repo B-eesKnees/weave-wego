@@ -646,36 +646,21 @@ export default {
                 }
             }
         },
-        moveToDetail(brdid) { //클릭시 상세페이지 이동 관련 함수 조회수 늘어나는거랑 최근본 페이지 관련도 포함하게 만듦
+        moveToDetail(brdid) { //클릭시 최근본 게시글 테이블에 저장
             console.log(brdid);
             axios({
-                url: "/increase", //조회수 늘어나게 요청
+                url: 'http://localhost:3000/recentView',
                 method: "POST",
                 data: {
-                    brd_id: brdid
+                    brdID : brdid,
+                    email : this.email
                 }
-            }).then(async (res) => { //조회수 늘어나는거 성공하면
-                if (res.data.code == 200) { //then으로 최근본 게시글 추가까지 실행
-                    console.log('조회수 증가');
-                }
-                console.log(this.email);
-                axios({ //최근본 게시글 테이블에 데이터 넣기 요청
-                    url: '/recentView',
-                    method: 'POST',
-                    data: {
-                        brdID: brdid,
-                        email: this.email //현재 로그인한 이메일
-                    }
-                }).then((res) => {
-                    if (res.status == 200) {
-                        console.log('최근본 게시글');
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                })
-            }).catch((error) => {
-                console.error(error);
+            }).then((res)=>{
+                console.log(res.data.message);
+            }).catch((error)=> {
+                alert(error);
             })
+
             window.location.href = `/detail/${brdid}`;
         }
     }

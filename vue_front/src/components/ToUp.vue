@@ -54,14 +54,26 @@
     justify-content: center;
     align-items: center;
     box-shadow: 1px 1px 3px 1px rgb(209, 209, 209);
-    opacity: 0;
-    transition: opacity 1s ease;
+    animation: fadein 0.7s;
+    -webkit-animation: fadein 0.7s;
   }
   .uparrow {
     vertical-align: middle
   }
-  .scroll-to-top.show {
-  /* 등장할 때 투명도 */
-  opacity: 1;
-}
+  @keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+  }
+  @-webkit-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+  }
   </style>

@@ -8,7 +8,7 @@
                     <img :src="`http://localhost:3000/downloadCourse/${recommendData.BRD_ID}/${recommendData.IMG_PATH}`"
                         alt="" />
                 </div>
-                <a :href="`/detail/${recommendData.BRD_ID}`">
+                <a :href="`/detail/${recommendData.BRD_ID}`" @click="saveView(recommendData.BRD_ID)">
                     <div id="opacity_glass"></div>
                 </a>
 
@@ -23,7 +23,7 @@
             <div class="mainpage2_second_right">
                 <div class="mainpage2_second_right_rows">
                     <div v-for="(item, i) in recommendData2" :key="i" class="mainpage2_second_right_row">
-                        <a :href="`/detail/${recommendData2[i].BRD_ID}`">
+                        <a :href="`/detail/${recommendData2[i].BRD_ID}`" @click="saveView(item.BRD_ID)">
                             <div class="mainpage2_second_right_row_img">
                                 <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
                                 <div id="opacity_glass2"></div>
@@ -55,13 +55,15 @@ export default {
     data() {
         return {
             recommendData: [],
-            recommendData2: []
+            recommendData2: [],
+            email: ''
         };
     },
 
     setup() { },
     created() { },
     mounted() {
+        this.email = localStorage.getItem("userID")
         this.getRecommendData()
     },
     unmounted() { },
@@ -77,7 +79,21 @@ export default {
                 }
                 console.log(this.recommendData, "recommendData");
             })
-        }
+        },
+        saveView(brdId) {
+            axios({
+                url: 'http://localhost:3000/recentView',
+                method: "POST",
+                data: {
+                    brdID : brdId,
+                    email : this.email
+                }
+            }).then((res)=>{
+                console.log(res.data.message);
+            }).catch((error)=> {
+                alert(error);
+            })
+        }    
     }
 }
 </script>
