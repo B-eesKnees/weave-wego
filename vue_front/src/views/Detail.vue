@@ -32,6 +32,8 @@ const boardData = ref({
 
 const commentData = ref([]);
 
+const popTimeData = ref([]);
+
 const locationData = ref([]);
 
 const locationRevData = ref([""]);
@@ -64,6 +66,20 @@ const getBoard = () => {
       router.push({
         path: `/`,
       });
+    });
+};
+const getPopTimes = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/locationpoptime", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      popTimeData.value = result.data.locationpoptime;
+    })
+    .catch((error) => {
+      console.log("locationpoptimeerror", error);
     });
 };
 
@@ -127,8 +143,8 @@ const createComment = () => {
   axios
     .post("http://127.0.0.1:3000/boardCreate/comment", {
       boardId: route.params.boardId,
-      writer: "test@test.com",
-      nick: "nick",
+      writer: localStorage.getItem("userID"),
+      nick: localStorage.getItem("userNick"),
       comment: newComment.value,
     })
     .then(() => {
@@ -141,6 +157,7 @@ getBoard();
 getLocations();
 getComments();
 getImages();
+getPopTimes();
 </script>
 
 <template>
@@ -159,7 +176,7 @@ getImages();
         </div>
       </div>
       <div class="name-info">
-        <div>{{ boardData.BRD_WRITER }}</div>
+        <div>{{ boardData.BRD_NICK }}</div>
         <div class="name-info-right">
           <div>좋아요</div>
           <div>조회수 {{ boardData.BRD_VIEWCOUNT }}</div>
@@ -345,12 +362,12 @@ getImages();
   width: 70%;
   border: 1px solid black;
 }
+
 .carousel_item,
 .carousel_item > img {
   width: 100%;
   height: 450px;
-
-  object-fit: cover;
+  object-fit: fill;
 }
 .imageslider {
   display: flex;

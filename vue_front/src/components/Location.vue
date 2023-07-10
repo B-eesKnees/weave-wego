@@ -3,6 +3,7 @@ const props = defineProps({
   location: Object,
   number: Number,
   rev: String,
+  poptime: String,
 });
 </script>
 
@@ -53,10 +54,10 @@ const props = defineProps({
           </div>
         </div>
         <div class="canvas-name">
-          {{ location.name }}
+          {{ location.LOC_NAME }}
         </div>
         <div class="canvas-location">
-          {{ location.location }}
+          {{ location.LOC_ADD }}
         </div>
         <div class="canvas-detail">
           <div>연락처 : 02) 123 - 1234</div>
