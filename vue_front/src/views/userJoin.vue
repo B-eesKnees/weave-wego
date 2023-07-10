@@ -11,7 +11,7 @@
                     <br />
                 </label>
 
-                <input id="file" type="file" ref="image" @change="upload" maxlength="150"/>
+                <input id="file" type="file" ref="image" @change="upload" maxlength="150" />
             </form>
 
 
@@ -19,7 +19,8 @@
         <div class="wrap">
             <form @submit.prevent="joinForm">
                 <label for="email">아이디</label>
-                <input v-model="email" type="text" id="email" placeholder="이메일 입력" :class="{ error_border: email_check || emailcheck != 2}" maxlength="25">
+                <input v-model="email" type="text" id="email" placeholder="이메일 입력"
+                    :class="{ error_border: email_check || emailcheck != 2 }" maxlength="25">
                 <form @submit.prevent="emailCheckForm">
                     <a href="/auth/checkemail"><button type="submit" id="email_check"
                             class="username_submit">중복확인</button></a>
@@ -28,13 +29,16 @@
                 <p id="error" v-show="emailcheck == 1">존재하는 이메일입니다.</p>
                 <p id="complete" v-show="emailcheck == 2 && !email_check">사용가능한 이메일입니다.</p>
                 <label for="password">비밀번호</label>
-                <input v-model="password" type="password" id="password" :class="{ error_border: password_check }" placeholder="비밀번호 입력" maxlength="15"><br />
+                <input v-model="password" type="password" id="password" :class="{ error_border: password_check }"
+                    placeholder="비밀번호 입력" maxlength="15"><br />
                 <p id="error" v-if="password_check">비밀번호를 정확히 입력해주세요.<br /> *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상</p>
                 <label for="password_check2">비밀번호 확인</label>
-                <input v-model="password2" type="password" id="password_check" :class="{ error_border: password_check2 }" placeholder="비밀번호 확인 입력"><br />
+                <input v-model="password2" type="password" id="password_check" :class="{ error_border: password_check2 }"
+                    placeholder="비밀번호 확인 입력"><br />
                 <p id="error" v-if="password_check2">비밀번호가 일치하지 않습니다.</p>
                 <label for="nickname">별명</label>
-                <input  @input="nickname = $event.target.value" type="text" id="nickname" placeholder="활동명 입력" :class="{ error_border: nickname_check2 || nicknamecheck != 2}" maxlength="10">
+                <input @input="nickname = $event.target.value" type="text" id="nickname" placeholder="활동명 입력"
+                    :class="{ error_border: nickname_check2 || nicknamecheck != 2 }" maxlength="10">
                 <form @submit.prevent="nicknameCheckForm">
                     <a href="/auth/checknick"><button type="submit" id="nickname_check"
                             class="username_submit">중복확인</button></a>
@@ -59,7 +63,8 @@
                 </div>
                 <p id="error" v-if="age_range_check">나이대를 선택하세요.</p>
                 <label for="phone_num">전화번호</label>
-                <input v-model="phone_num" type="text" id="phone_num" placeholder="전화번호 입력" :class="{ error_border: phone_check }" maxlength="11"><br />
+                <input v-model="phone_num" type="text" id="phone_num" placeholder="전화번호 입력"
+                    :class="{ error_border: phone_check }" maxlength="11"><br />
                 <p id="error" v-if="phone_check">전화번호를 정확히 입력해주세요. 예)01066090043</p>
                 <a href="/auth/join"><input type="submit" :class="{ 'error_submit': allcheck, 'submit': !allcheck }"
                         :disabled="allcheck" id="login" value="가입하기"></a>
@@ -113,7 +118,7 @@ export default {
             emailcheck: 3,
             nicknamecheck: 3,
 
-            
+
         };
     },
     watch: {
@@ -153,7 +158,7 @@ export default {
             this.inputAllCheck()
             this.emailCheckForm()
             this.nicknameCheckForm()
-            
+
         },
         movetomain() {
             window.location.href = '/';
@@ -311,11 +316,11 @@ export default {
                 },
             }).then(async (res) => {
                 alert(res.data.message);
-                if(this.image) {
+                if (this.image) {
                     await this.uploadFile(this.image);
                 } else {
                     this.defaultImage(this.email);
-                    window.location.href='/';
+                    window.location.href = '/';
                 }
                 // await this.uploadFile(this.image);
             }).catch(error => {
@@ -435,6 +440,8 @@ input[type="file"] {
 
 .title-bar h5 {
     margin: 24px 0;
+    font-size: x-large;
+    font-weight: bold;
 }
 
 .title-bar img {
@@ -536,6 +543,7 @@ input.submit:hover {
     margin-left: 24%;
     font-size: 12px;
 }
+
 #complete {
     color: #388265;
     margin-bottom: 2%;
@@ -558,5 +566,4 @@ input.submit:hover {
     color: darkgray;
     margin-top: 25px;
     transition: all .2s ease-in-out;
-}
-</style>
+}</style>

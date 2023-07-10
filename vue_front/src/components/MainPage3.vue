@@ -1,10 +1,13 @@
 <template>
-    <div id="main3" class="mainpage3">
+    <div ref="main3" id="main3" class="mainpage3">
         <div class="mainpage3_third">
             <div class="mainpage3_third_filters">
                 <div class="mainpage3_third_filters_location_filter">
-                    <button class="filter_btn" @click="showLocation(), filterBtnClick($event)">지역 선택</button>
-                    <svg v-show="isShowLocation" width="600" height="500" viewBox="50 25 700 600"
+                    <button id="locationClose" v-if="isShowLocation" @click="filterBtnClose($event)"
+                        class="location_close">✖</button>
+                    <button ref="filterBtn" class="filter_btn" @click="showLocation(), filterBtnClick($event)">지역
+                        선택</button>
+                    <svg ref="svg" v-show="isShowLocation" width="600" height="500" viewBox="50 25 700 600"
                         xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <filter id="dropshadow">
@@ -24,7 +27,7 @@
                                 </feMerge>
                             </filter>
                         </defs>
-                        <g filter="url(#dropshadow)">
+                        <g ref="svg1" filter="url(#dropshadow)">
                             <path ref="jongro" id="종로구"
                                 @click="locationSelect($event), PostHashtagsNewes(), showSortRecent(), showSortViews(), showSortLikes()"
                                 class="OUTLINE"
@@ -157,7 +160,8 @@
                     </svg>
                 </div>
                 <div class="mainpage3_third_filters_theme_filter">
-                    <button @click="showTheme(), filterBtnClick($event)" class="filter_btn">테마 선택</button>
+                    <button id="themeClose" v-if="isShowTheme" @click="filterBtnClose($event)" class="theme_close">✖</button>
+                    <button ref="filterBtn2" @click="showTheme(), filterBtnClick($event)" class="filter_btn">테마 선택</button>
                     <div v-show="isShowTheme" class="show_theme">
                         <h4
                             @click="themeSelect($event), PostHashtagsNewes(), showSortRecent(), showSortViews(), showSortLikes()">
@@ -194,26 +198,26 @@
             </div>
             <div class="mainpage3_third_contents">
                 <h2 id="nodata" v-if="nodata">데이터가 없습니다.</h2>
-                <div v-for="(item, i) in Data" :key="i" class="mainpage3_third_content">
-                    <a ref="alink" :href="`/detail/${Data[i].BRD_ID}`">
-                        <div class="mainpage3_third_content_img">
-                            <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
-                            <div id="opacity_glass"></div>
-                            <div class="mainpage3_third_content_like">
-                                <img :id="`content${i}`" v-if="this.likelist.includes(item.BRD_ID)"
-                                    @click="likeToggle($event)" :src="imgsrc[0]" alt="" />
-                                <img v-if="!this.likelist.includes(item.BRD_ID)" @click="likeToggle($event)" :src="imgsrc[1]"
+                <div v-for="(item, i) in Data" :key="i" class="mainpage3_third_content"> <!-- a 태그 삭제 -->
+                    <div class="mainpage3_third_content_img" @click="moveToDetail(item.BRD_ID)">
+                        <!--이미지 클릭시 상세페이지로 이동 이벤트-->
+                        <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
+                        <div id="opacity_glass"></div>
+                        <div class="mainpage3_third_content_like">
+                            <button type="button" @click="[handleClick($event), likeToggle(item.BRD_ID)]">
+                                <!--버튼 추가/ 이벤트 2개 실행 handleClick에는 이벤트자체 likeToggle에는 BRD_ID -->
+                                <img :id="`content${i}`" v-if="this.likelist.includes(item.BRD_ID)" :src="imgsrc[0]"
                                     alt="" />
-                            </div>
+                                <img v-if="!this.likelist.includes(item.BRD_ID)" :src="imgsrc[1]" alt="" />
+                            </button>
                         </div>
-                        <div class="mainpage3_third_content_detail">
-                            <h5>{{ item.BRD_TITLE }}</h5>
-                            <div class="border"></div>
-                            <p>{{ item.BRD_REV }}</p>
-                        </div>
-                    </a>
+                    </div>
+                    <div class="mainpage3_third_content_detail">
+                        <h5>{{ item.BRD_TITLE }}</h5>
+                        <div class="border"></div>
+                        <p>{{ item.BRD_REV }}</p>
+                    </div>
                 </div>
-
             </div>
             <div class="more_btn">
                 <button @click="showMoreContent">더보기</button>
@@ -262,7 +266,7 @@ export default {
             likelist: [],
             imgbrdID: true,
             imgsrc: [require("../assets/img/like2.png"),
-                    require("../assets/img/like.png"),],
+            require("../assets/img/like.png"),],
         };
     },
 
@@ -286,8 +290,6 @@ export default {
 
     },
     methods: {
-
-
         PostHashtagsNewes() {
             if (this.sortvalue == '최근순') {
                 axios({
@@ -368,6 +370,18 @@ export default {
                 this.isShowTheme = false;
             }
         },
+        filterBtnClose(event) {
+            if (event.target.id == 'locationClose') {
+                this.isShowLocation = false;
+                this.$refs.filterBtn.classList.remove("filters_btn");
+                this.$refs.filterBtn.classList.add("filter_btn");
+            } else if(event.target.id == 'themeClose') {
+                this.isShowTheme = false;
+                this.$refs.filterBtn2.classList.remove("filters_btn");
+                this.$refs.filterBtn2.classList.add("filter_btn");
+            }
+
+        },
         filterBtnClick(event) { //지역 선택버튼 스타일
             if (event.target.classList.contains('filters_btn')) {
                 event.target.classList.remove("filters_btn");
@@ -439,7 +453,7 @@ export default {
                         console.log(this.OriginData, "오리지날데이터");
                         console.log(this.newhashtags, "백에서 받은 데이터");
 
-                        if (this.hashtags.length >= 1 || this.search) { // 선택 하나라도 했으면
+                        if (this.hashtags.length >= 1 || this.search) { // 선택 하나라도했고 또는 검색창에 입력했으면
                             this.OriginData = [];
 
                             for (var i in this.newhashtags) {
@@ -580,45 +594,90 @@ export default {
                     email: this.email
                 }
             }).then((res) => {
-                const resdata = res.data;
-
-                for (var i in resdata) {
-                    this.likelist.push(resdata[i].LL_NUM);
-                }
-
-                console.log(this.likelist, "likeList");
-                console.log(this.Data, "Data");
-
-                for (i in this.Data) {
-                    this.abcd[i] = Data[i].BRD_ID;
-                }
-                console.log(this.abcd);
+                this.likelist = res.data;
+                console.log(this.likelist);
             })
         },
-        likeToggle(event) {
-
-            if (event.target.tagName == "IMG") {
-                event.preventDefault()
-                const contentID = event.target.id;
-                if (this.email == null) { //비로그인시
-                    if (!confirm("로그인이 필요합니다.  로그인하시겠습니까?")) { //취소시
-                    } else {
-                        window.location.href = '/login';
+        likeToggle(brdID) { //받아온 brdID //좋아요버튼 클릭시 발생하는 이벤트 2
+            console.log(brdID);
+            console.log(this.likelist);
+            console.log(this.email);
+            if (this.likelist.includes(brdID)) { //좋아요 누른 게시글이면 
+                axios({
+                    url: '/dislikeCourse', //좋아요 취소 요청
+                    method: "POST",
+                    data: {
+                        email: this.email, //로그인한 이메일
+                        brdID: brdID //버튼있는 게시글 번호
                     }
-
-                } else { // 로그인시
-
-                    if (contentID === 'content1') {
-                        this.imgsrc[0] = require("../assets/img/like.png");
+                }).then((res) => { //실행성공하면
+                    if (res.data.code == 200) {
+                        console.log('좋아요 취소');
+                        this.postLoginUser(); //좋아요한 게시글 리스트 초기화
                     }
-                    // else if(contentID == contentID[i] && this.imgsrc == require("../assets/img/like2.png")){
-                    //     this.imgsrc = require("../assets/img/like.png")
-                    // }
+                }).catch((error) => {
+                    console.error(error);
+                })
+            } else {
+                axios({
+                    url: '/likeCourse', //신규 좋아요 요청
+                    method: "POST",
+                    data: {
+                        email: this.email, //로그인한 이메일
+                        brdID: brdID //버튼있는 게시글 번호
+                    }
+                }).then((res) => {
+                    if (res.data.code == 200) {
+                        console.log('좋아요');
+                        this.postLoginUser(); //좋아요한 게시글 리스트 초기화
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                })
+            }
+            return;
+        },
+        handleClick(event) { //좋아요버튼 클릭시 발생하는 이벤트 1
+            event.stopPropagation(); //a 태그 작동 정지
 
+            if (!this.email) { //로그인이 안되어있는 상태라면
+                if (confirm('로그인이 필요합니다. 로그인하시겠습니까?')) { //확인창 띄우고
+                    window.location.href = "/login"; //동의할시 로그인 창으로 이동
                 }
-
             }
         },
+        moveToDetail(brdid) { //클릭시 상세페이지 이동 관련 함수 조회수 늘어나는거랑 최근본 페이지 관련도 포함하게 만듦
+            console.log(brdid);
+            axios({
+                url: "/increase", //조회수 늘어나게 요청
+                method: "POST",
+                data: {
+                    brd_id: brdid
+                }
+            }).then(async (res) => { //조회수 늘어나는거 성공하면
+                if (res.data.code == 200) { //then으로 최근본 게시글 추가까지 실행
+                    console.log('조회수 증가');
+                }
+                console.log(this.email);
+                axios({ //최근본 게시글 테이블에 데이터 넣기 요청
+                    url: '/recentView',
+                    method: 'POST',
+                    data: {
+                        brdID: brdid,
+                        email: this.email //현재 로그인한 이메일
+                    }
+                }).then((res) => {
+                    if (res.status == 200) {
+                        onsole.log('최근본 게시글');
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                })
+            }).catch((error) => {
+                console.error(error);
+            })
+            window.location.href = `/detail/${brdid}`;
+        }
     }
 }
 
@@ -635,6 +694,7 @@ export default {
     width: 100%;
 }
 
+/* 필터 부분 시작*/
 .mainpage3_third_filters {
     display: flex;
     justify-content: center;
@@ -661,6 +721,26 @@ export default {
     box-shadow: 0 0 5px #ccc;
 }
 
+.location_close {
+    z-index: 9999;
+    position: absolute;
+    top: 75%;
+    left: 80%;
+    padding: 1%;
+    font-size: x-large;
+    color: black;
+}
+
+.theme_close {
+    z-index: 9999;
+    position: absolute;
+    top: 100%;
+    left: 95%;
+    padding: 1%;
+    font-size: x-large;
+    color: black;
+}
+
 .show_map {
     position: absolute;
     left: 0%;
@@ -682,6 +762,7 @@ export default {
     flex-wrap: wrap;
     background-color: white;
     padding: 1% 1%;
+    padding-top: 20%;
     margin-top: 1%;
     border-radius: 5%;
     position: absolute;
@@ -704,6 +785,8 @@ export default {
     background-color: #388265;
     color: white;
 }
+/* 필터부분 끝 */
+
 
 .mainpage3_third_filters_keyword_filter {
     display: flex;
@@ -766,16 +849,27 @@ export default {
     margin: 0 1.6%;
     margin-bottom: 5%;
     box-shadow: 0 0 5px #ccc;
+    transition: all 0.1s linear;
 }
 
-.mainpage3_third_content a {
-    text-decoration: none;
+.mainpage3_third_content:hover {
+    width: 30%;
+    height: 45vh;
+    margin: 0 1.6%;
+    margin-bottom: 5%;
+    box-shadow: 0 0 5px #ccc;
+    transform: scale(1.1);
 }
 
 .mainpage3_third_content_img {
     width: 100%;
     height: 65%;
     position: relative;
+}
+
+.mainpage3_third_content_img:hover {
+    /* 이미지 위로 올렸을때 마우스 커서 변경(클릭느낌나게) */
+    cursor: pointer;
 }
 
 .mainpage3_third_content_img img {
@@ -925,5 +1019,4 @@ svg {
     alignment-baseline: middle;
     user-select: none;
     pointer-events: none;
-}
-</style>
+}</style>

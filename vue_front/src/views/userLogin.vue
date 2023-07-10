@@ -236,6 +236,8 @@ a {
 
 .title-bar h5 {
   margin-top: 2%;
+  font-size: x-large;
+  font-weight: bold;
 }
 
 .info-bar {
