@@ -10,7 +10,7 @@ router.get("/board", (req, res) => {
   const query = `SELECT b.BRD_ID, b.BRD_WRITER, b.BRD_LOC_REV1, b.BRD_LOC_REV2, b.BRD_LOC_REV3,b.BRD_LOC_REV4, b.BRD_LOC_REV5, b.BRD_REV, COUNT(ll.LL_ID) AS Like_Count,b.BRD_HASHTAG, DATE_FORMAT(b.BRD_CREATED_AT, '%Y-%m-%d') AS BRD_CREATED_AT, b.BRD_NICK, b.BRD_OPEN
   FROM board b
   LEFT JOIN likelist ll ON b.BRD_ID = ll.LL_NUM
-  WHERE b.BRD_ID =2;
+  WHERE b.BRD_ID =${boardId};
   `;
 
   db.query(query, [boardId], (err, results) => {
@@ -23,6 +23,11 @@ router.get("/board", (req, res) => {
         res.status(404).json({ error: "게시글을 찾을 수 없습니다." });
       } else {
         if (board.BRD_OPEN) {
+          db.query(
+            "UPDATE board set BRD_VIEWCOUNT = BRD_VIEWCOUNT + 1 WHERE BRD_ID=?",
+            [boardId]
+          );
+
           res.json({ board });
         } else {
           const userId = req.user & req.user.id;
@@ -74,43 +79,36 @@ router.get("/locations", (req, res) => {
   });
 });
 
-//이미지 받아오기 (여러장)
+//이미지 목록 받아오기
 router.get("/images", (req, res) => {
-  const boardId = req.body.boardId;
-  const query = `SELECT IMG_PATH FROM image WHERE IMG_NUM = ?`;
+  const { boardId } = req.query;
+  const query = `SELECT * FROM image WHERE IMG_NUM=?`;
 
   db.query(query, [boardId], (err, results) => {
     if (err) {
       console.error(err);
-      res.status(500).json({ error: "이미지 조회 중 오류가 발생했습니다." });
+      res.status(500).json({ error: "서버 에러" });
     } else {
-      if (results.length === 0) {
-        res.status(404).json({ error: "이미지를 찾을 수 없습니다. " });
-      } else {
-        const imagePaths = results.map((result) => result.IMG_PATH);
-        const imageFolder = `C:/새 폴더/weavewego/weavewego/node_back/CourseImage/${boardId}`;
-
-        const imagesData = [];
-
-        for (let i = 1; i < imagePaths.length; i++) {
-          const imagePath = path.join(imageFolder, imagePaths[i]);
-
-          try {
-            const data = fs.readFileSync(imagePath);
-            const imageData = {
-              fileName: imagePaths[i],
-              data: data.toString("base64"),
-            };
-            imageData.push(imageData);
-          } catch (err) {
-            console.error(err);
-          }
-        }
-        res.setHeader("content-Type", "application/json");
-        res.json(imagesData);
-      }
+      res.json({ images: results });
     }
   });
+});
+//이미지 받아오기
+router.get("/image/:filename", (req, res) => {
+  const filename = req.params.filename;
+
+  fs.readFile(
+    path.join(__dirname, `../CourseImage/${filename}`),
+    (err, data) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: "이미지를 읽을 수 없습니다." });
+      } else {
+        res.setHeader("Content-Type", "image/jpeg");
+        res.send(data);
+      }
+    }
+  );
 });
 
 //팝업 운영시간
@@ -295,44 +293,61 @@ router.put("/updatecomments/", (req, res) => {
 
 //게시글 내용 수정--------------------------------------------------------
 router.put("/updateboard", (req, res) => {
-  const boardId = req.params.boardId;
-  const {
-    title,
-    hashtag,
-    loc1rev,
-    loc2rev,
-    loc3rev,
-    loc4rev,
-    loc5rev,
-    locrev,
-    createdat,
-    isOpen,
-  } = req.body;
+  console.log(req.body);
+  const postData = req.body.postData;
+  const locationData = req.body.locationData;
+  const boardRow = {
+    BRD_TITLE: postData.title,
+    BRD_LOC_REV1: locationData[0] ? locationData[0].content : "",
+    BRD_LOC_REV2: locationData[1] ? locationData[1].content : "",
+    BRD_LOC_REV3: locationData[2] ? locationData[2].content : "",
+    BRD_LOC_REV4: locationData[3] ? locationData[3].content : "",
+    BRD_LOC_REV5: locationData[4] ? locationData[4].content : "",
+    BRD_REV: postData.review,
+    BRD_HASHTAG: postData.hashtag,
+    BRD_OPEN: postData.open,
+  };
 
-  const query = `UPDATE BOARD SET BRD_TITLE = ?, BRD_HASHTAG = ?, BRD_LOC_REV1 = ?, BRD_LOC_REV2 = ?, BRD_LOC_REV3 = ?, BRD_LOC_REV4 = ?, BRD_LOC_REV5 = ?, BRD_REV = ?,BRD_CREATED_AT=NOW(),BRD_OPEN =? WHERE BRD_ID = ?;`;
+  db.query(
+    "UPDATE board SET ? WHERE BRD_ID=?",
+    [boardRow, postData.id],
+    (err, results) => {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: "서버에러" });
+      } else {
+        res.status(200).json({
+          updateboard: results,
+          message: "게시글 수정이 완료되었습니다.",
+        });
+      }
+    }
+  );
+});
 
-  const values = [
-    title,
-    hashtag,
-    loc1rev,
-    loc2rev,
-    loc3rev,
-    loc4rev,
-    loc5rev,
-    locrev,
-    createdat,
-    isOpen,
-    boardId,
-  ];
-  db.query(query, values, (err, results) => {
+//공개,비공개 설정 시 내가 쓴 게시글은 비공개여도 볼 수 있도록
+
+router.get("/board/:boardId", (req, res) => {
+  const { boardId } = req.params;
+  const userEmail = req.body ? req.body.email : null;
+
+  const query = "SELECT * FROM board WHERE brd_id = ?";
+
+  db.query(query, [boardId], (err, results) => {
     if (err) {
       console.error(err);
-      res.status(500).json({ error: "서버에러" });
+      res.status(500).json({ error: "내용 조회 오류" });
     } else {
-      res.status(200).json({
-        updateboard: results,
-        message: "게시글 수정이 완료되었습니다.",
-      });
+      if (results.length > 0) {
+        const board = results[0];
+        if (board.BRD_OPEN === 0 && board.BRD_USER_EMAIL !== userEmail) {
+          res.status(403).json({ message: "접근 권한이 없습니다." });
+          return;
+        }
+        res.json(board);
+      } else {
+        res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
+      }
     }
   });
 });
