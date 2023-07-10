@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const updateLikeCount = require("../updateLikeCount");
 
 //좋아요 증가 (감소)
 router.post("/like/:boardId", (req, res) => {
@@ -43,6 +44,7 @@ router.post("/like/:boardId", (req, res) => {
                         countResults.length > 0
                           ? countResults[0].like_count
                           : 0;
+                      updateLikeCount(boardId, likeCount);
                       res.status(200).json({
                         message: "좋아요 취소 완료",
                         like_count: likeCount,
@@ -76,6 +78,7 @@ router.post("/like/:boardId", (req, res) => {
                         countResults.length > 0
                           ? countResults[0].like_count
                           : 0;
+                      updateLikeCount(boardId, likeCount);
                       res.status(200).json({
                         message: "좋아요 추가 완료",
                         like_count: likeCount,
@@ -91,3 +94,4 @@ router.post("/like/:boardId", (req, res) => {
     }
   );
 });
+module.exports = router;
