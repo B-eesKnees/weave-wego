@@ -81,6 +81,7 @@
             :editMode="editMode"
             @addlist="(id) => addToselectedItems(id)"
             @removelist="(id) => deleteToselectedItems(id)"
+            :email="email"
           ></boardList>
         </div>
         <div v-if="boardList.length > visibleCount" class="more_btn">
