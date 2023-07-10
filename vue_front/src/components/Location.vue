@@ -18,7 +18,7 @@ const props = defineProps({
           }}</a>
         </div>
         <div class="location-location">
-          {{ location.location }}
+          {{ location.LOC_ADD }}
         </div>
       </div>
     </div>

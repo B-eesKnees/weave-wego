@@ -86,7 +86,7 @@
       </div>
       <!-- 사진 첨부하는 버튼 들어갈 곳-->
       <div class="buttons">
-        <button @click="handleSubmit">작성완료</button>
+        <button @click="updatePost">수정완료</button>
         <button>취소</button>
       </div>
     </div>
@@ -96,63 +96,117 @@
 <script setup>
 import gnbBar from "@/components/gnbBar.vue";
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onActivated } from "vue";
+import { useRouter, useRoute } from "vue-router";
+///
+const route = useRoute();
+const router = useRouter();
 ///
 const open = ref(0);
 const title = ref("");
 const review = ref("");
+
 ///
 const map = ref(null);
 const infowindow = ref(null);
 const keyword = ref("경복궁");
 const markers = ref([]);
 const locations = ref([]);
+const locationRevData = ref([]);
+const images = ref([]); // 이미지 업로드 하는 스크립트
 
-const handleSubmit = () => {
-  if (title.value === "") {
-    alert("제목을 입력해주세요.");
-  } else if (!locations.value[1]) {
-    alert("장소를 2개 이상 선택해주세요.");
-  } else if (images.value.length === 0) {
-    alert("이미지를 업로드해주세요.");
-    return;
-  } else createPost;
-};
-
-const createPost = () => {
-  console.log(locations.value);
+const getBoard = () => {
+  console.log("a");
   axios
-    .post("http://127.0.0.1:3000/boardCreate", {
-      writer: localStorage.getItem("userID"),
-      title: title.value,
-      loc_rev1: locations.value[0] ? locations.value[0].content : "",
-      loc_rev2: locations.value[1] ? locations.value[1].content : "",
-      loc_rev3: locations.value[2] ? locations.value[2].content : "",
-      loc_rev4: locations.value[3] ? locations.value[3].content : "",
-      loc_rev5: locations.value[4] ? locations.value[4].content : "",
-      rev: review.value,
-      hashtag: "#지역",
-      nick: localStorage.getItem("userNick"),
-      open: open.value,
+    .get("http://127.0.0.1:3000/postdata/board", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
     })
     .then((result) => {
-      console.log(result);
+      const BRD_TEMP = result.data.board;
+      title.value = BRD_TEMP.BRD_TITLE;
+      review.value = BRD_TEMP.BRD_REV;
+      open.value = BRD_TEMP.BRD_OPEN;
+      locationRevData.value = [
+        BRD_TEMP.BRD_LOC_REV1,
+        BRD_TEMP.BRD_LOC_REV2,
+        BRD_TEMP.BRD_LOC_REV3,
+        BRD_TEMP.BRD_LOC_REV4,
+        BRD_TEMP.BRD_LOC_REV5,
+      ];
+    })
+    .catch((error) => {
+      console.log("board_error", error);
+    });
+};
+
+const getLocations = () => {
+  const maps = window.kakao.maps;
+
+  axios
+    .get("http://127.0.0.1:3000/postdata/locations", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      const temp = result.data.locations;
+      for (let i = 0; i < JSON.parse(temp.LOC_ADD).length; i++) {
+        locations.value.push({
+          id: i,
+          title: JSON.parse(temp.LOC_NAME)[i].name,
+          address: JSON.parse(temp.LOC_ADD)[i].add,
+          coord: new maps.LatLng(
+            JSON.parse(temp.LOC_LAT)[i].lat,
+            JSON.parse(temp.LOC_LNG)[i].lng
+          ),
+          content: locationRevData.value[i],
+        });
+      }
+    })
+    .catch((error) => {
+      console.log("locations_error", error);
+    });
+};
+
+const updatePost = () => {
+  const formData = new FormData();
+  formData.append(
+    "postData",
+    JSON.stringify({
+      id: route.params.boardId,
+      title: title.value,
+      review: review.value,
+      hashtag: "해시태그",
+      open: open.value,
+    })
+  );
+  formData.append("locationData", JSON.stringify(locations.value));
+  images.value.map((i) => {
+    formData.append("imageData", i.file);
+  });
+  axios({
+    method: "put",
+    url: "http://127.0.0.1:3000/postdata/updateboard",
+    data: formData,
+  })
+    .then((result) => {
+      router.push({
+        path: `/detail/${result.data.boardId}`,
+      });
     })
     .catch((error) => {
       console.log(error);
     });
-  axios.post("http://127.0.0.1:3000/boardCreate", {});
 };
-
-const images = ref([]); // 이미지 업로드 하는 스크립트
 
 const addImage = (e) => {
   images.value.push({
-    ...e.target.files[0],
     id: Math.max(...images.value.map((i) => i.id), 0) + 1,
     preview: URL.createObjectURL(e.target.files[0]),
+    file: e.target.files[0],
   });
-  console.log(images.value[0]);
 };
 
 const removeImage = (id) => {
@@ -164,18 +218,23 @@ const prepareMap = () => {
   script.src =
     "//dapi.kakao.com/v2/maps/sdk.js?appkey=2701d0491303d0eea69f2f2b5138d02f&libraries=services&autoload=false";
 
-  script.onload = () => window.kakao.maps.load(drawMap);
+  script.onload = () => {
+    window.kakao.maps.load(drawMap);
+    getBoard();
+    getLocations();
+  };
 
   document.head.appendChild(script);
 };
 
-const addLocation = (marker, title) => {
+const addLocation = (marker, title, address) => {
   if (locations.value.length < 5) {
     if (!locations.value.some((l) => l.title === title))
       locations.value.push({
         id: Math.max(...locations.value.map((l) => l.id), 0) + 1,
         title: title,
         coord: marker.getPosition(),
+        address: address,
         content: "",
       });
   }
@@ -218,7 +277,7 @@ function getListItem(index, places) {
 }
 
 // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
-function addMarker(position, idx, title) {
+function addMarker(position, idx) {
   const maps = window.kakao.maps;
 
   const imageSrc =
@@ -314,6 +373,7 @@ const displayPlaces = (places) => {
     // 마커를 생성하고 지도에 표시합니다
     const placePosition = new maps.LatLng(places[i].y, places[i].x);
     const marker = addMarker(placePosition, i);
+    const address = places[i].road_address_name;
     const itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
     // LatLngBounds 객체에 좌표를 추가합니다
@@ -324,12 +384,11 @@ const displayPlaces = (places) => {
     // mouseout 했을 때는 인포윈도우를 닫습니다
     (function (marker, title) {
       maps.event.addListener(marker, "click", function () {
-        addLocation(marker, title);
+        addLocation(marker, title, address);
       });
 
       maps.event.addListener(marker, "mouseover", function () {
         displayInfowindow(marker, title);
-        console.log(locations.value);
       });
 
       maps.event.addListener(marker, "mouseout", function () {
@@ -337,7 +396,7 @@ const displayPlaces = (places) => {
       });
 
       itemEl.onclick = function () {
-        addLocation(marker, title);
+        addLocation(marker, title, address);
       };
 
       itemEl.onmouseover = function () {
@@ -403,6 +462,8 @@ const drawMap = () => {
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
     drawMap();
+    getBoard();
+    getLocations();
   } else {
     prepareMap();
   }
