@@ -15,16 +15,6 @@ const session = require("express-session");
 const fs = require("fs");
 const util = require("util");
 const writeFileAsync = util.promisify(fs.writeFile);
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
-
-io.on("connection", (socket) => {
-  console.log("새로운 클라이언트가 연결되었습니다.");
-
-  socket.on("disconnect", () => {
-    console.log("클라이언트가 연결을 끊었습니다.");
-  });
-});
 
 dotenv.config();
 //git 테스트
@@ -60,7 +50,6 @@ const myPageRouter = require("./routes/mypage"); // 마이페이지
 const postDataRouter = require("./routes/post");
 const changeProfileRouter = require("./routes/profile");
 const updateLikeRouter = require("./routes/updateLike");
-const updateLikeCount = require("./updateLikeCount");
 
 app.use("/auth", authRouter); // /autu 로그인 관련 라우터
 app.use("/", mainRouter); // 메인페이지 관련 라우터
@@ -70,7 +59,6 @@ app.use("/postdata", postDataRouter);
 app.use("/profile", changeProfileRouter);
 
 app.use("/updatelike", updateLikeRouter);
-app.use("/updatelikecount", updateLikeCount);
 
 app.get("/downloadProfile/:userEmail/:fileName", (req, res) => {
   //프로필 이미지 다운 라우터

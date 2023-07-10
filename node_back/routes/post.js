@@ -244,7 +244,7 @@ router.get("/deleteboard", (req, res) => {
   const { boardId } = req.query;
   const query = `DELETE FROM board where BRD_ID=?`;
 
-  db.query(query, (err, results) => {
+  db.query(query, [boardId], (err, results) => {
     if (err) {
       console.error(err);
       res.json.status(500).json({ error: "서버에러" });
@@ -258,7 +258,7 @@ router.get("/deleteboard", (req, res) => {
 router.get("/deletecomments", (req, res) => {
   const { commentId } = req.query;
   const query = `DELETE FROM comment WHERE COM_ID=?;`;
-  db.query(query, (err, results) => {
+  db.query(query, [commentId], (err, results) => {
     if (err) {
       console.error(err);
       res.json.status(500).json({ error: "서버에러" });
@@ -329,7 +329,6 @@ router.put("/updateboard", (req, res) => {
       console.error(err);
       res.status(500).json({ error: "서버에러" });
     } else {
-      //res.redirect("/postdata/board?boardid=2");
       res.status(200).json({
         updateboard: results,
         message: "게시글 수정이 완료되었습니다.",
