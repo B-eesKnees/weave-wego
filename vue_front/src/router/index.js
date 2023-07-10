@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "../views/MainPage.vue";
 import userLogin from "../views/userLogin.vue";
 import userJoin from "../views/userJoin.vue";
+import adminBoardList from '../components/adminBoardlist.vue'
 
 const requireLogin = () => (to, from, next) => { //로그인안하고 접근하려했을때 실행할 함수?
   if(localStorage.getItem('userID')!==null) { //localStorage에 데이터 있으면
@@ -25,6 +26,11 @@ const routes = [
     path: "/join",
     name: "userJoin",
     component: userJoin,
+  },
+  {
+    path: "/admin/boardlist",
+    name: "adminBoardList",
+    component: adminBoardList,
   },
   {
     path: "/naverlogin",
