@@ -19,8 +19,11 @@
 footer {
   background-color: #d9d9d9;
   padding: 3% 0;
-  position: relative;
+  position: static;
   bottom: 0;
+  width: 100%;
+  height: 20%;
+  margin-top: auto;
 }
 
 .footer_1 {

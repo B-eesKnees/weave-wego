@@ -48,13 +48,17 @@
       </div>
     </div>
   </section>
-  <section>
+  <section class="tabWrap">
     <TabsWrapper>
       <TabItem title="내코스">
         <!-- 내코스--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
         <div v-if="!nodata">
-          <button v-if="!editMode" class="edit" @click="toggleEditMode">
+          <button
+            v-if="!editMode && boardList.length > 0"
+            class="edit"
+            @click="toggleEditMode"
+          >
             &nbsp;&nbsp;편집&nbsp;&nbsp;
           </button>
           <button v-if="editMode" class="delete" @click="deleteContent">
@@ -79,7 +83,7 @@
             @removelist="(id) => deleteToselectedItems(id)"
           ></boardList>
         </div>
-        <div v-if="boardList.length > 3" class="more_btn">
+        <div v-if="boardList.length > visibleCount" class="more_btn">
           <button @click="showMoreContent">더보기</button>
         </div>
         <!-- 자식 컴포넌트에서 넘어온 것들 받기 / 받아온 값들(id) 두 함수에 전달 -->
@@ -88,7 +92,7 @@
       <TabItem title="최근에 본 코스">
         <!-- 최근에 본 코스--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
-        <div class="course">
+        <div>
           <div id="norecentData" class="nodata">최근에 본 코스가 없습니다</div>
           <recentBoardList
             v-if="!norecentData"
@@ -100,7 +104,7 @@
       <TabItem title="좋아요 리스트">
         <!-- 좋아요리스트--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
-        <div class="course">
+        <div>
           <div id="noLikeData" class="nodata">좋아요 한 코스가 없습니다</div>
           <likeBoardList
             v-if="!noLikeData"
@@ -147,9 +151,7 @@
       </TabItem>
     </TabsWrapper>
   </section>
-  <footer>
-    <footerContent />
-  </footer>
+
   <ToUp />
 </template>
 
