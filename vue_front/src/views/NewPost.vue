@@ -117,12 +117,12 @@ const createPost = () => {
   formData.append(
     "postData",
     JSON.stringify({
-      writer: "test@test.com",
+      writer: localStorage.getItem("userID"),
       title: title.value,
       review: review.value,
       hashtag: "해시태그",
       open: open.value,
-      nick: "test",
+      nick: localStorage.getItem("userNick"),
     })
   );
   formData.append("locationData", JSON.stringify(locations.value));
