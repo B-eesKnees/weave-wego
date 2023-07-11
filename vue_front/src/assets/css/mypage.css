@@ -284,7 +284,7 @@ a {
   position: absolute;
   display: block;
   right: 0;
-  top: -5vh;
+  top: 1.5vh;
   width: 100px;
   border: none;
   background: #fafafa;
@@ -299,10 +299,8 @@ a {
 
 .commentlist {
   position: relative;
-  height: 200px;
   width: 100%;
-  
-  margin-top: 7vh;
+  margin-top: 0vh;
 }
 
 .comment-list{

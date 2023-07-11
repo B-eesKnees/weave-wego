@@ -97,11 +97,18 @@
           <div id="norecentData" class="nodata">최근에 본 코스가 없습니다</div>
           <recentBoardList
             v-if="!norecentData"
-            v-for="item in recentBoardList"
+            v-for="item in visiblerecentBoard"
             :recentBoardList="item"
             :key="item.BRD_ID"
-          /></div
-      ></TabItem>
+          />
+        </div>
+        <div
+          v-if="recentBoardList.length > visiblerecentCount"
+          class="more_btn"
+        >
+          <button @click="showMorerecentContent">더보기</button>
+        </div></TabItem
+      >
       <TabItem title="좋아요 리스트">
         <!-- 좋아요리스트--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
@@ -109,19 +116,23 @@
           <div id="noLikeData" class="nodata">좋아요 한 코스가 없습니다</div>
           <likeBoardList
             v-if="!noLikeData"
-            v-for="item in likeBoardList"
+            v-for="item in visiblelikeBoard"
             :likeBoardList="item"
             :key="item.id"
             :hideBrdOpen="true"
-          /></div
-      ></TabItem>
+          />
+        </div>
+        <div v-if="likeBoardList.length > visibleLikeCount" class="more_btn">
+          <button @click="showMorelikeContent">더보기</button>
+        </div></TabItem
+      >
       <TabItem title="내가 쓴 댓글">
         <!-- 내가 쓴 댓글--------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------------------------------------------------------------------------ -->
         <div v-if="!noCommentData">
           <button
             v-if="!comment_editMode"
-            class="edit"
+            class="comment_edit"
             @click="toggleCommentEditMode"
           >
             &nbsp;&nbsp;편집&nbsp;&nbsp;
@@ -143,11 +154,14 @@
           <div id="noCommentData" class="nodata">작성한 댓글이 없습니다</div>
           <commentList
             v-if="!noCommentData"
-            v-for="item in commentList"
+            v-for="item in visibleCommentList"
             :commentList="item"
             :key="item.COM_ID"
             :comment_editMode="comment_editMode"
           />
+        </div>
+        <div v-if="commentList.length > visibleCommentCount" class="more_btn">
+          <button @click="showMoreComment">더보기</button>
         </div>
       </TabItem>
     </TabsWrapper>
@@ -203,7 +217,10 @@ export default {
       noCommentData: false,
       selectedItems: [],
 
-      visibleCount: 3, // 초기에 보여줄 목록 개수
+      visibleCount: 3, // 초기에 보여줄 목록 개수\
+      visiblerecentCount: 3,
+      visibleLikeCount: 3,
+      visibleCommentCount: 3,
     };
   },
   created() {
@@ -219,6 +236,15 @@ export default {
   computed: {
     visibleBoardList() {
       return this.boardList.slice(0, this.visibleCount);
+    },
+    visiblerecentBoard() {
+      return this.recentBoardList.slice(0, this.visiblerecentCount);
+    },
+    visiblelikeBoard() {
+      return this.likeBoardList.slice(0, this.visibleLikeCount);
+    },
+    visibleCommentList() {
+      return this.commentList.slice(0, this.visibleCommentCount);
     },
     // 생략
   },
@@ -248,6 +274,15 @@ export default {
     },
     showMoreContent() {
       this.visibleCount += 3; // 3개씩 추가적으로 보여주기
+    },
+    showMorerecentContent() {
+      this.visiblerecentCount += 3;
+    },
+    showMorelikeContent() {
+      this.visibleLikeCount += 3;
+    },
+    showMoreComment() {
+      this.visibleCommentCount += 3;
     },
     // 최근에 본 게시글 리스트 불러오기-------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------

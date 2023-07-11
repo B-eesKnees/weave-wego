@@ -19,42 +19,22 @@ export default {
         this.$emit("removelist", this.boardList.BRD_ID);
       }
     },
-    moveToDetail(brdId) {
-      console.log(brdId);
+    moveToDetail(brdid) {
+      //클릭시 최근본 게시글 테이블에 저장
       axios({
-        url: "/increase",
+        url: "http://localhost:3000/recentview",
         method: "POST",
         data: {
-          brd_id: brdId,
+          brdID: brdid,
+          email: this.email,
         },
       })
-        .then(async (res) => {
-          if (res.data.code == 200) {
-            console.log("조회수 증가");
-          }
-          console.log(this.email);
-          axios({
-            url: "/recentView",
-            method: "POST",
-            data: {
-              brdID: brdId,
-              email: this.email,
-            },
-          })
-            .then((res) => {
-              if (res.status == 200) {
-                console.log("최근본 게시글");
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+        .then((res) => {
+          console.log(res.data);
         })
         .catch((error) => {
-          console.error(error);
+          alert(error);
         });
-      // 페이지 이동 처리 (라우터를 사용하는 경우에 맞게 수정해야 함)
-      // window.location.href = `/detail/${brdId}`;
     },
   },
 };
@@ -62,10 +42,7 @@ export default {
 
 <template>
   <div>
-    <a
-      :href="`/detail/${boardList.BRD_ID}`"
-      @click="moveToDetail(boardList.BRD_ID)"
-    >
+    <a :href="`/detail/${boardList.BRD_ID}`">
       <input
         class="mycourse_checkbox"
         type="checkbox"
@@ -73,8 +50,8 @@ export default {
         :value="boardList.BRD_ID"
         v-model="isChecked"
         @change="sendSelectedItems"
+        @click="moveToDetail(boardList.BRD_ID)"
       />
-      <!-- @change="sendSelectedItems" 이벤트 추가 -->
 
       <div class="board-list">
         <div class="board_content">
