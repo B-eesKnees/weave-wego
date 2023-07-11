@@ -1,5 +1,5 @@
-<style src="../assets/css/mypage.css"></style>
 <style src="../assets/css/reset.css"></style>
+<style src="../assets/css/mypage.css"></style>
 <template>
   <gnbBar />
 
@@ -137,12 +137,16 @@
           >
             &nbsp;&nbsp;편집&nbsp;&nbsp;
           </button>
-          <button v-if="comment_editMode" class="delete" @click="deleteComment">
+          <button
+            v-if="comment_editMode"
+            class="comment_delete"
+            @click="deleteComment"
+          >
             &nbsp;&nbsp;삭제&nbsp;&nbsp;
           </button>
           <button
             v-if="comment_editMode"
-            class="cancel"
+            class="comment_cancel"
             @click="cancelCommentEdit"
           >
             &nbsp;&nbsp;취소&nbsp;&nbsp;
@@ -158,6 +162,8 @@
             :commentList="item"
             :key="item.COM_ID"
             :comment_editMode="comment_editMode"
+            @addcomlist="(id) => addToselectedComItems(id)"
+            @removecomlist="(id) => deleteToselectedComItems(id)"
           />
         </div>
         <div v-if="commentList.length > visibleCommentCount" class="more_btn">
@@ -171,18 +177,22 @@
 </template>
 
 <script>
+import axios from "axios";
 import { ref } from "vue";
+import { faL } from "@fortawesome/free-solid-svg-icons";
+
 import gnbBar from "../components/gnbBar.vue";
+import ToUp from "@/components/ToUp.vue";
+import footerContent from "@/components/footer.vue";
+
 import TabsWrapper from "../components/TabsWrapper.vue";
 import TabItem from "../components/TabItem.vue";
+
 import boardList from "../components/boardList.vue";
 import commentList from "../components/commentList.vue";
 import recentBoardList from "../components/recentBoardList.vue";
 import likeBoardList from "../components/likeBoardList.vue";
-import footerContent from "@/components/footer.vue";
-import ToUp from "@/components/ToUp.vue";
-import axios from "axios";
-import { faL } from "@fortawesome/free-solid-svg-icons";
+
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
@@ -216,11 +226,12 @@ export default {
       noLikeData: false,
       noCommentData: false,
       selectedItems: [],
+      selectedComItems: [],
 
       visibleCount: 3, // 초기에 보여줄 목록 개수\
       visiblerecentCount: 3,
       visibleLikeCount: 3,
-      visibleCommentCount: 3,
+      visibleCommentCount: 4,
     };
   },
   created() {
@@ -353,11 +364,22 @@ export default {
       this.selectedItems = this.selectedItems.filter((item) => item !== id);
       console.log(this.selectedItems);
     },
+    addToselectedComItems(comment) {
+      if (!this.selectedComItems) {
+        this.selectedComItems = []; // 배열 초기화
+      }
+      this.selectedComItems.push(comment);
+      console.log(this.selectedComItems);
+    },
+    deleteToselectedComItems(id) {
+      this.selectedComItems = this.selectedComItems.filter(
+        (item) => item !== id
+      );
+      console.log(this.selectedComItems);
+    },
+
     async deleteContent() {
-      //테스트하느라 콘솔이 많습니다..
-      // 삭제 버튼을 누른다면
       if (this.selectedItems.length === 0) {
-        //배열길이가 0이면 !this.selectedItems는 왜인지 작동이 안됌
         console.log(this.selectedItems);
         alert("삭제 할 게시글 없음");
         return; // 선택된 항목이 없으면 종료합니다.
@@ -386,14 +408,33 @@ export default {
     // 코멘트 글 편집 삭제 수정 버튼-------------------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------------------------------
     toggleCommentEditMode() {
-      console.log("toggleCommentEditMode 호출됨");
       this.comment_editMode = true;
     },
     deleteComment() {
-      // 코멘트 삭제 로직
+      if (this.selectedComItems.length === 0) {
+        console.log(this.selectedComItems);
+        alert("삭제 할 댓글 없음");
+        return; // 선택된 항목이 없으면 종료합니다.
+      } else {
+        // 선택된 항목을 서버에 삭제 요청합니다.
+        console.log(this.selectedComItems);
+        axios({
+          url: "/mypage/delMyCourse",
+          method: "POST",
+          data: this.selectedComItems,
+        })
+          .then(async (res) => {
+            alert(res.data.message);
+            this.selectedComItems = []; //삭제후 배열 비우기 안비우면 계속 남아있음
+            console.log(this.selectedComItems);
+            await this.boardListData(); //삭제후 새롭게 게시글 받아오기
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      }
     },
     cancelCommentEdit() {
-      console.log("cancelCommentEdit 호출됨");
       this.comment_editMode = false;
     },
   },

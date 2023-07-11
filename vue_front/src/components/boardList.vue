@@ -1,4 +1,5 @@
 <script>
+import axios from "axios";
 export default {
   props: {
     boardList: { type: Object, required: true },
@@ -42,17 +43,16 @@ export default {
 
 <template>
   <div>
+    <input
+      class="mycourse_checkbox"
+      type="checkbox"
+      v-if="editMode"
+      :value="boardList.BRD_ID"
+      v-model="isChecked"
+      @change="sendSelectedItems"
+      @click="moveToDetail(boardList.BRD_ID)"
+    />
     <a :href="`/detail/${boardList.BRD_ID}`">
-      <input
-        class="mycourse_checkbox"
-        type="checkbox"
-        v-if="editMode"
-        :value="boardList.BRD_ID"
-        v-model="isChecked"
-        @change="sendSelectedItems"
-        @click="moveToDetail(boardList.BRD_ID)"
-      />
-
       <div class="board-list">
         <div class="board_content">
           <div class="hashtag">{{ boardList.BRD_HASHTAG }}</div>
@@ -70,6 +70,7 @@ export default {
             {{ boardList.BRD_OPEN === 1 ? "공개" : "비공개" }}
           </div>
         </div>
+
         <div
           class="mypage_img"
           :style="`background-image: url(http://localhost:3000/downloadCourse/${boardList.BRD_ID}/${boardList.IMG_PATH})`"

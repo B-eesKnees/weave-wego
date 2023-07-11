@@ -1,11 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
 @media screen and (max-width: 1920px) {
   body {
     background-color: rgba(250, 250, 250, 1);
-  }
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.7;
+
 }
 a {
   text-decoration: none;
   color: inherit;
+  
+  }
+
 }
 
 .mypage_profile_set {
@@ -141,45 +148,7 @@ a {
   border-radius: 0 0 5px 5px;
   display: inline;
 }
-.edit {
-  position: absolute;
-  right: 0;
-  top: -50px;
-  width: 100px;
-  background: #fafafa;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-position: under;
 
-  /* padding: 5px 20px; */
-}
-.delete{
-  position: absolute;
-  right: 80px;
-  top: -35px;
-  width: 100px;
-  background: #fafafa;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-position: under;
-}
-
-.cancel{
-  position: absolute;
-  right: 0;
-  top: -35px;
-  width: 100px;
-  background: #fafafa;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-position: under;
-}
 
 .board-list {
   position: relative;
@@ -206,9 +175,9 @@ a {
   position: relative;
   display: inline-block;
   color: #bebebe;
-  font-size: 1.5em;
+  font-size: 1.2em;
   font-weight: 300;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .brd_created_at {
@@ -225,14 +194,14 @@ a {
   /* width: 70px; */
   /* border: solid 1px #000; */
   font-size: 1.8em;
-  font-weight: 350;
-  margin-bottom: 30px;
+  font-weight: 400;
+  margin-bottom: 15px;
   
 }
 
 .like > img,
 .viewer > img {
-  width: 20px;
+  width: 18px;
   margin-right: 5px;
 }
 
@@ -240,7 +209,7 @@ a {
   position: relative;
   display: inline-block;
   margin-right: 10px;
-  font-size: 1.3em;
+  font-size: 1.2em;
   font-weight: 300;
   color: #808080;
 }
@@ -270,31 +239,16 @@ a {
 
 .mycourse_checkbox{
   position: relative;
+  display: flex;
   top: 50px;
   left: 10px;
   width: 30px;
   height: 30px;
   z-index: 99;
+  margin-top: -30px;
 }
 
 /* tab comment css ------------------------------------------------------------- */
-
-
-.comment_edit {
-  position: absolute;
-  display: block;
-  right: 0;
-  top: 1.5vh;
-  width: 100px;
-  border: none;
-  background: #fafafa;
-  padding: 10px;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-position: under;
-
-  /* padding: 5px 20px; */
-}
 
 
 .commentlist {
@@ -313,7 +267,7 @@ a {
 .comment_content {
   width: 100%;
   position: absolute;
-  padding: 44px 45px;  
+  padding: 44px 0 0 46px;  
 }
 
 .com_brd_title{
@@ -328,6 +282,7 @@ a {
 .com_created_at{
   position: absolute;
   display: inline-block;
+  font-weight: 300;
   right: 5%;
 }
 
@@ -341,9 +296,21 @@ a {
 .com_comment{
   position: relative;
   display: inline-block;
-  left: 3%;
-  top: -20px;
+  left: 35px;
+  top: -25px;
   font-size: 1.6em;
+  font-weight: 400;
+}
+
+.comment_checkbox{
+  position: relative;
+  display: flex;
+  top: 50px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  z-index: 99;
+  margin-top: -30px;
 }
 
 .nodata{
@@ -374,3 +341,95 @@ a {
 }
 
 
+
+
+
+
+/* edit css ------------------------------------------------------------- */
+
+
+.edit {
+  position: absolute;
+  display: block;
+  right: 0;
+  top: -50px;
+  width: 100px;
+  background: #fafafa;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+
+  /* padding: 5px 20px; */
+}
+
+.delete{
+  position: absolute;
+  right: 80px;
+  top: -20px;
+  width: 100px;
+  background: #fafafa;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+}
+
+.cancel{
+  position: absolute;
+  right: 0;
+  top: -20px;
+  width: 100px;
+  background: #fafafa;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+}
+
+.comment_edit {
+  position: absolute;
+  display: block;
+  right: 0;
+  top: 1.5vh;
+  width: 100px;
+  border: none;
+  background: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+  z-index: 1;
+  /* padding: 5px 20px; */
+}
+
+.comment_delete{
+  position: absolute;
+  right: 80px;
+  top: 1.5vh;
+  width: 100px;
+  background: #fafafa;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+  z-index: 1;
+}
+
+.comment_cancel{
+  position: absolute;
+  right: 0;
+  top: 1.5vh;
+  width: 100px;
+  background: #fafafa;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-position: under;
+  z-index: 1;
+}

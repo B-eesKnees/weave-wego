@@ -45,7 +45,7 @@ const queries = {
   order by ll.LL_TIME desc;`,
 
   myCommentQuery:
-    `select b.BRD_TITLE, com.COM_COMMENT, date_format(com.COM_CREATED_AT, '%Y-%m-%d') as COM_CREATED_AT
+    `select b.BRD_ID, b.BRD_TITLE, com.COM_COMMENT, date_format(com.COM_CREATED_AT, '%Y-%m-%d') as COM_CREATED_AT
     from comment com
     left join board b on com.COM_NUM = b.BRD_ID
     where com.COM_WRITER = ?
@@ -100,40 +100,29 @@ router.post('/myCourse', async (request, res) => {
 
 
 // 내 코스 선택 삭제
-// router.post('/delMyCourse', async (request, res) => {
+
+
+// const deleteUsers = async (req, res) => {
+//   const { values } = req.body;
+
 //   try {
-//     const delBoard = request.body.data;  // 게시판 아이디 어떻게 받아아ㅏㅏ와아아악
-//     console.log(delBoard.aaa);
+//     // 회원 삭제
+//     await Member.destroy({ where: { member_id: values } });
 
-//     res.send(await req(queries.delMyCourseQuery, delBoard));
-//   } catch (err) {
-//     res.status(500).send({
-//       error: err
-//     });
+//     console.log("회원 삭제 성공");
+//     return res.status(200).json({ message: "회원 삭제 성공" });
+//   } catch (error) {
+//     console.error("회원 삭제 실패:", error);
+//     return res.status(500).json({ message: "회원 삭제 실패" });
 //   }
-// });
-
-const deleteUsers = async (req, res) => {
-  const { values } = req.body;
-
-  try {
-    // 회원 삭제
-    await Member.destroy({ where: { member_id: values } });
-
-    console.log("회원 삭제 성공");
-    return res.status(200).json({ message: "회원 삭제 성공" });
-  } catch (error) {
-    console.error("회원 삭제 실패:", error);
-    return res.status(500).json({ message: "회원 삭제 실패" });
-  }
-};
+// };
 
 router.post('/delMyCourse', async (req, res) => { //07.07 성공..
-  const deleteComments = req.body; //ex) [1,2,3] 형식으로 날라오면
+  const deleteContents = req.body; //ex) [1,2,3] 형식으로 날라오면
   // console.log(req.body);
-  console.log(deleteComments);
+  console.log(deleteContents);
 
-  db.query(`delete from weavewego.board where BRD_ID in (?)`, [deleteComments], (err) => { //반복문 안쓰고 가능
+  db.query(`delete from weavewego.board where BRD_ID in (?)`, [deleteContents], (err) => { //반복문 안쓰고 가능
     if (err) {
       res.send({ // 에러 발생 시
         'code': 400,
@@ -143,7 +132,7 @@ router.post('/delMyCourse', async (req, res) => { //07.07 성공..
     } else {
       res.status(200).json({
         "code": 200,
-        "message": "삭제 성공"
+        "message": "삭제 완료"
       });
     }
   })
@@ -195,18 +184,38 @@ router.post('/myComment', async (request, res) => {
 
 
 // 내 댓글 삭제
-router.get('/delmyComment', async (request, res) => {
-  try {
-    const delCom = [15, 16];
+// router.get('/delmyComment', async (request, res) => {
+//   try {
+//     const delCom = [15, 16];
 
-    res.send(await req(queries.delmyCommentQuery, [delCom]));
-  } catch (err) {
-    res.status(500).send({
-      error: err
-    });
-  }
-});
+//     res.send(await req(queries.delmyCommentQuery, [delCom]));
+//   } catch (err) {
+//     res.status(500).send({
+//       error: err
+//     });
+//   }
+// });
 
+router.post('/delmyComment', async (req, res) => { //07.07 성공..
+  const deleteComments = req.body; //ex) [1,2,3] 형식으로 날라오면
+  // console.log(req.body);
+  console.log(deleteComments);
+
+  db.query(`delete from weavewego.comment where BRD_ID in (?)`, [deleteComments], (err) => { //반복문 안쓰고 가능
+    if (err) {
+      res.send({ // 에러 발생 시
+        'code': 400,
+        'failed': 'error occurred',
+        'error': err
+      })
+    } else {
+      res.status(200).json({
+        "code": 200,
+        "message": "댓글 삭제 완료"
+      });
+    }
+  })
+})
 
 
 
