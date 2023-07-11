@@ -1,13 +1,16 @@
 <template>
     <gnbBar />
+    <SideBar />
     <h2 class="admin_h2">관리자 페이지</h2>
     <div class="admin">
         <div class="reportCourse">
             <div class="reportCourse_titles">
                 <h5 class="reportCourse_title">신고 글</h5>
                 <div>
-                    <span class="reportCourse_titles_number">{{ reportCourse.length }}</span>
-                    <a class="reportCourse_titles_link" href="#">></a>
+                    <a class="reportCourse_titles_link" href="#">
+                        <span class="reportCourse_titles_number">{{ reportCourse.length }}</span>
+                        <span>></span>
+                    </a>
                 </div>
             </div>
             <div class="reportCourse_info">
@@ -28,8 +31,10 @@
             <div class="reportCourse_titles">
                 <h5 class="reportCourse_title">전체 게시글</h5>
                 <div>
-                    <span class="reportCourse_titles_number">{{ totalCourse.length }}</span>
-                    <a class="reportCourse_titles_link" href="/admin/boardlist">></a>
+                    <a class="reportCourse_titles_link" href="/admin/boardlist">
+                        <span class="reportCourse_titles_number">{{ totalCourse.length }}</span>
+                        <span>></span>
+                    </a>
                 </div>
             </div>
             <div class="reportCourse_info">
@@ -50,8 +55,10 @@
             <div class="reportCourse_titles">
                 <h5 class="reportCourse_title">신고 댓글</h5>
                 <div>
-                    <span class="reportCourse_titles_number">{{ reportComment.length }}</span>
-                    <a class="reportCourse_titles_link" href="#">></a>
+                    <a class="reportCourse_titles_link" href="#">
+                        <span class="reportCourse_titles_number">{{ reportComment.length }}</span>
+                        <span>></span>
+                    </a>
                 </div>
             </div>
             <div class="reportComment_info">
@@ -59,7 +66,7 @@
                 <p>댓글제목</p>
                 <p>유저닉네임</p>
             </div>
-            <div  class="reportCourse_contents">
+            <div class="reportCourse_contents">
                 <div v-for="com in reportComment" :key="com.id" class="reportCourse_content">
                     <p class="reportComment_content_num">{{ com.COM_ID }}</p>
                     <p class="reportComment_content_title">{{ com.COM_NICK }}</p>
@@ -72,8 +79,10 @@
             <div class="reportCourse_titles">
                 <h5 class="reportCourse_title">유저목록</h5>
                 <div>
-                    <span class="reportCourse_titles_number">{{ userData.length }}</span>
-                    <a class="reportCourse_titles_link" href="#">></a>
+                    <a class="reportCourse_titles_link" href="#">
+                        <span class="reportCourse_titles_number">{{ userData.length }}</span>
+                        <span>></span>
+                    </a>
                 </div>
             </div>
             <div class="user_info">
@@ -94,6 +103,7 @@
 
 <script>
 import gnbBar from "../components/gnbBar.vue";
+import SideBar from "../components/adminSidebar.vue"
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
@@ -101,7 +111,8 @@ axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 export default {
     components: {
-        gnbBar
+        gnbBar,
+        SideBar,
     },
     data() {
         return {
@@ -152,18 +163,6 @@ export default {
             }).then(async (res) => {
                 this.userData = res.data;
             })
-        },
-        reset2() {
-            this.reportComment = [];
-        },
-        reset1() {
-            this.reportCourse = [];
-        },
-        reset3() {
-            this.totalCourse = [];
-        },
-        reset4() {
-            this.userData = [];
         }
     }
 }
@@ -171,7 +170,8 @@ export default {
 
 <style scoped>
 .admin_h2 {
-    margin: 10% 65% 0 17%;
+    margin: 5% auto 0 auto;
+    text-align: center;
 }
 
 .admin {
@@ -208,6 +208,7 @@ export default {
 
 .reportCourse_titles_number {
     color: #388265;
+    font-weight: bold;
     margin-left: -15%;
     margin-right: 5%;
 }
@@ -215,7 +216,7 @@ export default {
 .reportCourse_titles_link {
     font-size: large;
     text-decoration: none;
-    padding: 2% 4%;
+    padding: 2% 6%;
 }
 
 .reportCourse_info {
@@ -269,9 +270,11 @@ export default {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .reportComment_info p:nth-child(2) {
     margin-left: -35%;
 }
+
 .reportComment_content {
     width: 100%;
     display: flex;
@@ -308,9 +311,11 @@ export default {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .user_info p:nth-child(2) {
     margin-left: -15%;
 }
+
 .user_content {
     width: 100%;
     display: flex;
