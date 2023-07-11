@@ -27,7 +27,11 @@
         </div>
         <div class="admin_boardlist_page">
             <button @click="pagingDown">이전</button>
-            <span>현재페이지 : {{ pageCount }}</span>
+            <div v-for="(page,i) in result" :key="i" class="paging">
+                <button @click="paging($event)">{{ i+1 }}</button>
+
+            </div>
+            <!-- <span>현재페이지 : {{ pageCount }}</span> -->
             <button @click="pagingUp">다음</button>
         </div>
 
@@ -56,6 +60,7 @@ export default {
             result: [],
             showBoard: [],
             pageCount: 0,
+            currentPage: 1,
         };
     },
 
@@ -95,13 +100,32 @@ export default {
             for (var i in this.result[this.pageCount - 1]) {
                 this.showBoard.push(this.result[this.pageCount - 1][i]);
             }
+        },
+        paging(event) {
+            this.showBoard = [];
+            console.log(event.target.innerText);
+            var page = event.target.innerText;
+
+            for (var j = 1; j <= this.result.length; j++) {
+                if (page == j) {
+                    console.log(j);
+                    for (var i in this.result[j - 1]) {
+                        this.showBoard.push(this.result[j - 1][i]);
+                    }
+                    this.currentPage = j;
+                    this.pageCount = j;
+                }
+            }
+
+
+
         }
     }
 }
 </script>
 
 <style scoped>
-input{
+input {
     width: 20px;
     height: 20px;
 }
@@ -167,6 +191,7 @@ input{
     align-items: center;
     padding: 0 1%;
 }
+
 .admin_board:nth-child(2n-1) {
     background-color: #f2f0f9;
 }
@@ -200,9 +225,19 @@ input{
     text-align: center;
     margin-top: 2%;
     margin-bottom: 10%;
+    width: 100%;
+    
 }
 
 .admin_boardlist_page button {
     padding: 0 1%;
+}
+
+.paging {
+    display: inline-block;
+}
+.paging button {
+    width: 200%;
+    background-color: antiquewhite;
 }
 </style>
