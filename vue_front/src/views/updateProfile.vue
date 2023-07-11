@@ -6,11 +6,11 @@
       <form @submit.prevent="updateForm">
         <label class="title-bar-label" for="file">
           <div v-if="provider === 'local'" class="title-bar-btn">+</div>
-          <div v-else-if="provider === 'naver' ||provider === 'kakao'"></div>
+          <div v-else-if="provider === 'naver' || provider === 'kakao'"></div>
           <img v-if="type" class="img_style" :src="imageUploaded" alt="올린 이미지" />
-          <img v-else-if="provider === 'local' && image !== null" class="img_style" :src="`http://localhost:3000/downloadProfile/${email}/${image}`" alt="올린 이미지" />
-          <img v-else-if="provider === 'kakao' ||provider === 'naver'" class="img_style" :src="image">
-          <img v-else id="img_style" src="../assets/img/profileExample.png" alt="올린 이미지" />
+          <img v-else-if="provider === 'local' && image !== 'default'" class="img_style" :src="`http://localhost:3000/downloadProfile/${email}/${image}`" alt="올린 이미지" />
+          <img v-else-if="provider === 'kakao' || provider === 'naver'" class="img_style" :src="image">
+          <img v-else-if="image === 'default'" id="img_style" src="../assets/img/profileExample.png" alt="올린 이미지" />
           <br />
         </label>
 

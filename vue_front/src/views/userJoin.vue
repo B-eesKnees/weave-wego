@@ -320,20 +320,39 @@ export default {
                 alert(res.data.message);
                 if (this.image) {
                     await this.uploadFile(this.image);
-                } else {
-                    this.defaultImage(this.email);
-                    window.location.href = '/';
                 }
-                // await this.uploadFile(this.image);
             }).catch(error => {
                 alert(error);
+            }).then(async ()=>{
+                console.log(this.email);
+                console.log(this.password);
+
+                await axios({
+                        url: "http://localhost:3000/auth/login",
+                        method: "POST",
+                        data: {
+                        email: this.email,
+                        password: this.password,
+                        },
+                }).then((res) => {
+                    if (res.data.code == 200) {
+                        
+                        localStorage.setItem("userID", res.data.email);
+                        localStorage.setItem("userNick", res.data.nick);
+                        localStorage.setItem("userImage", res.data.image);
+                        localStorage.setItem("userProvider", res.data.provider);
+
+                        window.location.href = "/";
+                    }
+                }).catch((error) => {
+                    alert(error);
+                });
             })
         },
         async uploadFile(files) {
             if (!files) {
                 return; // 파일이 없으면 함수 종료
             }
-            window.location.href = '/';
             let name = files.name;
             let data = await this.$base64(files);
 
@@ -344,7 +363,7 @@ export default {
                     "data": data
                 }
             }).then(res => {
-                window.location.href = '/';
+                console.log('흠');
             }).catch(error => {
                 alert(error);
             })
@@ -361,15 +380,6 @@ export default {
 
 
             }
-        },
-        defaultImage(email) {
-            axios({
-                url: 'auth/defaultImage',
-                method: 'POST',
-                data: {
-                    email
-                }
-            })
         }
     }
 }
