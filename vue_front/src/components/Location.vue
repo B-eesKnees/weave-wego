@@ -3,7 +3,7 @@ const props = defineProps({
   location: Object,
   number: Number,
   rev: String,
-  poptime: String,
+  poptime: Object,
 });
 </script>
 
@@ -62,7 +62,7 @@ const props = defineProps({
         <div class="canvas-detail">
           <div>연락처 : 02) 123 - 1234</div>
           <div>홈페이지 : https://www.ezen.co.kr</div>
-          <div>영업시간 :</div>
+          <div>영업시간 : {{ poptime.LOC_POP_TIME }}</div>
         </div>
       </div>
     </div>

@@ -82,7 +82,38 @@ const getPopTimes = () => {
       console.log("locationpoptimeerror", error);
     });
 };
-
+const deletePost = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/deleteboard/", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      router.push({
+        path: "/",
+      });
+      console.log("삭제 성공");
+    })
+    .catch((error) => {
+      console.log("삭제 에러", error);
+    });
+};
+const deleteComment = (id) => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/deletecomments/", {
+      params: {
+        commentId: id,
+      },
+    })
+    .then((result) => {
+      getComments();
+      console.log("삭제 성공");
+    })
+    .catch((error) => {
+      console.log("삭제 에러", error);
+    });
+};
 const getComments = () => {
   axios
     .get("http://127.0.0.1:3000/postdata/comments", {
@@ -172,7 +203,7 @@ getPopTimes();
       <div class="title">
         <div>{{ boardData.BRD_TITLE }}</div>
         <div class="time">
-          {{ boardData.BRD_CREATED_AT }}
+          {{ boardData.BRD_CREATED_AT.slice(0, 16).replace("T", " ") }}
         </div>
       </div>
       <div class="name-info">
@@ -200,7 +231,9 @@ getPopTimes();
                 </a>
               </li>
               <li>
-                <button class="dropdown-item" type="button">삭제</button>
+                <button class="dropdown-item" type="button" @click="deletePost">
+                  삭제
+                </button>
               </li>
               <li>
                 <button class="dropdown-item" type="button">신고</button>
@@ -224,6 +257,7 @@ getPopTimes();
           :location="item"
           :number="index + 1"
           :rev="locationRevData[index]"
+          :poptime="popTimeData"
         />
         <!-- 이미지 슬라이드 -->
         <div class="imageslider">
@@ -273,6 +307,7 @@ getPopTimes();
               v-for="comment in commentData"
               :key="comment.COM_ID"
               :comment="comment"
+              @delete="deleteComment"
             />
           </div>
         </div>

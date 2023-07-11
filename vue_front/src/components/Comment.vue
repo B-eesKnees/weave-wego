@@ -3,6 +3,7 @@ const props = defineProps({
   comment: Object,
   comment_editMode: Boolean,
 });
+const emit = defineEmits(["delete"]);
 </script>
 
 <template>
@@ -15,7 +16,13 @@ const props = defineProps({
         <div class="comment-nickname">
           <div>{{ comment.COM_NICK }}</div>
           <div class="comment-date">
-            <div>{{ comment.COM_UPDATED_AT }}</div>
+            <div>
+              {{
+                comment.COM_UPDATED_AT
+                  ? comment.COM_UPDATED_AT.slice(0, 16).replace("T", " ")
+                  : comment.COM_CREATED_AT.slice(0, 16).replace("T", " ")
+              }}
+            </div>
             <div>
               <button
                 type="button"
@@ -30,7 +37,12 @@ const props = defineProps({
                   <button class="dropdown-item" type="button">수정</button>
                 </li>
                 <li>
-                  <button class="dropdown-item" type="button">삭제</button>
+                  <a
+                    class="dropdown-item"
+                    type="button"
+                    @click="() => emit('delete', comment.COM_ID)"
+                    >삭제</a
+                  >
                 </li>
                 <li>
                   <button class="dropdown-item" type="button">신고</button>
