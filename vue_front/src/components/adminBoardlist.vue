@@ -3,7 +3,10 @@
     <SideBar />
     <div class="admin_boardlist">
         <h2>전체 게시글</h2>
-        <h5>전체 <span>{{ totalCourse.length }}</span>개</h5>
+        <div class="admin_boardlist_top">
+            <h5>전체 <span>{{ totalCourse.length }}</span>개</h5>
+            <button @click="selectbox">삭제</button>
+        </div>
         <div class="admin_boards">
             <div class="admin_boards_info">
                 <p>제목</p>
@@ -15,24 +18,22 @@
                 <input type="checkbox">
             </div>
             <div v-for="(item, i) in showBoard" :key="i" class="admin_board">
-                <p>{{ item.BRD_TITLE }}</p>
-                <p>{{ item.BRD_NICK }}<br />({{ item.BRD_WRITER }})</p>
-                <p>{{ item.BRD_CREATED_AT }}</p>
-                <p>{{ item.BRD_VIEWCOUNT }}</p>
-                <p>좋아요데이터 없음</p>
-                <p v-if="item.BRD_OPEN == 'Y'">공개</p>
-                <p v-else>비공개</p>
-                <input type="checkbox">
+                <p :ref="`boardData0`">{{ item.BRD_TITLE }}</p>
+                <p ref="boardData">{{ item.BRD_NICK }}<br />({{ item.BRD_WRITER }})</p>
+                <p ref="boardData">{{ item.BRD_CREATED }}</p>
+                <p ref="boardData">{{ item.BRD_VIEWCOUNT }}</p>
+                <p ref="boardData">{{ item.likecount }}</p>
+                <p ref="boardData" v-if="item.BRD_OPEN == 'Y'">공개</p>
+                <p ref="boardData" v-else>비공개</p>
+                <input type="checkbox" v-model="selectlist" :value="`${i}`">
             </div>
         </div>
         <div class="admin_boardlist_page">
-            <button @click="pagingDown">이전</button>
-            <div v-for="(page,i) in result" :key="i" class="paging">
-                <button @click="paging($event)">{{ i+1 }}</button>
-
+            <button class="prevBtn" @click="pagingDown">이전</button>
+            <div v-for="(page, i) in result" :key="i" class="paging">
+                <button ref="currentpages" @click="paging($event)">{{ i + 1 }}</button>
             </div>
-            <!-- <span>현재페이지 : {{ pageCount }}</span> -->
-            <button @click="pagingUp">다음</button>
+            <button class="nextBtn" @click="pagingUp">다음</button>
         </div>
 
     </div>
@@ -55,6 +56,8 @@ export default {
     },
     data() {
         return {
+            selectlist: [],
+
             totalCourse: [],
 
             result: [],
@@ -66,9 +69,11 @@ export default {
 
     setup() { },
     created() {
+
+    },
+    mounted() {
         this.viewCourse()
     },
-    mounted() { },
     unmounted() { },
     methods: {
         viewCourse() { //전체 게시글 요청
@@ -103,22 +108,32 @@ export default {
         },
         paging(event) {
             this.showBoard = [];
-            console.log(event.target.innerText);
+
             var page = event.target.innerText;
 
-            for (var j = 1; j <= this.result.length; j++) {
-                if (page == j) {
-                    console.log(j);
-                    for (var i in this.result[j - 1]) {
+            for (var j = 1; j <= this.result.length; j++) {//게시글묶음(데이터를10개씩 묶은 수)만큼 반복
+                if (page == j) { // 클릭한 버튼의 숫자와 j가 같으면
+                    for (var i in this.result[j - 1]) { // j-1만큼 반복
                         this.showBoard.push(this.result[j - 1][i]);
                     }
-                    this.currentPage = j;
-                    this.pageCount = j;
+                    this.currentPage = j; // 현재페이지
+                    this.pageCount = j; // 다음,이전버튼과 연동을 위한 페이지 카운트
                 }
             }
-
-
-
+            //스타일(배경색) 초기화
+            for (i in this.$refs.currentpages) {
+                this.$refs.currentpages[i].classList.remove('currentPage');
+            }
+            //클릭한 버튼이 현재페이지와 같으면 스타일(배경색) 추가
+            for (i in this.$refs.currentpages) {
+                if (this.currentPage == page && !this.$refs.currentpages[i].classList.contains('currentPage')) {
+                    event.target.classList.add('currentPage');
+                }
+            }
+        },
+        selectbox() {
+            console.log(this.selectlist);
+            console.log(this.$refs.boardData0[i].innerText);
         }
     }
 }
@@ -143,6 +158,19 @@ input {
 
 .admin_boardlist span {
     font-weight: bold;
+}
+.admin_boardlist_top {
+    display: flex;
+    justify-content: space-between;
+}
+.admin_boardlist_top button {
+    background-color: #388265;
+    color: whitesmoke;
+    padding: 1%;
+    margin-bottom: 1%;
+    font-size: small;
+    font-weight: bold;
+    border-radius: 10%;
 }
 
 .admin_boards {
@@ -225,19 +253,39 @@ input {
     text-align: center;
     margin-top: 2%;
     margin-bottom: 10%;
-    width: 100%;
-    
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .admin_boardlist_page button {
+    border: 1px solid #ccc;
     padding: 0 1%;
 }
 
-.paging {
-    display: inline-block;
+.prevBtn {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
+
+.nextBtn {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.paging {
+    display: flex;
+}
+
 .paging button {
-    width: 200%;
-    background-color: antiquewhite;
+    width: 100%;
+    display: flex;
+    padding: 0.5rem 1rem;
+    justify-content: center;
+}
+
+.currentPage {
+    background-color: #818386;
+    color: whitesmoke;
 }
 </style>
