@@ -89,7 +89,10 @@ router.post("/deleteComment", async (req, res) => {
   });
 //-----------글 목록 보기
 router.post(`/viewBoardlist`, async (req, res) => {
-  db.query(`select * from weavewego.board`, (err, results) => {
+  db.query(`SELECT b.BRD_TITLE, b.BRD_NICK, b.BRD_WRITER, date_format(BRD_CREATED_AT, '%Y-%m-%d %H:%i') as BRD_CREATED, b.BRD_VIEWCOUNT, count(ll.LL_ID) as likecount, b.BRD_OPEN 
+            FROM board b 
+            left join likelist ll on b.BRD_ID = ll.LL_NUM 
+            group by b.BRD_ID;`, (err, results) => {
     if (err) {
       res.send({
         // 에러 발생 시

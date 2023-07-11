@@ -34,9 +34,6 @@ module.exports = {
         query: `UPDATE weavewego.board
                 SET BRD_VIEWCOUNT = BRD_VIEWCOUNT + 1
                 WHERE BRD_ID = ?;`
-    },
-    recentView: {
-        query: `insert into weavewego.recentview set ?`
     }
     //----------------------------------------------------------
 }
