@@ -5,7 +5,11 @@ const router = express.Router();
 //-----------------------------------신고된 게시글 보기
 router.post("/reportCourse", async (req, res) => {
   db.query(
-    `select * from weavewego.board where BRD_REPORT = 1`,
+    `SELECT b.BRD_TITLE, b.BRD_NICK, b.BRD_WRITER, date_format(BRD_CREATED_AT, '%Y-%m-%d %H:%i') as BRD_CREATED, b.BRD_VIEWCOUNT, count(ll.LL_ID) as likecount, b.BRD_OPEN,b.BRD_ID,BRD_REPORT
+    FROM board b 
+    left join likelist ll on b.BRD_ID = ll.LL_NUM 
+    where BRD_REPORT = 1
+    group by b.BRD_ID`,
     (err, results) => {
       //report가 1이면 출력시키는 쿼리
       if (err) {
@@ -89,7 +93,7 @@ router.post("/deleteComment", async (req, res) => {
   });
 //-----------글 목록 보기
 router.post(`/viewBoardlist`, async (req, res) => {
-  db.query(`SELECT b.BRD_TITLE, b.BRD_NICK, b.BRD_WRITER, date_format(BRD_CREATED_AT, '%Y-%m-%d %H:%i') as BRD_CREATED, b.BRD_VIEWCOUNT, count(ll.LL_ID) as likecount, b.BRD_OPEN 
+  db.query(`SELECT b.BRD_TITLE, b.BRD_NICK, b.BRD_WRITER, date_format(BRD_CREATED_AT, '%Y-%m-%d %H:%i') as BRD_CREATED, b.BRD_VIEWCOUNT, count(ll.LL_ID) as likecount, b.BRD_OPEN,b.BRD_ID 
             FROM board b 
             left join likelist ll on b.BRD_ID = ll.LL_NUM 
             group by b.BRD_ID;`, (err, results) => {

@@ -2,27 +2,33 @@
     <gnbBar />
     <SideBar />
     <div class="admin_boardlist">
-        <h2>전체 게시글</h2>
+        <h2>신고 게시글</h2>
         <div class="admin_boardlist_top">
             <h5>전체 <span>{{ totalCourse.length }}</span>개</h5>
+            <button @click="sendSelectedItems">삭제</button>
         </div>
         <div class="admin_boards">
             <div class="admin_boards_info">
                 <p>제목</p>
-                <p>글쓴이(이메일)</p>
-                <p>작성일</p>
+                <p>글쓴이</p>
+                <p>날짜</p>
+                <p>신고여부</p>
                 <p>조회수</p>
-                <p>좋아요수</p>
+                <p>좋아요</p>
                 <p>상태</p>
+                <input type="checkbox">
             </div>
             <div v-for="(item, i) in showBoard" :key="i" class="admin_board">
-                <p :ref="`boardData0`">{{ item.BRD_TITLE }}</p>
-                <p ref="boardData">{{ item.BRD_NICK }}<br />({{ item.BRD_WRITER }})</p>
-                <p ref="boardData">{{ item.BRD_CREATED }}</p>
-                <p ref="boardData">{{ item.BRD_VIEWCOUNT }}</p>
-                <p ref="boardData">{{ item.likecount }}</p>
-                <p ref="boardData" v-if="item.BRD_OPEN == '1'">공개</p>
-                <p ref="boardData" v-else>비공개</p>
+                <p>{{ item.BRD_TITLE }}</p>
+                <p>{{ item.BRD_NICK }}<br />({{ item.BRD_WRITER }})</p>
+                <p>{{ item.BRD_CREATED }}</p>
+                <p v-if="item.BRD_REPORT == '1'">신고</p>
+                <p v-else>미신고</p>
+                <p>{{ item.BRD_VIEWCOUNT }}</p>
+                <p>{{ item.likecount }}</p>
+                <p v-if="item.BRD_OPEN == '1'">공개</p>
+                <p v-else>비공개</p>
+                <input type="checkbox" v-model="selected" :value="`${item.BRD_ID}`">
             </div>
         </div>
         <div class="admin_boardlist_page">
@@ -53,6 +59,9 @@ export default {
     },
     data() {
         return {
+            isChecked: false,
+            selected: [],
+
             totalCourse: [],
 
             result: [],
@@ -73,7 +82,7 @@ export default {
     methods: {
         viewCourse() { //전체 게시글 요청
             axios({
-                url: '/admin/viewBoardlist',
+                url: '/admin/reportCourse',
                 method: 'POST'
             }).then(async (res) => {
                 this.totalCourse = res.data;
@@ -126,6 +135,23 @@ export default {
                 }
             }
         },
+        async sendSelectedItems() {
+            var CourseID = this.selected;
+
+
+            if (confirm("회원 게시글을 정말 삭제하시겠습니까?")) {
+                //삭제 요청
+                await axios({
+                    url: "http://localhost:3000/deleteCourse",
+                    method: "POST",
+                    data: {
+                        CourseID: CourseID
+                    },
+                }).then(async (res) => {
+                    alert(res.data.message);
+                });
+            }
+        }
     }
 }
 </script>
@@ -155,6 +181,16 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.admin_boardlist_top button {
+    background-color: #388265;
+    color: whitesmoke;
+    padding: 1%;
+    margin-bottom: 1%;
+    font-size: small;
+    font-weight: bold;
+    border-radius: 10%;
 }
 
 .admin_boards {
@@ -213,6 +249,7 @@ input {
 .admin_board:nth-child(2n-1) {
     background-color: #f2f0f9;
 }
+
 
 
 .admin_boardlist_page {

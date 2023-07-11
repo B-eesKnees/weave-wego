@@ -18,11 +18,11 @@
 <style scoped>
 footer {
   background-color: #d9d9d9;
-  padding: 3% 0;
+  padding: 4% 0;
   position: static;
   bottom: 0;
   width: 100%;
-  height: 20%;
+  height: 20vh;
   margin-top: auto;
 }
 

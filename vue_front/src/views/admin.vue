@@ -5,9 +5,9 @@
     <div class="admin">
         <div class="reportCourse">
             <div class="reportCourse_titles">
-                <h5 class="reportCourse_title">신고 글</h5>
+                <h5 class="reportCourse_title">신고 게시글</h5>
                 <div>
-                    <a class="reportCourse_titles_link" href="#">
+                    <a class="reportCourse_titles_link" href="/admin/reportboard">
                         <span class="reportCourse_titles_number">{{ reportCourse.length }}</span>
                         <span>></span>
                     </a>
