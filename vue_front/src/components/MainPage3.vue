@@ -204,11 +204,12 @@
                         <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
                         <div id="opacity_glass"></div>
                         <div class="mainpage3_third_content_like">
-                            <button type="button" @click="[handleClick($event), likeToggle(item.BRD_ID)]">
+                            <button type="button" @click="[handleClick($event), likeToggle(item.BRD_ID)]"  class="like-button" :class="{ clicked: this.likelist.includes(item.BRD_ID) }">
                                 <!--버튼 추가/ 이벤트 2개 실행 handleClick에는 이벤트자체 likeToggle에는 BRD_ID -->
                                 <img :id="`content${i}`" v-if="this.likelist.includes(item.BRD_ID)" :src="imgsrc[0]"
                                     alt="" />
                                 <img v-if="!this.likelist.includes(item.BRD_ID)" :src="imgsrc[1]" alt="" />
+                                <div class="heart"><img :id="`content${i}`" :src="imgsrc[0]" alt="" /></div>
                             </button>
                         </div>
                     </div>
@@ -1004,4 +1005,38 @@ svg {
     alignment-baseline: middle;
     user-select: none;
     pointer-events: none;
-}</style>
+}
+    /* 애니메이션 스타일 설정 */
+.like-button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+    
+.like-button img {
+    width: 28px;
+    height: 28px;
+}
+    
+.like-button.clicked {
+    transform: scale(1.1);
+}
+.like-button.clicked .heart {
+        animation: fireworks 1s ease-in-out;
+    }
+    
+    @keyframes fireworks {
+        0% {
+            opacity: 0;
+            transform: translateY(0) rotate(0deg);
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-50px) rotate(360deg);
+        }
+    }
+</style>
