@@ -321,28 +321,45 @@ router.post("/increase", async (req, res) => {
 });
 //---최근 본 게시글 
 router.post('/recentView', async (req, res)=>{
-  const RC_NUM = req.body.brdID;
-  const RC_VIEWER = req.body.email;
+  const RC_NUM = req.body.brdID; //게시글번호와
+  const RC_VIEWER = req.body.email; //유저 이메일 받아와서
 
-  const view = {
+  const view = { //이건 안쓰네
     RC_NUM,
     RC_VIEWER
   }
-  console.log(view);
+  // console.log(view);
 
-  db.query(sql.recentView.query, view, (err)=>{
+  db.query(`select * from recentview where RC_NUM = ? and RC_VIEWER = ?`, [RC_NUM, RC_VIEWER], (err, results)=>{ //최근 본 기록이 있는지 확인
     if(err) {
-      console.log('실패!!!!!!!');
-      res.send({
-        code: 400,
+      res.status(401).send({ //에러처리
         failed: "error occurred",
         error: err,
       });
-    } else {
-      res.status(200).send({"message": "성공"})
-      console.log('성공!!!!!!!');
+    } else if(results.length> 0) { //최근본 기록이 있으면
+      db.query(`update recentview set RC_TIME = NOW() where RC_NUM = ? and RC_VIEWER = ?`, [RC_NUM, RC_VIEWER], (err)=>{ //최근본 시간만 변경
+        if(err) {
+          res.status(401).send({ //에러처리
+            failed: "error occurred",
+            error: err,
+          });
+        } else {
+          res.status(200).send("성공!"); //성공시 200 전송
+        }
+      });
+    } else if(results.length == 0) { //최근본 기록이 없으면
+      db.query(`insert into recentview set ?`, view, (err)=>{ //insert로 데이터 삽입
+        if(err) {
+          res.status(401).send({ //에러처리
+            failed: "error occurred", 
+            error: err,
+          });
+        } else {
+          res.status(200).send("성공!"); //성공시 200 전송
+        }
+      });
     }
-  })
-})
+  });
+});
 
 module.exports = router;
