@@ -13,7 +13,7 @@ const newComment = ref("");
 
 const boardData = ref({
   BRD_CREATED_AT: "",
-  BRD_HASHTAG: "",
+  BRD_HASHTAG: [],
   BRD_ID: 0,
   BRD_LOC_REV1: "",
   BRD_LOC_REV2: "",
@@ -32,11 +32,10 @@ const boardData = ref({
 
 const commentData = ref([]);
 
-const popTimeData = ref([]);
-
 const locationData = ref([]);
 
 const locationRevData = ref([""]);
+const popTimeData = ref();
 
 const images = ref([]);
 
@@ -52,6 +51,11 @@ const getBoard = () => {
     })
     .then((result) => {
       boardData.value = result.data.board;
+      try {
+        boardData.value.BRD_HASHTAG = JSON.parse(boardData.value.BRD_HASHTAG);
+      } catch {
+        boardData.value.BRD_HASHTAG = [];
+      }
       locationRevData.value = [
         boardData.value.BRD_LOC_REV1,
         boardData.value.BRD_LOC_REV2,
@@ -68,52 +72,7 @@ const getBoard = () => {
       });
     });
 };
-const getPopTimes = () => {
-  axios
-    .get("http://127.0.0.1:3000/postdata/locationpoptime", {
-      params: {
-        boardId: route.params.boardId, // router -> :boardId
-      },
-    })
-    .then((result) => {
-      popTimeData.value = result.data.locationpoptime;
-    })
-    .catch((error) => {
-      console.log("locationpoptimeerror", error);
-    });
-};
-const deletePost = () => {
-  axios
-    .get("http://127.0.0.1:3000/postdata/deleteboard/", {
-      params: {
-        boardId: route.params.boardId, // router -> :boardId
-      },
-    })
-    .then((result) => {
-      router.push({
-        path: "/",
-      });
-      console.log("삭제 성공");
-    })
-    .catch((error) => {
-      console.log("삭제 에러", error);
-    });
-};
-const deleteComment = (id) => {
-  axios
-    .get("http://127.0.0.1:3000/postdata/deletecomments/", {
-      params: {
-        commentId: id,
-      },
-    })
-    .then((result) => {
-      getComments();
-      console.log("삭제 성공");
-    })
-    .catch((error) => {
-      console.log("삭제 에러", error);
-    });
-};
+
 const getComments = () => {
   axios
     .get("http://127.0.0.1:3000/postdata/comments", {
@@ -170,6 +129,22 @@ const getImages = () => {
     });
 };
 
+const getPopTimes = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/locationpoptime", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      popTimeData.value = result.data.locationpoptime[0];
+      console.log(popTimeData.value);
+    })
+    .catch((error) => {
+      console.log("locationpoptimeerror", error);
+    });
+};
+
 const createComment = () => {
   axios
     .post("http://127.0.0.1:3000/boardCreate/comment", {
@@ -181,6 +156,23 @@ const createComment = () => {
     .then(() => {
       newComment.value = "";
       getComments();
+    });
+};
+
+const deleteComment = (commentId) => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/deletecomments", {
+      params: {
+        boardId: route.params.boardId,
+        commentId,
+      },
+    })
+    .then(() => {
+      console.log("y");
+      getComments();
+    })
+    .catch(() => {
+      console.log("n");
     });
 };
 
@@ -198,16 +190,16 @@ getPopTimes();
     </div>
     <div class="detail">
       <div class="hashtag">
-        {{ boardData.BRD_HASHTAG }}
+        {{ `${boardData.BRD_HASHTAG.map((h) => `#${h}`).join(" ")}` }}
       </div>
       <div class="title">
         <div>{{ boardData.BRD_TITLE }}</div>
         <div class="time">
-          {{ boardData.BRD_CREATED_AT.slice(0, 16).replace("T", " ") }}
+          {{ boardData.BRD_CREATED_AT.slice(0, 10) }}
         </div>
       </div>
       <div class="name-info">
-        <div>{{ boardData.BRD_NICK }}</div>
+        <div>{{ boardData.BRD_WRITER }}</div>
         <div class="name-info-right">
           <div>좋아요</div>
           <div>조회수 {{ boardData.BRD_VIEWCOUNT }}</div>
@@ -231,9 +223,7 @@ getPopTimes();
                 </a>
               </li>
               <li>
-                <button class="dropdown-item" type="button" @click="deletePost">
-                  삭제
-                </button>
+                <button class="dropdown-item" type="button">삭제</button>
               </li>
               <li>
                 <button class="dropdown-item" type="button">신고</button>
@@ -252,7 +242,7 @@ getPopTimes();
         <!-- 장소 컴포넌트 -->
         <location
           v-for="(item, index) in locationData"
-          v-if="locationData.length"
+          v-if="locationData.length && popTimeData && locationRevData.length"
           :key="index"
           :location="item"
           :number="index + 1"
@@ -397,12 +387,12 @@ getPopTimes();
   width: 70%;
   border: 1px solid black;
 }
-
 .carousel_item,
 .carousel_item > img {
   width: 100%;
   height: 450px;
-  object-fit: fill;
+
+  object-fit: cover;
 }
 .imageslider {
   display: flex;
