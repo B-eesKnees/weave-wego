@@ -38,6 +38,8 @@ const locationData = ref([]);
 
 const locationRevData = ref([""]);
 
+let userEmail = ref("");
+
 const images = ref([]);
 
 const route = useRoute(); // 라우터 2번 route 변수 만들어주기
@@ -184,11 +186,32 @@ const createComment = () => {
     });
 };
 
+const getUserEmail = () => {
+  userEmail = localStorage.getItem("userID");
+  // console.log(userEmail);
+}
+
+const setRecentView = () =>{
+  axios
+    .post("http://127.0.0.1:3000/recentView", {
+      brdID: route.params.boardId,
+      email: userEmail
+    })
+    .then(()=>{
+      console.log('최근 본 게시글 성공');
+    })
+    .catch((err)=>{
+      alert(err);
+    })
+}
+
 getBoard();
 getLocations();
 getComments();
 getImages();
 getPopTimes();
+getUserEmail();
+setRecentView();
 </script>
 
 <template>
