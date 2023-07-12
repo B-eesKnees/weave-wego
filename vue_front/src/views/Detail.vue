@@ -284,7 +284,7 @@ setRecentView();
         />
         <!-- 이미지 슬라이드 -->
         <div class="imageslider">
-          <carousel :items-to-show="1" :wrap-around="true">
+          <carousel :items-to-show="1" :wrap-around="false">
             <slide v-for="image in images" :key="image">
               <div class="carousel_item">
                 <img :src="image" />
