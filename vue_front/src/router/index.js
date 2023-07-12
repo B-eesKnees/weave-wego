@@ -70,7 +70,7 @@ const routes = [
     name: "newPost",
     component: () =>
       import(/* webpackChunkName: "newpost" */ "../views/NewPost.vue"),
-    // beforeEnter: requireLogin()
+    beforeEnter: requireLogin()
   },
 
   {

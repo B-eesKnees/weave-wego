@@ -84,17 +84,21 @@ app.get("/downloadCourse/:courseId/:fileName", (req, res) => {
   //게시글 이미지 다운 라우터
   const {
     //url에 있는 userEmail, fileName 받아오기
-    courseId,
-    fileName,
+    fileName
   } = req.params;
-  const filepath = `${__dirname}/CourseImage/${courseId}/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/CourseImage/1/image.png
+  const filepath = `${__dirname}/CourseImage/${fileName}`; //받아온 걸로 다운받을 경로 만들기 ex)/CourseImage/image.png
+  console.log("filepath:", filepath);
+  console.log("fileName:", fileName);
+  console.log("-----------------------");
   res.header(
     "Content-Type",
     `image/${fileName.substring(fileName.lastIndexOf("."))}`
   ); //이미지 보내는 코드인가?
-  if (!fs.existsSync(filepath))
+  if (!fs.existsSync(filepath)) {
+    console.log("error");
     res.status(404).send((error = "Can not found file."));
-  else fs.createReadStream(filepath).pipe(res); //파일 있으면 vue단으로 전송
+  }
+  else {fs.createReadStream(filepath).pipe(res);} //파일 있으면 vue단으로 전송
 });
 
 app.post("/uploadProfile/:userEmail/:fileName", async (req, res) => {

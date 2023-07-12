@@ -45,11 +45,18 @@ const images = ref([]);
 const route = useRoute(); // 라우터 2번 route 변수 만들어주기
 const router = useRouter();
 
+const getUserEmail = () => {
+  userEmail.value = localStorage.getItem("userID");
+  // console.log(userEmail);
+}
+
 const getBoard = () => {
+  console.log(userEmail.value);
   axios
     .get("http://127.0.0.1:3000/postdata/board", {
       params: {
         boardId: route.params.boardId, // router -> :boardId
+        email: userEmail.value
       },
     })
     .then((result) => {
@@ -65,9 +72,7 @@ const getBoard = () => {
     .catch((error) => {
       console.log("board_error", error);
       alert("글이 없어용");
-      router.push({
-        path: `/`,
-      });
+
     });
 };
 const getPopTimes = () => {
@@ -186,16 +191,12 @@ const createComment = () => {
     });
 };
 
-const getUserEmail = () => {
-  userEmail = localStorage.getItem("userID");
-  // console.log(userEmail);
-}
-
 const setRecentView = () =>{
+  console.log(userEmail.value);
   axios
     .post("http://127.0.0.1:3000/recentView", {
       brdID: route.params.boardId,
-      email: userEmail
+      email: userEmail.value
     })
     .then(()=>{
       console.log('최근 본 게시글 성공');
@@ -205,12 +206,12 @@ const setRecentView = () =>{
     })
 }
 
+getUserEmail();
 getBoard();
 getLocations();
 getComments();
 getImages();
 getPopTimes();
-getUserEmail();
 setRecentView();
 </script>
 
@@ -425,7 +426,8 @@ setRecentView();
 .carousel_item > img {
   width: 100%;
   height: 450px;
-  object-fit: fill;
+  object-fit: cover;
+  object-position: center center;
 }
 .imageslider {
   display: flex;
