@@ -160,7 +160,8 @@
                     </svg>
                 </div>
                 <div class="mainpage3_third_filters_theme_filter">
-                    <button id="themeClose" v-if="isShowTheme" @click="filterBtnClose($event)" class="theme_close">✖</button>
+                    <button id="themeClose" v-if="isShowTheme" @click="filterBtnClose($event)"
+                        class="theme_close">✖</button>
                     <button ref="filterBtn2" @click="showTheme(), filterBtnClick($event)" class="filter_btn">테마 선택</button>
                     <div v-show="isShowTheme" class="show_theme">
                         <h4
@@ -197,19 +198,20 @@
                 </select>
             </div>
             <div class="mainpage3_third_contents">
-                <h2 id="nodata" v-if="nodata">데이터가 없습니다.</h2>
                 <div v-for="(item, i) in Data" :key="i" class="mainpage3_third_content"> <!-- a 태그 삭제 -->
                     <div class="mainpage3_third_content_img" @click="moveToDetail(item.BRD_ID)">
                         <!--이미지 클릭시 상세페이지로 이동 이벤트-->
                         <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
                         <div id="opacity_glass"></div>
                         <div class="mainpage3_third_content_like">
-                            <button type="button" @click="[handleClick($event), likeToggle(item.BRD_ID)]"  class="like-button" :class="{ clicked: this.likelist.includes(item.BRD_ID) }">
-                                <!--버튼 추가/ 이벤트 2개 실행 handleClick에는 이벤트자체 likeToggle에는 BRD_ID -->
-                                <img :id="`content${i}`" v-if="this.likelist.includes(item.BRD_ID)" :src="imgsrc[0]"
+                            <button type="button" @click="[handleClick($event), likeToggle(item.BRD_ID)]"
+                                class="like-button" :class="{ clicked: this.likelist.includes(item.BRD_ID) }">
+                                 <!--버튼 추가/ 이벤트 2개 실행 handleClick에는 이벤트자체 likeToggle에는 BRD_ID -->
+                                 <img class="heart" :id="`content${i}`" v-if="this.likelist.includes(item.BRD_ID)" :src="imgsrc[0]"
+                                    alt="" />
+                                <img class="heart-overlay" :id="`content${i}`" :src="imgsrc[0]"
                                     alt="" />
                                 <img v-if="!this.likelist.includes(item.BRD_ID)" :src="imgsrc[1]" alt="" />
-                                <div class="heart"><img :id="`content${i}`" :src="imgsrc[0]" alt="" /></div>
                             </button>
                         </div>
                     </div>
@@ -220,9 +222,12 @@
                     </div>
                 </div>
             </div>
+
             <div class="more_btn">
-                <button @click="showMoreContent">더보기</button>
+                <button v-if="!nodata" @click="showMoreContent">더보기</button>
             </div>
+            <a href="/newpost" id="nodata" v-if="nodata">글 작성하러 가기</a>
+
         </div>
     </div>
 </template>
@@ -376,7 +381,7 @@ export default {
                 this.isShowLocation = false;
                 this.$refs.filterBtn.classList.remove("filters_btn");
                 this.$refs.filterBtn.classList.add("filter_btn");
-            } else if(event.target.id == 'themeClose') {
+            } else if (event.target.id == 'themeClose') {
                 this.isShowTheme = false;
                 this.$refs.filterBtn2.classList.remove("filters_btn");
                 this.$refs.filterBtn2.classList.add("filter_btn");
@@ -584,6 +589,9 @@ export default {
                 }
                 this.dataCount++; // 다음 배열(묶음) 출력하기위해 1증가
             }
+            if (remainData < 1) {
+                this.nodata = true;
+            }
         },
 
         //로그인 여부에 따른 좋아요기능
@@ -653,12 +661,12 @@ export default {
                 url: 'http://localhost:3000/recentView',
                 method: "POST",
                 data: {
-                    brdID : brdid,
-                    email : this.email
+                    brdID: brdid,
+                    email: this.email
                 }
-            }).then((res)=>{
+            }).then((res) => {
                 console.log(res.data.message);
-            }).catch((error)=> {
+            }).catch((error) => {
                 alert(error);
             })
 
@@ -771,6 +779,7 @@ export default {
     background-color: #388265;
     color: white;
 }
+
 /* 필터부분 끝 */
 
 
@@ -950,7 +959,15 @@ export default {
 }
 
 #nodata {
-    margin: 10% auto;
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    margin: 5% auto 10% auto;
+    padding: 2% 4%;
+    background-color: #388265;
+    color: whitesmoke;
+    border-radius: 10px;
+    text-decoration: none;
 }
 
 
@@ -961,7 +978,7 @@ svg {
     border-radius: 5%;
     overflow: visible;
     position: absolute;
-    z-index: 1;
+    z-index: 50;
     top: 70%;
     left: -162%;
     box-shadow: 0 0 5px #ccc;
@@ -1006,8 +1023,9 @@ svg {
     user-select: none;
     pointer-events: none;
 }
+
     /* 애니메이션 스타일 설정 */
-.like-button {
+    .like-button {
     position: relative;
     display: inline-block;
     cursor: pointer;
@@ -1018,10 +1036,17 @@ svg {
     width: 28px;
     height: 28px;
 }
-    
-.like-button.clicked {
-    transform: scale(1.1);
+.like-button .heart-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }
+.like-button.clicked .heart-overlay {
+  opacity: 1;
+}
+    
 .like-button.clicked .heart {
         animation: fireworks 1s ease-in-out;
     }
@@ -1029,14 +1054,14 @@ svg {
     @keyframes fireworks {
         0% {
             opacity: 0;
-            transform: translateY(0) rotate(0deg);
+            transform: translateY(0) translateX(0) scale(1);
         }
         50% {
             opacity: 1;
         }
         100% {
             opacity: 0;
-            transform: translateY(-50px) rotate(360deg);
+            transform: translateY(-15px) translateX(-15px) rotate(45deg) scale(0.5);
         }
     }
 </style>
