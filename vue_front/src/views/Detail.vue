@@ -88,6 +88,21 @@ const getComments = () => {
     });
 };
 
+const reportPost = () => {
+  axios
+    .put(
+      `http://127.0.0.1:3000/postdata/updateReport/board/${route.params.boardId}`
+    )
+    .then((result) => {
+      boardData.value.BRD_REPORT = 1;
+      alert("게시글이 신고되었습니다.");
+    })
+    .catch((error) => {
+      alert("이미 신고된 게시글입니다.");
+      console.log(error);
+    });
+};
+
 const getLocations = () => {
   axios
     .get("http://127.0.0.1:3000/postdata/locations", {
@@ -175,6 +190,23 @@ const deleteComment = (commentId) => {
       console.log("n");
     });
 };
+const deletePost = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/deleteboard/", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      router.push({
+        path: "/",
+      });
+      console.log("삭제 성공");
+    })
+    .catch((error) => {
+      console.log("삭제 에러", error);
+    });
+};
 
 getBoard();
 getLocations();
@@ -223,10 +255,14 @@ getPopTimes();
                 </a>
               </li>
               <li>
-                <button class="dropdown-item" type="button">삭제</button>
+                <button class="dropdown-item" type="button" @click="deletePost">
+                  삭제
+                </button>
               </li>
               <li>
-                <button class="dropdown-item" type="button">신고</button>
+                <button class="dropdown-item" type="button" @click="reportPost">
+                  신고
+                </button>
               </li>
             </ul>
           </div>
@@ -251,7 +287,7 @@ getPopTimes();
         />
         <!-- 이미지 슬라이드 -->
         <div class="imageslider">
-          <carousel :items-to-show="1" :wrap-around="true">
+          <carousel :items-to-show="1" :wrap-around="false">
             <slide v-for="image in images" :key="image">
               <div class="carousel_item">
                 <img :src="image" />

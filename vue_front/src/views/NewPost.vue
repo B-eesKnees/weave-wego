@@ -8,9 +8,9 @@
       </div>
       <!-- 필터 들어갈 곳 -->
       <div class="select">
-        <input id="public" v-model="open" type="radio" :value="1" />
+        <input id="public" v-model="brdopen" type="radio" :value="0" />
         <label for="public" style="margin-right: 1rem">비공개</label>
-        <input id="private" v-model="open" type="radio" :value="0" />
+        <input id="private" v-model="brdopen" type="radio" :value="1" />
         <label for="private">공개</label>
       </div>
       <div class="title">
@@ -104,7 +104,7 @@ import { useRouter } from "vue-router";
 ///
 const router = useRouter();
 ///
-const open = ref(0);
+const brdopen = ref(1);
 const title = ref("");
 const review = ref("");
 const tags = ref();
@@ -125,7 +125,7 @@ const createPost = () => {
       title: title.value,
       review: review.value,
       hashtag: tags.value,
-      open: open.value,
+      open: brdopen.value,
       nick: localStorage.getItem("userNick"),
     })
   );
@@ -400,8 +400,8 @@ const drawMap = () => {
 
   const container = document.getElementById("map");
   const options = {
-    center: new maps.LatLng(33.450701, 126.570667),
-    level: 6,
+    center: new maps.LatLng(37.56682420267543, 126.978652258823),
+    level: 8,
   };
 
   map.value = new maps.Map(container, options);

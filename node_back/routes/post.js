@@ -191,7 +191,7 @@ router.get("/report/comment/:commentId", (req, res) => {
 router.put("/updateReport/board/:boardId", (req, res) => {
   const { boardId } = req.params;
 
-  const updateReport = `UPDATE board SET BRD_REPORT =1 WHERE BRD_ID=3;`;
+  const updateReport = `UPDATE board SET BRD_REPORT =1 WHERE BRD_ID=?;`;
 
   db.query(updateReport, [boardId], (err, results) => {
     if (err) {
