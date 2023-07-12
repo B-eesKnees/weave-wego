@@ -313,28 +313,30 @@ export default {
                     nickname: this.nickname,
                     sex: this.sex,
                     agegroup: this.agegroup,
-                    phone_num: this.phone_num,
-
+                    phone_num: this.phone_num
                 },
             }).then(async (res) => {
                 alert(res.data.message);
                 if (this.image) {
-                    await this.uploadFile(this.image);
+                    await this.uploadFile(this.image).then(()=>{
+                        this.autoLogin();
+                    });
+                } else {
+                    this.autoLogin();
                 }
             }).catch(error => {
                 alert(error);
-            }).then(async ()=>{
-                console.log(this.email);
-                console.log(this.password);
-
-                await axios({
+            })
+        },
+        async autoLogin() {
+            await axios({
                         url: "http://localhost:3000/auth/login",
                         method: "POST",
                         data: {
                         email: this.email,
                         password: this.password,
                         },
-                }).then((res) => {
+                }).then(async (res) => {
                     if (res.data.code == 200) {
                         
                         localStorage.setItem("userID", res.data.email);
@@ -347,7 +349,6 @@ export default {
                 }).catch((error) => {
                     alert(error);
                 });
-            })
         },
         async uploadFile(files) {
             if (!files) {
@@ -356,14 +357,14 @@ export default {
             let name = files.name;
             let data = await this.$base64(files);
 
-            axios({
+            return axios({
                 url: `http://localhost:3000/uploadProfile/${this.email}/${name}`,
                 method: 'POST',
                 data: {
                     "data": data
                 }
             }).then(res => {
-                console.log('흠');
+                console.log('이미지 db 넣기 성공')
             }).catch(error => {
                 alert(error);
             })

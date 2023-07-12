@@ -5,6 +5,7 @@ const db = {
   host: "127.0.0.1",
   user: "root",
   password: "12345678",
+  timezone: "GMT"
 };
 const dbPool = require("mysql").createPool(db);
 

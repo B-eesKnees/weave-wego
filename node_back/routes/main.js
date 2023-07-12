@@ -322,7 +322,12 @@ router.post("/increase", async (req, res) => {
 //---최근 본 게시글 
 router.post('/recentView', async (req, res)=>{
   const RC_NUM = req.body.brdID; //게시글번호와
-  const RC_VIEWER = req.body.email; //유저 이메일 받아와서
+  let RC_VIEWER = req.body.email; //유저 이메일 받아와서
+
+  if(RC_VIEWER === null) {
+    console.log("실행막기");
+    return;
+  }
 
   const view = { //이건 안쓰네
     RC_NUM,

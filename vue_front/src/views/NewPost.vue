@@ -3,13 +3,15 @@
     <gnbBar />
     <div class="header">글 작성하기</div>
     <div class="page">
-      <div class="filter">필터 구역</div>
+      <div class="filter">
+        <FilterComponent @update-tag="(data) => updateTags(data)" />
+      </div>
       <!-- 필터 들어갈 곳 -->
       <div class="select">
-        <input id="public" v-model="open" type="radio" :value="1" />
-        <label for="public" style="margin-right: 1rem">공개</label>
-        <input id="private" v-model="open" type="radio" :value="0" />
-        <label for="private">비공개</label>
+        <input id="public" v-model="brdopen" type="radio" :value="0" />
+        <label for="public" style="margin-right: 1rem">비공개</label>
+        <input id="private" v-model="brdopen" type="radio" :value="1" />
+        <label for="private">공개</label>
       </div>
       <div class="title">
         <div>제목</div>
@@ -69,7 +71,7 @@
       <div>
         이미지 업로드
         <div class="images">
-          <div v-for="image in images" class="image">
+          <div v-for="image in images" :key="image.id" class="image">
             <button type="button" @click="() => removeImage(image.id)">
               x
             </button>
@@ -94,6 +96,7 @@
 </template>
 
 <script setup>
+import FilterComponent from "@/components/filterComponent.vue";
 import gnbBar from "@/components/gnbBar.vue";
 import axios from "axios";
 import { ref, onMounted } from "vue";
@@ -101,9 +104,10 @@ import { useRouter } from "vue-router";
 ///
 const router = useRouter();
 ///
-const open = ref(0);
+const brdopen = ref(1);
 const title = ref("");
 const review = ref("");
+const tags = ref();
 ///
 const map = ref(null);
 const infowindow = ref(null);
@@ -120,8 +124,8 @@ const createPost = () => {
       writer: localStorage.getItem("userID"),
       title: title.value,
       review: review.value,
-      hashtag: "해시태그",
-      open: open.value,
+      hashtag: tags.value,
+      open: brdopen.value,
       nick: localStorage.getItem("userNick"),
     })
   );
@@ -143,6 +147,10 @@ const createPost = () => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+const updateTags = (data) => {
+  tags.value = [...data.locations, ...data.themes];
 };
 
 const addImage = (e) => {
@@ -392,8 +400,8 @@ const drawMap = () => {
 
   const container = document.getElementById("map");
   const options = {
-    center: new maps.LatLng(33.450701, 126.570667),
-    level: 6,
+    center: new maps.LatLng(37.56682420267543, 126.978652258823),
+    level: 8,
   };
 
   map.value = new maps.Map(container, options);
@@ -452,6 +460,10 @@ input[type="radio"] {
   border: 0;
   border-bottom: 1px solid darkgray;
   background-color: #f1f1f1;
+}
+
+.filter {
+  z-index: 3;
 }
 .map > p {
   font-size: 1.125rem;
