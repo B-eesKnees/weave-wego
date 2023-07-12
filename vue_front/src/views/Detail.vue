@@ -13,7 +13,7 @@ const newComment = ref("");
 
 const boardData = ref({
   BRD_CREATED_AT: "",
-  BRD_HASHTAG: "",
+  BRD_HASHTAG: [],
   BRD_ID: 0,
   BRD_LOC_REV1: "",
   BRD_LOC_REV2: "",
@@ -32,8 +32,6 @@ const boardData = ref({
 
 const commentData = ref([]);
 
-const popTimeData = ref([]);
-
 const locationData = ref([]);
 
 const locationRevData = ref([""]);
@@ -48,7 +46,7 @@ const router = useRouter();
 const getUserEmail = () => {
   userEmail.value = localStorage.getItem("userID");
   // console.log(userEmail);
-}
+};
 
 const getBoard = () => {
   console.log(userEmail.value);
@@ -56,11 +54,16 @@ const getBoard = () => {
     .get("http://127.0.0.1:3000/postdata/board", {
       params: {
         boardId: route.params.boardId, // router -> :boardId
-        email: userEmail.value
+        email: userEmail.value,
       },
     })
     .then((result) => {
       boardData.value = result.data.board;
+      try {
+        boardData.value.BRD_HASHTAG = JSON.parse(boardData.value.BRD_HASHTAG);
+      } catch {
+        boardData.value.BRD_HASHTAG = [];
+      }
       locationRevData.value = [
         boardData.value.BRD_LOC_REV1,
         boardData.value.BRD_LOC_REV2,
@@ -72,55 +75,9 @@ const getBoard = () => {
     .catch((error) => {
       console.log("board_error", error);
       alert("글이 없어용");
+    });
+};
 
-    });
-};
-const getPopTimes = () => {
-  axios
-    .get("http://127.0.0.1:3000/postdata/locationpoptime", {
-      params: {
-        boardId: route.params.boardId, // router -> :boardId
-      },
-    })
-    .then((result) => {
-      popTimeData.value = result.data.locationpoptime;
-    })
-    .catch((error) => {
-      console.log("locationpoptimeerror", error);
-    });
-};
-const deletePost = () => {
-  axios
-    .get("http://127.0.0.1:3000/postdata/deleteboard/", {
-      params: {
-        boardId: route.params.boardId, // router -> :boardId
-      },
-    })
-    .then((result) => {
-      router.push({
-        path: "/",
-      });
-      console.log("삭제 성공");
-    })
-    .catch((error) => {
-      console.log("삭제 에러", error);
-    });
-};
-const deleteComment = (id) => {
-  axios
-    .get("http://127.0.0.1:3000/postdata/deletecomments/", {
-      params: {
-        commentId: id,
-      },
-    })
-    .then((result) => {
-      getComments();
-      console.log("삭제 성공");
-    })
-    .catch((error) => {
-      console.log("삭제 에러", error);
-    });
-};
 const getComments = () => {
   axios
     .get("http://127.0.0.1:3000/postdata/comments", {
@@ -130,9 +87,25 @@ const getComments = () => {
     })
     .then((result) => {
       commentData.value = result.data.comments;
+      console.log(commentData.value);
     })
     .catch((error) => {
       console.log("comments_error", error);
+    });
+};
+
+const reportPost = () => {
+  axios
+    .put(
+      `http://127.0.0.1:3000/postdata/updateReport/board/${route.params.boardId}`
+    )
+    .then((result) => {
+      boardData.value.BRD_REPORT = 1;
+      alert("게시글이 신고되었습니다.");
+    })
+    .catch((error) => {
+      alert("이미 신고된 게시글입니다.");
+      console.log(error);
     });
 };
 
@@ -177,12 +150,29 @@ const getImages = () => {
     });
 };
 
+const getPopTimes = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/locationpoptime", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      popTimeData.value = result.data.locationpoptime[0];
+      console.log(popTimeData.value);
+    })
+    .catch((error) => {
+      console.log("locationpoptimeerror", error);
+    });
+};
+
 const createComment = () => {
   axios
     .post("http://127.0.0.1:3000/boardCreate/comment", {
       boardId: route.params.boardId,
       writer: localStorage.getItem("userID"),
       nick: localStorage.getItem("userNick"),
+      image: localStorage.getItem("userImage"),
       comment: newComment.value,
     })
     .then(() => {
@@ -191,20 +181,20 @@ const createComment = () => {
     });
 };
 
-const setRecentView = () =>{
+const setRecentView = () => {
   console.log(userEmail.value);
   axios
     .post("http://127.0.0.1:3000/recentView", {
       brdID: route.params.boardId,
-      email: userEmail.value
+      email: userEmail.value,
     })
-    .then(()=>{
-      console.log('최근 본 게시글 성공');
+    .then(() => {
+      console.log("최근 본 게시글 성공");
     })
-    .catch((err)=>{
+    .catch((err) => {
       alert(err);
-    })
-}
+    });
+};
 
 getUserEmail();
 getBoard();
@@ -222,16 +212,16 @@ setRecentView();
     </div>
     <div class="detail">
       <div class="hashtag">
-        {{ boardData.BRD_HASHTAG }}
+        {{ `${boardData.BRD_HASHTAG.map((h) => `#${h}`).join(" ")}` }}
       </div>
       <div class="title">
         <div>{{ boardData.BRD_TITLE }}</div>
         <div class="time">
-          {{ boardData.BRD_CREATED_AT.slice(0, 16).replace("T", " ") }}
+          {{ boardData.BRD_CREATED_AT.slice(0, 10) }}
         </div>
       </div>
       <div class="name-info">
-        <div>{{ boardData.BRD_NICK }}</div>
+        <div>{{ boardData.BRD_WRITER }}</div>
         <div class="name-info-right">
           <div>좋아요</div>
           <div>조회수 {{ boardData.BRD_VIEWCOUNT }}</div>
@@ -260,7 +250,9 @@ setRecentView();
                 </button>
               </li>
               <li>
-                <button class="dropdown-item" type="button">신고</button>
+                <button class="dropdown-item" type="button" @click="reportPost">
+                  신고
+                </button>
               </li>
             </ul>
           </div>
@@ -276,7 +268,7 @@ setRecentView();
         <!-- 장소 컴포넌트 -->
         <location
           v-for="(item, index) in locationData"
-          v-if="locationData.length"
+          v-if="locationData.length && popTimeData && locationRevData.length"
           :key="index"
           :location="item"
           :number="index + 1"
@@ -285,7 +277,7 @@ setRecentView();
         />
         <!-- 이미지 슬라이드 -->
         <div class="imageslider">
-          <carousel :items-to-show="1" :wrap-around="true">
+          <carousel :items-to-show="1" :wrap-around="false">
             <slide v-for="image in images" :key="image">
               <div class="carousel_item">
                 <img :src="image" />
@@ -421,7 +413,6 @@ setRecentView();
   width: 70%;
   border: 1px solid black;
 }
-
 .carousel_item,
 .carousel_item > img {
   width: 100%;
