@@ -427,7 +427,7 @@ export default {
             alert(res.data.message);
             this.selectedComItems = []; //삭제후 배열 비우기 안비우면 계속 남아있음
             console.log(this.selectedComItems);
-            await this.boardListData(); //삭제후 새롭게 게시글 받아오기
+            await this.commentListData(); //삭제후 새롭게 게시글 받아오기
           })
           .catch((error) => {
             alert(error);
