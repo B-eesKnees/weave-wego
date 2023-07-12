@@ -90,7 +90,11 @@
             <div v-for="button in buttonList" :key="button.tab">
               <button
                 @click="selectTab(button.tab)"
-                :class="{ 'active-button': activeTab === button.tab }"
+                :class="[
+                  'gnb-button',
+                  { 'active-button': activeTab === button.tab },
+                  button.tab,
+                ]"
               >
                 {{ button.name }}
               </button>

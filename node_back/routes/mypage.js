@@ -21,7 +21,7 @@ const queries = {
     left join likelist ll on b.BRD_ID = ll.LL_NUM
     where b.BRD_WRITER = ?
     group by b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
-    order by BRD_CREATED_AT desc;`,
+    order by b.BRD_CREATED_AT desc;`,
 
   delMyCourseQuery: `delete from board b where b.BRD_ID in (?)`,
 

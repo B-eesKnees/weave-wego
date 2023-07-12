@@ -107,3 +107,10 @@ a {
     border: none;
     background: none;
   }
+
+
+  .myPage .gnb-button {
+    position: relative;
+    text-align: left;
+    border: 1px solid #000;
+  }

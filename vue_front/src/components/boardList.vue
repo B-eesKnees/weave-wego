@@ -52,7 +52,7 @@ export default {
       @change="sendSelectedItems"
       @click="moveToDetail(boardList.BRD_ID)"
     />
-    <a :href="`/detail/${boardList.BRD_ID}`">
+    <a :href="`/detail/${boardList.BRD_ID}`" target="_blank">
       <div class="board-list">
         <div class="board_content">
           <div class="hashtag">{{ boardList.BRD_HASHTAG }}</div>

@@ -33,7 +33,7 @@ export default {
   />
 
   <div class="comment-list">
-    <a :href="`/detail/${commentList.BRD_ID}`">
+    <a :href="`/detail/${commentList.BRD_ID}`" target="_blank">
       <div class="comment_content">
         <div class="com_brd_title">{{ commentList.BRD_TITLE }}</div>
         <div class="com_created_at">{{ commentList.COM_CREATED_AT }}</div>

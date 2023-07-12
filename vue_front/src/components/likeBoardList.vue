@@ -8,7 +8,7 @@ export default {
 
 <template>
   <div>
-    <a href="/detail">
+    <a :href="`/detail/${likeBoardList.BRD_ID}`" target="_blank">
       <div class="board-list">
         <div class="board_content">
           <div class="hashtag">{{ likeBoardList.BRD_HASHTAG }}</div>
