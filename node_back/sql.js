@@ -22,7 +22,7 @@ module.exports = {
                 FROM weavewego.board left JOIN weavewego.likelist ON board.BRD_ID = likelist.LL_NUM 
                 where board.BRD_OPEN = 1
                 GROUP BY board.BRD_ID, board.BRD_WRITER, board.BRD_HASHTAG, board.BRD_NICK, board.BRD_TITLE
-                order by board.BRD_CREATED_AT ASC;`
+                order by board.BRD_CREATED_AT desc;`
     },
     likeCourse: {
         query: `insert into weavewego.likelist set ?`

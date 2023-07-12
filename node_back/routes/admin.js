@@ -111,7 +111,7 @@ router.post(`/viewBoardlist`, async (req, res) => {
 });
 //-----------회원 정보 보기
 router.post(`/viewUserlist`, async (req, res) => {
-  db.query(`select * from weavewego.user`, (err, results) => {
+  db.query(`select USER_IMAGE, USER_NICKNAME, USER_EMAIL, USER_AGEGROUP, DATE_FORMAT(USER_REGDATE, "%Y-%m-%d %H:%i") AS USER_REGDATE, USER_PHONE, USER_PROVIDER from weavewego.user`, (err, results) => {
     if (err) {
       res.send({
         // 에러 발생 시
@@ -124,4 +124,26 @@ router.post(`/viewUserlist`, async (req, res) => {
     }
   });
 });
+//----------------------------------유저 탈퇴시키기
+router.post("/deleteUser", async (req, res) => {
+  const deleteUsers = req.body.userEmail; //ex) [1,2,3] 형식으로 날라오면
+  console.log(deleteUsers); 
+    db.query(
+      `delete from weavewego.user where USER_EMAIL in (?)`,
+      [deleteUsers],
+      (err) => {
+        //쿼리문 반복 실행
+        if (err) {
+          res.send({
+            // 에러 발생 시
+            code: 400,
+            failed: "error occurred",
+            error: err,
+          });
+        } else {
+          res.status(200).send({"message" : "성공"});
+        }
+      }
+    );
+  });
 module.exports = router;

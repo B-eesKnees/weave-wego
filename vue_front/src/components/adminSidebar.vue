@@ -5,8 +5,8 @@
         <a href="/admin">관리자 홈</a>
         <a href="/admin/boardlist">전체 게시글</a>
         <a href="/admin/reportboard">신고 게시글</a>
-        <a href="/admin/boardlist">신고 댓글</a>
-        <a href="/admin/boardlist">유저목록</a>
+        <a href="/admin/reportcomment">신고 댓글</a>
+        <a href="/admin/userlist">유저목록</a>
     </div>
 </template>
 

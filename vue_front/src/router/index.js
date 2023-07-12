@@ -4,6 +4,8 @@ import userLogin from "../views/userLogin.vue";
 import userJoin from "../views/userJoin.vue";
 import adminBoardList from '../components/adminBoardlist.vue'
 import adminReportBoard from '../components/adminReportBoard.vue'
+import adminUserList from '../components/adminUserList.vue'
+import adminReportComment from '../components/adminReportComment.vue'
 
 const requireLogin = () => (to, from, next) => {
   //로그인안하고 접근하려했을때 실행할 함수?
@@ -39,6 +41,16 @@ const routes = [
     path: "/admin/reportboard",
     name: "adminReportBoard",
     component: adminReportBoard,
+  },
+  {
+    path: "/admin/userlist",
+    name: "adminUserList",
+    component: adminUserList,
+  },
+  {
+    path: "/admin/reportcomment",
+    name: "adminReportComment",
+    component: adminReportComment,
   },
   {
     path: "/naverlogin",

@@ -174,7 +174,7 @@ router.post('/getNewestFilter', async (req, res) => {
     ${generateHashtagConditions(hashtags)}
     ${generateSearchCondition(search)}
     GROUP BY b.BRD_ID, b.BRD_WRITER, b.BRD_HASHTAG, b.BRD_NICK, b.BRD_TITLE
-    order by b.BRD_CREATED_AT ASC;`;
+    order by b.BRD_CREATED_AT desc;`;
 
   db.query(query, (err, results) => {
     if (err) {
