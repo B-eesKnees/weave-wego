@@ -10,7 +10,14 @@ const emit = defineEmits(["delete"]);
   <div>
     <div class="comment">
       <div class="profile">
-        <img class="profile_icon" src="../assets/img/test.png" />
+        <img
+          class="profile_icon"
+          :src="
+            comment.COM_IMAGE.startsWith('http')
+              ? comment.COM_IMAGE
+              : `http://localhost:3000/downloadProfile/${comment.COM_WRITER}/${comment.COM_IMAGE}`
+          "
+        />
       </div>
       <div class="comment-body">
         <div class="comment-nickname">

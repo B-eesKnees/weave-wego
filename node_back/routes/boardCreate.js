@@ -128,7 +128,7 @@ router.post("/comment", (req, res) => {
     COM_NUM: body.boardId,
     COM_WRITER: body.writer,
     COM_NICK: body.nick,
-    COM_IMAGE: "",
+    COM_IMAGE: body.image,
     COM_COMMENT: body.comment,
   };
   db.query("INSERT INTO comment SET ? ", commentRow, (err) => {

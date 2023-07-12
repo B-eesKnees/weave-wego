@@ -82,6 +82,7 @@ const getComments = () => {
     })
     .then((result) => {
       commentData.value = result.data.comments;
+      console.log(commentData.value);
     })
     .catch((error) => {
       console.log("comments_error", error);
@@ -166,6 +167,7 @@ const createComment = () => {
       boardId: route.params.boardId,
       writer: localStorage.getItem("userID"),
       nick: localStorage.getItem("userNick"),
+      image: localStorage.getItem("userImage"),
       comment: newComment.value,
     })
     .then(() => {
