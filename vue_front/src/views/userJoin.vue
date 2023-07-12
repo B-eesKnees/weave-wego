@@ -427,7 +427,10 @@ input[type="file"] {
 }
 
 .title-bar {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     color: #333333;
     font-size: 30px;
     padding-bottom: 10px;
@@ -438,8 +441,8 @@ input[type="file"] {
     position: absolute;
     width: 22px;
     height: 22px;
-    left: 50%;
-    top: 70%;
+    left: 50.5%;
+    top: 80%;
     text-align: center;
     line-height: 20px;
     border: 2px solid black;

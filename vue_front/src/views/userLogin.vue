@@ -401,7 +401,7 @@ input.submit2:hover {
 
 .error_submit {
   width: 100%;
-  padding: 5%;
+  padding: 6%;
   border-radius: 6px;
   border: 1px solid gray;
   font-size: 15px;
