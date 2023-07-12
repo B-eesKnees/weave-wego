@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+@media screen and (max-width: 1920px) {
+  body {
+    background-color: rgba(250, 250, 250, 1);
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.7;
+
+}
+.admin_h2 {
+    /* margin: 5% auto 0 auto; */
+    text-align: left;
+    position: relative;
+    top: 20vh;
+    left: 17vw;
+    margin-bottom: 200px;
+    width: 50%;
+    font-size: 3vh;
+
+}
+
+.admin {
+    max-width: 80%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1% auto 0 auto;
+    /* overflow-x: hidden; */
+}
+
+.reportCourse {
+    width: 40%;
+    height: 30vh;
+    line-height: normal;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #ccc;
+    margin: 2% 1%;
+}
+
+.reportCourse p,
+.reportCourse h5 {
+    margin: 0;
+}
+
+.reportCourse_titles {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2% 4%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.reportCourse_title {
+    font-size: 1.2em;
+}
+
+.reportCourse_titles_number {
+    color: #388265;
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-left: -15%;
+    margin-right: 5%;
+}
+
+.reportCourse_titles_link {
+    font-size: large;
+    text-decoration: none;
+    padding: 2% 6%;
+}
+
+.reportCourse_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 4%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.reportCourse_info p:nth-child(2) {
+    margin-left: -47%;
+}
+
+
+
+.reportCourse_content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5% 0 5%;
+}
+
+.reportCourse_content_num {
+    font-size: 1em;
+    width: 12%;
+    overflow: hidden;
+}
+
+.reportCourse_content_title {
+    width: 20%;
+    padding-right: 60%;
+    overflow: hidden;
+}
+
+.report_writer, .reportCourse_content_writer  {
+    display: inline-block;
+}
+/* {
+    width: 30%;
+    overflow: hidden;
+    font-size: small;
+} */
+
+
+/* 신고 댓글 */
+.reportComment_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 2%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.reportComment_info p:nth-child(2) {
+    margin-left: -35%;
+}
+
+.reportComment_content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2% 2%;
+}
+
+.reportComment_content_num {
+    font-size: small;
+    width: 12%;
+    overflow: hidden;
+}
+
+.reportComment_content_title {
+    width: 40%;
+    padding-right: 20%;
+    overflow: hidden;
+}
+
+.reportComment_content_writer {
+    width: 30%;
+    overflow: hidden;
+    font-size: small;
+}
+
+
+/* 유저목록 */
+.user_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% 2%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.user_info p:nth-child(2) {
+    margin-left: -15%;
+}
+
+.user_content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2% 2%;
+}
+
+.user_content_num {
+    font-size: small;
+    width: 30%;
+    height: 22px;
+    overflow: hidden;
+}
+
+.user_content_title {
+    width: 45%;
+    height: 22px;
+    padding-right: 5%;
+    overflow: hidden;
+}
+
+.user_content_writer {
+    width: 10%;
+    height: 22px;
+    overflow: hidden;
+    font-size: small;
+}
+
+
+.arrow {
+    position: relative;
+    margin-left: 5px;
+    font-weight: 300;
+}
+}

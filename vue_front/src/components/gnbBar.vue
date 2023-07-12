@@ -8,10 +8,15 @@
           <a href="/"><img src="../assets/img/logo.png" alt="logo" /></a>
         </h2>
       </div>
+
+      <!-- 로그인 전--------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------------ -->
       <div v-if="email === null" class="gnb_bar_user">
         <p><a href="/login">로그인</a></p>
         <p><a href="/join">회원가입</a></p>
       </div>
+      <!-- 카카오 로그인--------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------------ -->
       <div v-else-if="provider === 'kakao'" class="gnb_bar_user_login">
         <div
           class="kakao_img"
@@ -31,6 +36,31 @@
           </div>
         </div>
       </div>
+
+      <!-- 네이버 로그인--------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------------ -->
+      <div v-else-if="provider === 'naver'" class="gnb_bar_user_login">
+        <img
+          class="naver_img"
+          :src="image"
+          alt="profileExample"
+          @click="toggleButtons"
+        />
+        <div class="gnbmypage">
+          <div v-if="isButtonsVisible">
+            <div v-for="button in buttonList" :key="button.tab">
+              <button
+                @click="selectTab(button.tab)"
+                :class="{ 'active-button': activeTab === button.tab }"
+              >
+                {{ button.name }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 로컬로그인, 유저가 이미지 넣음--------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------------ -->
       <div
         v-else-if="provider === 'local' && image !== 'default'"
         class="gnb_bar_user_login"
@@ -56,11 +86,15 @@
           </div>
         </div>
       </div>
-
-      <div v-else-if="provider === 'naver'" class="gnb_bar_user_login">
+      <!-- 로컬로그인, 이미지 없음--------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------------ -->
+      <div
+        v-else-if="image === 'default' && this.email !== 'admin@admin.com'"
+        class="gnb_bar_user_login"
+      >
         <img
           class="naver_img"
-          :src="image"
+          src="../assets/img/profileExample.png"
           alt="profileExample"
           @click="toggleButtons"
         />
@@ -69,7 +103,11 @@
             <div v-for="button in buttonList" :key="button.tab">
               <button
                 @click="selectTab(button.tab)"
-                :class="{ 'active-button': activeTab === button.tab }"
+                :class="[
+                  'gnb-button',
+                  { 'active-button': activeTab === button.tab },
+                  button.tab,
+                ]"
               >
                 {{ button.name }}
               </button>
@@ -78,9 +116,15 @@
         </div>
       </div>
 
-      <div v-else-if="image === 'default'" class="gnb_bar_user_login">
+      <!-- admin 계정 로그인 했을 시--------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------------ -->
+      <div
+        v-else-if="provider === 'local' && this.email === 'admin@admin.com'"
+        class="gnb_bar_user_login"
+      >
+        <a href="/admin"><button class="adminbtn">ADMIN</button></a>
         <img
-          class="naver_img"
+          class="local_img"
           src="../assets/img/profileExample.png"
           alt="profileExample"
           @click="toggleButtons"
