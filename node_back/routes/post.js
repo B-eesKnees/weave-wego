@@ -7,31 +7,40 @@ const fs = require("fs");
 //게시글 받아오기
 router.get("/board", (req, res) => {
   const { boardId } = req.query;
-  const query = `SELECT * FROM board WHERE BRD_ID=?`;
+  const userEmail = req.query.email;
 
-  db.query(query, [boardId], (err, results) => {
+  const updateViewQuery =
+    "UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT + 1 WHERE BRD_ID=?";
+  const selectBoardQuery = "SELECT * FROM board WHERE BRD_ID=?";
+
+  db.query(updateViewQuery, [boardId], (err, updateResult) => {
     if (err) {
       console.error(err);
-      res.status(500).json({ error: "서버 에러" });
+      res.status(500).json({ error: 서버에러 });
     } else {
-      const board = results[0];
-      if (!board) {
+      if (updateResult.affectedRows === 0) {
         res.status(404).json({ error: "게시글을 찾을 수 없습니다." });
       } else {
-        if (board.BRD_OPEN) {
-          db.query(
-            "UPDATE board set BRD_VIEWCOUNT = BRD_VIEWCOUNT + 1 WHERE BRD_ID=?",
-            [boardId]
-          );
-          res.json({ board });
-        } else {
-          const userId = req.user & req.user.id;
-          if (userId && userId === board.BRD.WRITER) {
-            res.json({ board });
+        db.query(selectBoardQuery, [boardId], (err, results) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ error: "서버에러" });
           } else {
-            res.status(403).json({ error: "비공개 게시글입니다." });
+            const board = results[0];
+            if (!board) {
+              res.status(404).json({ error: "게시글을 찾을 수 없습니다. " });
+            } else {
+              if (
+                board.BRD_OPEN === 1 ||
+                (userEmail === board.BRD_WRITER && board.BRD_OPEN === 0)
+              ) {
+                res.json({ board });
+              } else {
+                res.status(403).json({ error: "비공개 게시글입니다." });
+              }
+            }
           }
-        }
+        });
       }
     }
   });
@@ -320,38 +329,6 @@ router.put("/updateboard", (req, res) => {
       }
     }
   );
-});
-
-//공개,비공개 설정 시 내가 쓴 게시글은 비공개여도 볼 수 있도록
-
-router.post("/notopenboard/:boardId", (req, res) => {
-  const { boardId } = req.params;
-  const userEmail = req.body ? req.body.email : null;
-
-  const query = "SELECT * FROM board WHERE brd_id = ?";
-
-  db.query(query, [boardId], (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "내용 조회 오류" });
-    } else {
-      if (results.length > 0) {
-        const board = results[0];
-        console.log(board.BRD_OPEN);
-        //console.log(board.BRD_OPEN);
-        if (
-          board.BRD_OPEN === 1 ||
-          (board.BRD_OPEN === 0 && board.BRD_WRITER === userEmail)
-        ) {
-          res.json(board);
-        } else {
-          res.status(403).json({ message: "접근 권한이 없습니다." });
-        }
-      } else {
-        res.status(404).json({ message: "게시물을 찾을 수 없습니다." });
-      }
-    }
-  });
 });
 
 module.exports = router;
