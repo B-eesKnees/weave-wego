@@ -87,14 +87,14 @@ export default {
                 this.pageCount++;
             })
         },
-        pagingUp() {
+        pagingUp() { // 다음페이지로 이동
             this.showBoard = [];
             for (var i in this.result[this.pageCount]) {
                 this.showBoard.push(this.result[this.pageCount][i]);
             }
             this.pageCount++;
         },
-        pagingDown() {
+        pagingDown() { // 이전페이지로 이동
             this.showBoard = [];
             this.pageCount--;
             for (var i in this.result[this.pageCount - 1]) {
@@ -155,6 +155,10 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.admin_boardlist_top span {
+    color: #388265;
+    font-size: x-large;
 }
 
 .admin_boards {

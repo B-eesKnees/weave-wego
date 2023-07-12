@@ -2,33 +2,32 @@
     <gnbBar />
     <SideBar />
     <div class="admin_boardlist">
-        <h2>신고 게시글</h2>
+        <h2>신고 댓글</h2>
         <div class="admin_boardlist_top">
             <h5>전체 <span>{{ totalCourse.length }}</span>개</h5>
             <button @click="sendSelectedItems">삭제</button>
         </div>
         <div class="admin_boards">
             <div class="admin_boards_info">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>날짜</p>
+                <p>프로필이미지</p>
+                <p>닉네임(이메일)</p>
+                <p>댓글식별</p>
+                <p>게시글참조</p>
+                <p>댓글내용</p>
+                <p>작성날짜</p>
                 <p>신고여부</p>
-                <p>조회수</p>
-                <p>좋아요</p>
-                <p>상태</p>
                 <input @change="checkedAllItems" type="checkbox" v-model="checkedAll">
             </div>
             <div v-for="(item, i) in showBoard" :key="i" class="admin_board">
-                <p>{{ item.BRD_TITLE }}</p>
-                <p>{{ item.BRD_NICK }}<br />({{ item.BRD_WRITER }})</p>
-                <p>{{ item.BRD_CREATED }}</p>
-                <p v-if="item.BRD_REPORT == '1'">신고</p>
-                <p v-else>미신고</p>
-                <p>{{ item.BRD_VIEWCOUNT }}</p>
-                <p>{{ item.likecount }}</p>
-                <p v-if="item.BRD_OPEN == '1'">공개</p>
-                <p v-else>비공개</p>
-                <input ref="selectedref" type="checkbox" v-model="selected" :value="`${item.BRD_ID}`">
+                <img class="admin_userimg" :src="`http://localhost:3000/downloadProfile/${item.USER_EMAIL}/${item.USER_IMAGE}`"
+                    alt="profileimg" />
+                <p>{{ item.COM_NICK }}<br />({{ item.COM_WRITER }})</p>
+                <p>{{ item.COM_ID }}</p>
+                <p>{{ item.COM_NUM }}</p>
+                <p>{{ item.COM_COMMENT }}</p>
+                <p>{{ item.COM_CREATED_AT }}</p>
+                <p>{{ item.COM_REPORT }}</p>
+                <input ref="selectedref" type="checkbox" v-model="selected" :value="`${item.COM_ID}`">
             </div>
         </div>
         <div class="admin_boardlist_page">
@@ -83,9 +82,9 @@ export default {
 
     },
     methods: {
-        viewCourse() { //전체 게시글 요청
+        viewCourse() { //전체 댓글 요청
             axios({
-                url: '/admin/reportCourse',
+                url: '/admin/reportComment',
                 method: 'POST'
             }).then(async (res) => {
                 this.totalCourse = res.data;
@@ -158,17 +157,17 @@ export default {
             var CourseID = this.selected;
             console.log(CourseID);
 
-            if (confirm("신고 게시글을 정말 삭제하시겠습니까?")) {
+            if (confirm("신고 댓글을 정말 삭제하시겠습니까?")) {
                 //삭제 요청
                 await axios({
-                    url: "http://localhost:3000/admin/deleteCourse",
+                    url: "http://localhost:3000/admin/deleteComment",
                     method: "POST",
                     data: {
-                        CourseID: CourseID
+                        commentID: CourseID
                     },
                 }).then(async (res) => {
                     alert(res.data.message);
-                    window.location.href = "/admin/reportboard";
+                    window.location.href = "/admin/reportcomment";
                 });
             }
         }
@@ -234,17 +233,17 @@ input {
 
 .admin_boards_info p:nth-child(1),
 .admin_board p:nth-child(1) {
-    width: 30%;
+    width: 10%;
 }
 
 .admin_boards_info p:nth-child(2),
 .admin_board p:nth-child(2) {
-    width: 15%;
+    width: 10%;
 }
 
 .admin_boards_info p:nth-child(3),
 .admin_board p:nth-child(3) {
-    width: 20%;
+    width: 5%;
 }
 
 .admin_boards_info p:nth-child(4),
@@ -254,14 +253,20 @@ input {
 
 .admin_boards_info p:nth-child(5),
 .admin_board p:nth-child(5) {
-    width: 7%;
+    width: 20%;
 }
 
 .admin_boards_info p:nth-child(6),
 .admin_board p:nth-child(6) {
-    width: 7%;
+    width: 15%;
 }
-
+.admin_boards_info p:nth-child(7),
+.admin_board p:nth-child(7) {
+    width: 5%;
+}
+.admin_userimg {
+    width: 10%;
+}
 .admin_board {
     max-width: 100%;
     display: flex;

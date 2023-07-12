@@ -55,7 +55,7 @@
             <div class="reportCourse_titles">
                 <h5 class="reportCourse_title">신고 댓글</h5>
                 <div>
-                    <a class="reportCourse_titles_link" href="#">
+                    <a class="reportCourse_titles_link" href="/admin/reportcomment">
                         <span class="reportCourse_titles_number">{{ reportComment.length }}</span>
                         <span>></span>
                     </a>
@@ -63,13 +63,13 @@
             </div>
             <div class="reportComment_info">
                 <p>댓글번호</p>
-                <p>댓글제목</p>
+                <p>댓글내용</p>
                 <p>유저닉네임</p>
             </div>
             <div class="reportCourse_contents">
                 <div v-for="com in reportComment" :key="com.id" class="reportCourse_content">
                     <p class="reportComment_content_num">{{ com.COM_ID }}</p>
-                    <p class="reportComment_content_title">{{ com.COM_NICK }}</p>
+                    <p class="reportComment_content_title">{{ com.COM_COMMENT }}</p>
                     <p class="reportComment_content_writer">{{ com.COM_WRITER }}</p>
                 </div>
             </div>
@@ -79,7 +79,7 @@
             <div class="reportCourse_titles">
                 <h5 class="reportCourse_title">유저목록</h5>
                 <div>
-                    <a class="reportCourse_titles_link" href="#">
+                    <a class="reportCourse_titles_link" href="/admin/userlist">
                         <span class="reportCourse_titles_number">{{ userData.length }}</span>
                         <span>></span>
                     </a>

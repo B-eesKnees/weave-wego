@@ -2,33 +2,32 @@
     <gnbBar />
     <SideBar />
     <div class="admin_boardlist">
-        <h2>신고 게시글</h2>
+        <h2>유저 관리</h2>
         <div class="admin_boardlist_top">
             <h5>전체 <span>{{ totalCourse.length }}</span>개</h5>
-            <button @click="sendSelectedItems">삭제</button>
+            <button @click="sendSelectedItems">탈퇴</button>
         </div>
         <div class="admin_boards">
             <div class="admin_boards_info">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>날짜</p>
-                <p>신고여부</p>
-                <p>조회수</p>
-                <p>좋아요</p>
-                <p>상태</p>
+                <p>프로필이미지</p>
+                <p>닉네임</p>
+                <p>이메일</p>
+                <p>나이대</p>
+                <p>가입날짜</p>
+                <p>폰번호</p>
+                <p>가입경로</p>
                 <input @change="checkedAllItems" type="checkbox" v-model="checkedAll">
             </div>
             <div v-for="(item, i) in showBoard" :key="i" class="admin_board">
-                <p>{{ item.BRD_TITLE }}</p>
-                <p>{{ item.BRD_NICK }}<br />({{ item.BRD_WRITER }})</p>
-                <p>{{ item.BRD_CREATED }}</p>
-                <p v-if="item.BRD_REPORT == '1'">신고</p>
-                <p v-else>미신고</p>
-                <p>{{ item.BRD_VIEWCOUNT }}</p>
-                <p>{{ item.likecount }}</p>
-                <p v-if="item.BRD_OPEN == '1'">공개</p>
-                <p v-else>비공개</p>
-                <input ref="selectedref" type="checkbox" v-model="selected" :value="`${item.BRD_ID}`">
+                <img class="admin_userimg" :src="`http://localhost:3000/downloadProfile/${item.USER_EMAIL}/${item.USER_IMAGE}`"
+                    alt="profileimg" />
+                <p>{{ item.USER_NICKNAME }}</p>
+                <p>{{ item.USER_EMAIL }}</p>
+                <p>{{ item.USER_AGEGROUP }}</p>
+                <p>{{ item.USER_REGDATE }}</p>
+                <p>{{ item.USER_PHONE }}</p>
+                <p>{{ item.USER_PROVIDER }}</p>
+                <input ref="selectedref" type="checkbox" v-model="selected" :value="`${item.USER_EMAIL}`">
             </div>
         </div>
         <div class="admin_boardlist_page">
@@ -83,9 +82,9 @@ export default {
 
     },
     methods: {
-        viewCourse() { //전체 게시글 요청
+        viewCourse() { //회원 정보 요청
             axios({
-                url: '/admin/reportCourse',
+                url: '/admin/viewUserlist',
                 method: 'POST'
             }).then(async (res) => {
                 this.totalCourse = res.data;
@@ -158,17 +157,17 @@ export default {
             var CourseID = this.selected;
             console.log(CourseID);
 
-            if (confirm("신고 게시글을 정말 삭제하시겠습니까?")) {
+            if (confirm("회원을 정말 탈퇴시키겠습니까?")) {
                 //삭제 요청
                 await axios({
-                    url: "http://localhost:3000/admin/deleteCourse",
+                    url: "http://localhost:3000/admin/deleteUser",
                     method: "POST",
                     data: {
-                        CourseID: CourseID
+                        userEmail: CourseID
                     },
                 }).then(async (res) => {
                     alert(res.data.message);
-                    window.location.href = "/admin/reportboard";
+                    window.location.href = "/admin/userlist";
                 });
             }
         }
@@ -234,32 +233,40 @@ input {
 
 .admin_boards_info p:nth-child(1),
 .admin_board p:nth-child(1) {
-    width: 30%;
+    width: 10%;
 }
 
 .admin_boards_info p:nth-child(2),
 .admin_board p:nth-child(2) {
-    width: 15%;
+    width: 10%;
 }
 
 .admin_boards_info p:nth-child(3),
 .admin_board p:nth-child(3) {
-    width: 20%;
+    width: 10%;
 }
 
 .admin_boards_info p:nth-child(4),
 .admin_board p:nth-child(4) {
-    width: 7%;
+    width: 5%;
 }
 
 .admin_boards_info p:nth-child(5),
 .admin_board p:nth-child(5) {
-    width: 7%;
+    width: 15%;
 }
 
 .admin_boards_info p:nth-child(6),
 .admin_board p:nth-child(6) {
-    width: 7%;
+    width: 10%;
+}
+
+.admin_boards_info p:nth-child(7),
+.admin_board p:nth-child(7) {
+    width: 5%;
+}
+.admin_userimg {
+    width: 10%;
 }
 
 .admin_board {

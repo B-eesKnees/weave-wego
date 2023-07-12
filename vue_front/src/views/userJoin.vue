@@ -54,7 +54,7 @@
                 <p id="error" v-if="sex_check">성별을 선택하세요.</p>
                 <div class="age_range">
                     <label for="age_range">나이대</label>
-                    <input v-model="agegroup" type='radio' name='agegroup' value='ten' class="input_sex" />10대
+                    <input v-model="agegroup" type='radio' name='agegroup' value='10' class="input_sex" />10대
                     <input v-model="agegroup" type='radio' name='agegroup' value='20' class="input_sex" />20대
                     <input v-model="agegroup" type='radio' name='agegroup' value='30' class="input_sex" />30대
                     <input v-model="agegroup" type='radio' name='agegroup' value='40' class="input_sex" />40대
