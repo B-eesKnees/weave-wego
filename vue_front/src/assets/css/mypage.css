@@ -4,16 +4,12 @@
   body {
     background-color: rgba(250, 250, 250, 1);
     font-family: 'Noto Sans KR', sans-serif;
-    line-height: 1.7;
+    /* line-height: 1.7; */
 
 }
-a {
-  text-decoration: none;
-  color: inherit;
-  
-  }
 
-}
+
+
 
 .mypage_profile_set {
   position: relative;
@@ -432,4 +428,6 @@ a {
   text-decoration: underline;
   text-underline-position: under;
   z-index: 1;
+}
+
 }

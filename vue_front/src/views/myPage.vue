@@ -1,4 +1,4 @@
-<style src="../assets/css/reset.css"></style>
+<!-- <style src="../assets/css/reset.css"></style> -->
 <style src="../assets/css/mypage.css"></style>
 <template>
   <gnbBar />
@@ -174,6 +174,7 @@
   </section>
 
   <ToUp />
+  <!-- <footerContent /> -->
 </template>
 
 <script>
@@ -257,7 +258,6 @@ export default {
     visibleCommentList() {
       return this.commentList.slice(0, this.visibleCommentCount);
     },
-    // 생략
   },
   methods: {
     // 보드리스트 불러오기-------------------------------------------------------------------------------------------------------
