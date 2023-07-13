@@ -46,6 +46,21 @@ router.get("/board", (req, res) => {
   });
 });
 
+// 좋아요 받아오기
+router.get("/likes", (req, res) => {
+  const { boardId } = req.query;
+  const query = "SELECT * FROM likelist WHERE LL_NUM=?";
+
+  db.query(query, [boardId], (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "서버에러" });
+    } else {
+      res.json({ likes: results });
+    }
+  });
+});
+
 //댓글 받아오기
 router.get("/comments", (req, res) => {
   const { boardId } = req.query;
