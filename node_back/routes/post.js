@@ -288,26 +288,23 @@ router.get("/deletecomments", (req, res) => {
 
 //댓글 수정
 
-router.put("/updatecomments/", (req, res) => {
+router.put("/updatecomment/:commentId", (req, res) => {
   const { commentId } = req.params;
-  const updatedComment = req.body.updatedComment;
+  const comment = req.body.comment;
 
-  const query = `update comment 
-                set COM_COMMENT = ?, COM_CREATED_AT = NOW() 
-                where COM_ID = ?`;
-  db.query(query, [commentId], (err, results) => {
+  if (comment.length === 0)
+    res.status(400).json({ message: "댓글을 입력하세요." });
+
+  const query = `UPDATE comment SET COM_CREATED_AT=now(),COM_COMMENT=? WHERE COM_ID=?`;
+  db.query(query, [comment, commentId], (err, results) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "서버에러" });
     } else {
-      if (!updatedComment) {
-        res.status(400).json({ message: "댓글을 입력하세요." });
-      } else {
-        res.status(200).json({
-          updatecomments: results,
-          message: "댓글이 수정되었습니다.",
-        });
-      }
+      res.status(200).json({
+        updatecomments: results,
+        message: "댓글이 수정되었습니다.",
+      });
     }
   });
 });

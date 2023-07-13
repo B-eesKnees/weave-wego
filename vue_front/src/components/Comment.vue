@@ -1,9 +1,22 @@
 <script setup>
+import { ref } from "vue";
 const props = defineProps({
   comment: Object,
   comment_editMode: Boolean,
 });
-const emit = defineEmits(["delete"]);
+const emit = defineEmits(["delete", "edit", "report"]);
+
+const userCheck = ref(false);
+
+const updateButton = ref(false);
+
+const setUpdate = () => {
+  updateButton.value = true;
+};
+
+if (props.comment.COM_WRITER == localStorage.getItem("userID")) {
+  userCheck.value = true;
+}
 </script>
 
 <template>
@@ -41,24 +54,60 @@ const emit = defineEmits(["delete"]);
               </button>
               <ul class="dropdown-menu">
                 <li>
-                  <button class="dropdown-item" type="button">수정</button>
+                  <button
+                    class="dropdown-item"
+                    type="button"
+                    v-if="userCheck"
+                    @click="setUpdate()"
+                  >
+                    수정
+                  </button>
                 </li>
                 <li>
                   <a
                     class="dropdown-item"
                     type="button"
+                    v-if="userCheck"
                     @click="() => emit('delete', comment.COM_ID)"
                     >삭제</a
                   >
                 </li>
                 <li>
-                  <button class="dropdown-item" type="button">신고</button>
+                  <button
+                    class="dropdown-item"
+                    type="button"
+                    @click="() => emit('report', comment.COM_ID)"
+                  >
+                    신고
+                  </button>
                 </li>
               </ul>
             </div>
           </div>
         </div>
         <div>{{ comment.COM_COMMENT }}</div>
+      </div>
+    </div>
+    <div class="comment_update" v-if="updateButton">
+      ㄴ
+      <input
+        v-model="updatedComment"
+        type="text"
+        placeholder="좋은 댓글을 씁시다"
+        font-size="2rem"
+        style="flex-grow: 1; height: 5rem"
+      />
+
+      <div>
+        <button
+          id="comment-submit"
+          class="comment-submit"
+          type="submit"
+          width="100px"
+          @click="() => emit('edit', comment.COM_ID, updatedComment)"
+        >
+          댓글 수정
+        </button>
       </div>
     </div>
   </div>
@@ -102,5 +151,20 @@ const emit = defineEmits(["delete"]);
 .dropdown {
   border: 0;
   background-color: transparent;
+}
+.comment_update {
+  display: flex;
+  padding: 0rem 0rem 1.5rem 1rem;
+}
+
+.comment_update > div:first-of-type {
+  text-align: center;
+  padding-right: 1rem;
+}
+.comment-submit {
+  width: 70px;
+  height: 30px;
+  margin-top: 1.5rem;
+  margin-left: 1rem;
 }
 </style>
