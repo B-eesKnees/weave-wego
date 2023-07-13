@@ -32,6 +32,8 @@ const boardData = ref({
 
 const commentData = ref([]);
 
+const updatedComment = ref("");
+
 const likeData = ref([]);
 
 const locationData = ref([]);
@@ -130,6 +132,19 @@ const reportPost = () => {
     });
 };
 
+const reportComment = (commentId) => {
+  axios
+    .put(`http://127.0.0.1:3000/postdata/updateReport/comment/${commentId}`)
+    .then((result) => {
+      commentData.value.COM_RREPORT = 1;
+      alert("댓글이 신고되었습니다.");
+    })
+    .catch((error) => {
+      alert("이미 신고된 댓글입니다.");
+      console.log(error);
+    });
+};
+
 const getLocations = () => {
   axios
     .get("http://127.0.0.1:3000/postdata/locations", {
@@ -213,6 +228,23 @@ const createComment = () => {
     .then(() => {
       newComment.value = "";
       getComments();
+    })
+    .catch((error) => {
+      alert("로그인 해 주세요.", error);
+    });
+};
+
+const updateComment = (commentId, updateComment) => {
+  axios
+    .put(`http://127.0.0.1:3000/postdata/updatecomment/${commentId}`, {
+      comment: updateComment,
+    })
+    .then((r) => {
+      alert("댓글이 수정되었습니다.");
+      getComments();
+    })
+    .catch((e) => {
+      console.log(e);
     });
 };
 const deleteComment = (commentId) => {
@@ -294,7 +326,7 @@ setRecentView();
         </div>
       </div>
       <div class="name-info">
-        <div>{{ boardData.BRD_WRITER }}</div>
+        <div>{{ boardData.BRD_NICK }}</div>
         <div class="name-info-right">
           <div>
             <input
@@ -384,13 +416,19 @@ setRecentView();
                 <a
                   class="dropdown-item"
                   type="button"
+                  v-if="boardData.BRD_ID == userEmail"
                   :href="`/detail/edit/${route.params.boardId}`"
                 >
                   수정
                 </a>
               </li>
               <li>
-                <button class="dropdown-item" type="button" @click="deletePost">
+                <button
+                  class="dropdown-item"
+                  type="button"
+                  v-if="boardData.BRD_ID == userEmail"
+                  @click="deletePost"
+                >
                   삭제
                 </button>
               </li>
@@ -469,6 +507,8 @@ setRecentView();
               :key="comment.COM_ID"
               :comment="comment"
               @delete="deleteComment"
+              @edit="updateComment"
+              @report="reportComment"
             />
           </div>
         </div>
@@ -566,7 +606,7 @@ setRecentView();
 .carousel_item > img {
   width: 100%;
   height: 450px;
-  object-fit: cover;
+  object-fit: fill;
   object-position: center center;
 }
 .imageslider {
