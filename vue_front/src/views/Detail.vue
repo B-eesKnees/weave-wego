@@ -416,7 +416,7 @@ setRecentView();
                 <a
                   class="dropdown-item"
                   type="button"
-                  v-if="boardData.BRD_ID == userEmail"
+                  v-if="boardData.BRD_WRITER == userEmail"
                   :href="`/detail/edit/${route.params.boardId}`"
                 >
                   수정
@@ -426,7 +426,7 @@ setRecentView();
                 <button
                   class="dropdown-item"
                   type="button"
-                  v-if="boardData.BRD_ID == userEmail"
+                  v-if="boardData.BRD_WRITER == userEmail"
                   @click="deletePost"
                 >
                   삭제
