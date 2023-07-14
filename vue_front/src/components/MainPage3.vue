@@ -647,7 +647,8 @@ export default {
             return;
         },
         handleClick(event) { //좋아요버튼 클릭시 발생하는 이벤트 1
-            event.stopPropagation(); //a 태그 작동 정지
+            event.preventDefault();
+            // event.stopPropagation(); //a 태그 작동 정지
 
             if (!this.email) { //로그인이 안되어있는 상태라면
                 if (confirm('로그인이 필요합니다. 로그인하시겠습니까?')) { //확인창 띄우고
@@ -1047,4 +1048,12 @@ svg {
             transform: translateY(-15px) translateX(-15px) rotate(45deg) scale(0.5);
         }
     }
+
+a {
+  text-decoration-line: none;
+/*   text-decoration-line: underline; */
+/*   text-decoration-line: overline; */
+/*   text-decoration-line: line-through; */
+/*   text-decoration-line: underline line-through overline; */
+}
 </style>
