@@ -198,8 +198,8 @@
                 </select>
             </div>
             <div class="mainpage3_third_contents">
-                <div v-for="(item, i) in Data" :key="i" class="mainpage3_third_content"> <!-- a 태그 삭제 -->
-                    <div class="mainpage3_third_content_img" @click="moveToDetail(item.BRD_ID)">
+                <a v-for="(item, i) in Data" :key="i" class="mainpage3_third_content" :href="`/detail/${item.BRD_ID}`" target="_blank"> <!-- a 태그 삭제 -->
+                    <div class="mainpage3_third_content_img">
                         <!--이미지 클릭시 상세페이지로 이동 이벤트-->
                         <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
                         <div id="opacity_glass"></div>
@@ -220,7 +220,7 @@
                         <div class="border"></div>
                         <p>{{ item.BRD_REV }}</p>
                     </div>
-                </div>
+                </a>
             </div>
 
             <div class="more_btn">
@@ -654,23 +654,6 @@ export default {
                     window.location.href = "/login"; //동의할시 로그인 창으로 이동
                 }
             }
-        },
-        moveToDetail(brdid) { //클릭시 최근본 게시글 테이블에 저장
-            console.log(brdid);
-            axios({
-                url: 'http://localhost:3000/recentView',
-                method: "POST",
-                data: {
-                    brdID: brdid,
-                    email: this.email
-                }
-            }).then((res) => {
-                console.log(res.data.message);
-            }).catch((error) => {
-                alert(error);
-            })
-
-            window.location.href = `/detail/${brdid}`;
         }
     }
 }

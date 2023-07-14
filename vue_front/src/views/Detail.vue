@@ -54,16 +54,22 @@ const getUserEmail = () => {
 };
 
 const getBoard = () => {
-  console.log(userEmail.value);
+  let recentView = 'noWatch';
+
+  if(sessionStorage.getItem('recentViewPost')) {
+    recentView = 'watched';
+  }
   axios
     .get("http://127.0.0.1:3000/postdata/board", {
       params: {
         boardId: route.params.boardId, // router -> :boardId
         email: userEmail.value,
+        recentview: recentView
       },
     })
     .then((result) => {
       boardData.value = result.data.board;
+      sessionStorage.setItem('recentViewPost', route.params.boardId);
       try {
         boardData.value.BRD_HASHTAG = JSON.parse(boardData.value.BRD_HASHTAG);
       } catch {
