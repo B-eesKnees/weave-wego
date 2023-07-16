@@ -198,8 +198,8 @@
                 </select>
             </div>
             <div class="mainpage3_third_contents">
-                <div v-for="(item, i) in Data" :key="i" class="mainpage3_third_content"> <!-- a 태그 삭제 -->
-                    <div class="mainpage3_third_content_img" @click="moveToDetail(item.BRD_ID)">
+                <a v-for="(item, i) in Data" :key="i" class="mainpage3_third_content" :href="`/detail/${item.BRD_ID}`" target="_blank"> <!-- a 태그 삭제 -->
+                    <div class="mainpage3_third_content_img">
                         <!--이미지 클릭시 상세페이지로 이동 이벤트-->
                         <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
                         <div id="opacity_glass"></div>
@@ -220,7 +220,7 @@
                         <div class="border"></div>
                         <p>{{ item.BRD_REV }}</p>
                     </div>
-                </div>
+                </a>
             </div>
 
             <div class="more_btn">
@@ -647,30 +647,14 @@ export default {
             return;
         },
         handleClick(event) { //좋아요버튼 클릭시 발생하는 이벤트 1
-            event.stopPropagation(); //a 태그 작동 정지
+            event.preventDefault();
+            // event.stopPropagation(); //a 태그 작동 정지
 
             if (!this.email) { //로그인이 안되어있는 상태라면
                 if (confirm('로그인이 필요합니다. 로그인하시겠습니까?')) { //확인창 띄우고
                     window.location.href = "/login"; //동의할시 로그인 창으로 이동
                 }
             }
-        },
-        moveToDetail(brdid) { //클릭시 최근본 게시글 테이블에 저장
-            console.log(brdid);
-            axios({
-                url: 'http://localhost:3000/recentView',
-                method: "POST",
-                data: {
-                    brdID: brdid,
-                    email: this.email
-                }
-            }).then((res) => {
-                console.log(res.data.message);
-            }).catch((error) => {
-                alert(error);
-            })
-
-            window.location.href = `/detail/${brdid}`;
         }
     }
 }
@@ -1064,4 +1048,12 @@ svg {
             transform: translateY(-15px) translateX(-15px) rotate(45deg) scale(0.5);
         }
     }
+
+a {
+  text-decoration-line: none;
+/*   text-decoration-line: underline; */
+/*   text-decoration-line: overline; */
+/*   text-decoration-line: line-through; */
+/*   text-decoration-line: underline line-through overline; */
+}
 </style>
