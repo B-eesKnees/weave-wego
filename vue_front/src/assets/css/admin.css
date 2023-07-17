@@ -102,6 +102,7 @@
     width: 20%;
     padding-right: 60%;
     overflow: hidden;
+    white-space:nowrap;
 }
 
 .report_writer, .reportCourse_content_writer  {
@@ -119,13 +120,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1% 2%;
+    padding: 2% 4%;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .reportComment_info p:nth-child(2) {
-    margin-left: -35%;
+    margin-left: -50%;
 }
 
 .reportComment_content {
@@ -133,23 +134,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2% 2%;
+    padding: 20px 5% 0 5%;
 }
 
 .reportComment_content_num {
     font-size: small;
-    width: 12%;
+    width: 22%;
     overflow: hidden;
 }
 
 .reportComment_content_title {
-    width: 40%;
-    padding-right: 20%;
+    width: 70%;
+    padding-left: 1%;
     overflow: hidden;
 }
 
 .reportComment_content_writer {
-    width: 30%;
+    width: 20%;
+    padding-left: 10%;
     overflow: hidden;
     font-size: small;
 }
