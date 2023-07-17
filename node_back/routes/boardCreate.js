@@ -122,6 +122,92 @@ router.post("/", postUpload, (req, res) => {
   );
 });
 
+router.put("/update", postUpload, (req, res) => {
+  const postData = JSON.parse(req.body.postData);
+  const locationData = JSON.parse(req.body.locationData);
+  const deletedImagesData = JSON.parse(req.body.deletedImages).length
+    ? JSON.parse(req.body.deletedImages)
+    : [0];
+  const postId = postData.id;
+  const boardRow = {
+    BRD_TITLE: postData.title,
+    BRD_LOC_REV1: locationData[0] ? locationData[0].content : "", // 이것들은
+    BRD_LOC_REV2: locationData[1] ? locationData[1].content : "", // 장소 정보에서
+    BRD_LOC_REV3: locationData[2] ? locationData[2].content : "", // 뽑을게요
+    BRD_LOC_REV4: locationData[3] ? locationData[3].content : "", // 삼항연산자는
+    BRD_LOC_REV5: locationData[4] ? locationData[4].content : "", // 장소가 무조건 5개가 아니기에
+    BRD_REV: postData.review,
+    BRD_HASHTAG: JSON.stringify(postData.hashtag),
+    BRD_OPEN: postData.open,
+  };
+  db.query("UPDATE board SET ? WHERE BRD_ID=?", [boardRow, postId], (err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "DB ERROR" });
+    } else {
+      const locationRow = {
+        LOC_NAME: JSON.stringify(locationData.map((l) => ({ name: l.title }))),
+        LOC_ADD: JSON.stringify(locationData.map((l) => ({ add: l.address }))),
+        LOC_LAT: JSON.stringify(locationData.map((l) => ({ lat: l.coord.Ma }))),
+        LOC_LNG: JSON.stringify(locationData.map((l) => ({ lng: l.coord.La }))),
+      };
+
+      db.query(
+        "UPDATE location SET ? WHERE LOC_ID=?",
+        [locationRow, postId],
+        (err) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ message: "DB ERROR" });
+          } else {
+            db.query(
+              "DELETE FROM image WHERE IMG_ID IN (?)",
+              [deletedImagesData],
+              (err) => {
+                if (err) {
+                  console.error(err);
+                  res.status(500).json({
+                    message: "DB ERROR",
+                  });
+                } else {
+                  if (req.files.imageData) {
+                    const imageRow = req.files.imageData.map((f) => [
+                      postId,
+                      f.filename,
+                    ]);
+                    db.query(
+                      "INSERT INTO image (IMG_NUM, IMG_PATH) VALUES ?",
+                      [imageRow],
+                      (err) => {
+                        if (err) {
+                          console.error(err);
+                          res.status(500).json({
+                            message: "DB ERROR",
+                          });
+                        } else {
+                          res.status(200).json({
+                            message: "INSERT COMPLETE",
+                            boardId: postId,
+                          });
+                        }
+                      }
+                    );
+                  } else {
+                    res.status(200).json({
+                      message: "INSERT COMPLETE",
+                      boardId: postId,
+                    });
+                  }
+                }
+              }
+            );
+          }
+        }
+      );
+    }
+  });
+});
+
 router.post("/comment", (req, res) => {
   const body = req.body;
   const commentRow = {

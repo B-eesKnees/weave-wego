@@ -35,7 +35,9 @@ router.get("/board", (req, res) => {
           } else {
             const board = results[0];
             if (!board) {
-              res.status(404).json({ error: "게시글을 찾을 수 없습니다. " });
+              res.status(404).json({
+                error: "게시글을 찾을 수 없습니다. ",
+              });
             } else {
               if (
                 board.BRD_OPEN === 1 ||
@@ -43,7 +45,9 @@ router.get("/board", (req, res) => {
               ) {
                 res.json({ board });
               } else {
-                res.status(403).json({ error: "비공개 게시글입니다." });
+                res.status(403).json({
+                  error: "비공개 게시글입니다.",
+                });
               }
             }
           }
@@ -312,89 +316,6 @@ router.put("/updatecomment/:commentId", (req, res) => {
         updatecomments: results,
         message: "댓글이 수정되었습니다.",
       });
-    }
-  });
-});
-
-//게시글 내용 수정--------------------------------------------------------
-router.put("/updateboard", (req, res) => {
-  console.log(req.body);
-  const postData = req.body.postData;
-  const locationData = req.body.locationData;
-  const boardRow = {
-    BRD_TITLE: postData.title,
-    BRD_LOC_REV1: locationData[0] ? locationData[0].content : "",
-    BRD_LOC_REV2: locationData[1] ? locationData[1].content : "",
-    BRD_LOC_REV3: locationData[2] ? locationData[2].content : "",
-    BRD_LOC_REV4: locationData[3] ? locationData[3].content : "",
-    BRD_LOC_REV5: locationData[4] ? locationData[4].content : "",
-    BRD_REV: postData.review,
-    BRD_HASHTAG: postData.hashtag,
-    BRD_OPEN: postData.open,
-  };
-
-  db.query(
-    "UPDATE board SET ? WHERE BRD_ID=?",
-    [boardRow, postData.id],
-    (err, results) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ error: "서버에러" });
-      } else {
-        res.status(200).json({
-          updateboard: results,
-          message: "게시글 수정이 완료되었습니다.",
-        });
-      }
-    }
-  );
-});
-
-//닉네임 변경
-router.put("/user/:userEmail/nickname", (req, res) => {
-  const { userEmail } = req.params;
-  const { nickname } = req.body;
-
-  const checkNick =
-    "SELECT COUNT(*) AS count FROM user WHERE user_nickname=? AND user_email=?";
-
-  db.query(checkNick, [nickname, userEmail], (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "error" });
-    }
-
-    const nickCount = results[0].count;
-    if (nickCount > 0) {
-      return res.status(400).json({ error: "중복된 닉네임 입니다." });
-    }
-
-    //닉네임 업데이트
-    const nickUpdate = "UPDATE user SET user_nickname =? where user_email =?";
-
-    db.query(nickUpdate, [nickname, userEmail], (err, results) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: "닉네임 업데이트 실패" });
-      }
-      res.json({ message: "닉네임 변경 성공" });
-    });
-  });
-});
-
-//게시글 닉네임 업데이트
-router.put("/user/:userEmail/boardNick", (req, res) => {
-  const { userEmail } = req.params;
-  const { newNick } = req.body;
-
-  const updateNick = "UPDATE board SET brd_nick =? WHERE brd_writer=? ";
-
-  db.query(updateNick, [newNick, userEmail], (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "error" });
-    } else {
-      res.status(200).json({ message: " 작성자 닉네임 업데이트 완료" });
     }
   });
 });

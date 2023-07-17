@@ -466,7 +466,7 @@ setRecentView();
           :poptime="popTimeData"
         />
         <!-- 이미지 슬라이드 -->
-        <div class="imageslider">
+        <div v-if="images.length" class="imageslider">
           <carousel :items-to-show="1" :wrap-around="false">
             <slide v-for="image in images" :key="image">
               <div class="carousel_item">
@@ -620,7 +620,7 @@ setRecentView();
 .carousel_item > img {
   width: 100%;
   height: 450px;
-  object-fit: fill;
+  object-fit: cover;
 }
 .imageslider {
   display: flex;
