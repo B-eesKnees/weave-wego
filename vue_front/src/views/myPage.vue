@@ -462,7 +462,9 @@ export default {
       this.getRecentBoardList();
 
       // 기존 탭을 새로고침하도록 변경
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     },
   },
 };

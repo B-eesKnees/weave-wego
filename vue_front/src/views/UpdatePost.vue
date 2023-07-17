@@ -135,6 +135,9 @@ const getBoard = () => {
         BRD_TEMP.BRD_LOC_REV4,
         BRD_TEMP.BRD_LOC_REV5,
       ];
+      console.log(locationRevData.value);
+      getLocations();
+      getImages();
     })
     .catch((error) => {
       console.log("board_error", error);
@@ -152,6 +155,7 @@ const getLocations = () => {
     })
     .then((result) => {
       const temp = result.data.locations;
+      console.log("t", temp);
       for (let i = 0; i < JSON.parse(temp.LOC_ADD).length; i++) {
         locations.value.push({
           id: i,
@@ -164,9 +168,27 @@ const getLocations = () => {
           content: locationRevData.value[i],
         });
       }
+      console.log("l", locations.value);
     })
     .catch((error) => {
       console.log("locations_error", error);
+    });
+};
+
+const getImages = () => {
+  axios
+    .get("http://127.0.0.1:3000/postdata/images", {
+      params: {
+        boardId: route.params.boardId, // router -> :boardId
+      },
+    })
+    .then((result) => {
+      images.value = result.data.images.map(
+        (i) => `http://127.0.0.1:3000/postdata/image/${i.IMG_PATH}`
+      );
+    })
+    .catch((error) => {
+      console.log("images_error", error);
     });
 };
 
@@ -221,7 +243,6 @@ const prepareMap = () => {
   script.onload = () => {
     window.kakao.maps.load(drawMap);
     getBoard();
-    getLocations();
   };
 
   document.head.appendChild(script);
@@ -462,8 +483,6 @@ const drawMap = () => {
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
     drawMap();
-    getBoard();
-    getLocations();
   } else {
     prepareMap();
   }
