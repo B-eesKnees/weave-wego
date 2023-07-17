@@ -2,10 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "../views/MainPage.vue";
 import userLogin from "../views/userLogin.vue";
 import userJoin from "../views/userJoin.vue";
-import adminBoardList from '../components/adminBoardlist.vue'
-import adminReportBoard from '../components/adminReportBoard.vue'
-import adminUserList from '../components/adminUserList.vue'
-import adminReportComment from '../components/adminReportComment.vue'
+import adminBoardList from "../components/adminBoardlist.vue";
+import adminReportBoard from "../components/adminReportBoard.vue";
+import adminUserList from "../components/adminUserList.vue";
+import adminReportComment from "../components/adminReportComment.vue";
 
 const requireLogin = () => (to, from, next) => {
   //로그인안하고 접근하려했을때 실행할 함수?
@@ -70,7 +70,7 @@ const routes = [
     name: "newPost",
     component: () =>
       import(/* webpackChunkName: "newpost" */ "../views/NewPost.vue"),
-    beforeEnter: requireLogin()
+    beforeEnter: requireLogin(),
   },
 
   {
@@ -119,6 +119,8 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior() {
+    return { top: 0 };
+  },
 });
-
 export default router;
