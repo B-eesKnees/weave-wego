@@ -194,7 +194,7 @@
                 <select v-model="sortvalue" name="items1">
                     <option :value="'최근순'">최근순</option>
                     <option :value="'인기순'">인기순</option>
-                    <option :value="'조회순'">조회순</option>
+                    <option :value="'조회순'">조회수순</option>
                 </select>
             </div>
             <div class="mainpage3_third_contents">
@@ -854,7 +854,7 @@ export default {
 .mainpage3_third_content_img img {
     width: 100%;
     height: 100%;
-    object-fit: scale-down;
+    object-fit: cover;
     z-index: 3;
 }
 
@@ -1017,8 +1017,8 @@ svg {
 }
     
 .like-button img {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 31px;
 }
 .like-button .heart-overlay {
   position: absolute;
