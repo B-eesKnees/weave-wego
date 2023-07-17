@@ -8,12 +8,15 @@ const fs = require("fs");
 router.get("/board", (req, res) => {
   const { boardId } = req.query;
   const userEmail = req.query.email;
-  const recentView = req.query.recentview; 
+  const recentView = req.query.recentview;
   //vue쪽에서 게시글 정보를 받아오고 난뒤 sessionStorage에 게시글 번호를 저장하게 하고
   //vue에서 게시글 정보를 받아올때 sessionStorage에 값이 있으면 (게시글 번호) watched를 없으면 noWatch를 보내도록 함
 
-  const updateViewQuery = (recentView=='noWatch') ? `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT + 1 WHERE BRD_ID=?` : `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT WHERE BRD_ID=?`;
-  //삼항연산자를 이용하여 vue에서 noWatch를 보내주면 조회수가 올라가도록 하고 
+  const updateViewQuery =
+    recentView == "noWatch"
+      ? `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT + 1 WHERE BRD_ID=?`
+      : `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT WHERE BRD_ID=?`;
+  //삼항연산자를 이용하여 vue에서 noWatch를 보내주면 조회수가 올라가도록 하고
   //아니면 조회수는 그대로 유지하게 하는 쿼리를 사용하게 함
   const selectBoardQuery = "SELECT * FROM board WHERE BRD_ID=?";
 
@@ -345,6 +348,55 @@ router.put("/updateboard", (req, res) => {
       }
     }
   );
+});
+
+//닉네임 변경
+router.put("/user/:userEmail/nickname", (req, res) => {
+  const { userEmail } = req.params;
+  const { nickname } = req.body;
+
+  const checkNick =
+    "SELECT COUNT(*) AS count FROM user WHERE user_nickname=? AND user_email=?";
+
+  db.query(checkNick, [nickname, userEmail], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "error" });
+    }
+
+    const nickCount = results[0].nickCount;
+    if (nickCount > 0) {
+      return res.status(400).json({ error: "중복된 닉네임 입니다." });
+    }
+
+    //닉네임 업데이트
+    const nickUpdate = "UPDATE user SET user_nickname =? where user_email =?";
+
+    db.query(nickUpdate, [nickname, userEmail], (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "닉네임 업데이트 실패" });
+      }
+      res.json({ message: "닉네임 변경 성공" });
+    });
+  });
+});
+
+//게시글 닉네임 업데이트
+router.put("/user/:userEmail/boardNick", (req, res) => {
+  const { userEmail } = req.params;
+  const { newNick } = req.body;
+
+  const updateNick = "UPDATE board SET brd_nick =? WHERE brd_writer=? ";
+
+  db.query(updateNick, [newNick, userEmail], (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "error" });
+    } else {
+      res.status(200).json({ message: " 작성자 닉네임 업데이트 완료" });
+    }
+  });
 });
 
 module.exports = router;
