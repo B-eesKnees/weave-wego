@@ -292,6 +292,7 @@
 .com_comment{
   position: relative;
   display: inline-block;
+  width: 80%;
   left: 35px;
   top: -25px;
   font-size: 1.6em;

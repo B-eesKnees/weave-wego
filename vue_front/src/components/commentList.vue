@@ -5,6 +5,16 @@ export default {
     commentList: Object,
     comment_editMode: Boolean,
   },
+  computed: {
+    truncatedComment() {
+      const maxChars = 40;
+      if (this.commentList.COM_COMMENT.length > maxChars) {
+        return this.commentList.COM_COMMENT.substring(0, maxChars) + "...";
+      } else {
+        return this.commentList.COM_COMMENT;
+      }
+    },
+  },
   data() {
     return {
       comIsChecked: false,
@@ -42,7 +52,7 @@ export default {
           src="../assets/img/commentList.png"
           alt="commentList"
         />
-        <div class="com_comment">{{ commentList.COM_COMMENT }}</div>
+        <div class="com_comment">{{ truncatedComment }}</div>
       </div>
     </a>
   </div>

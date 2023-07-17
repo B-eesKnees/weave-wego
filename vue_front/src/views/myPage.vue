@@ -229,10 +229,12 @@ export default {
       selectedItems: [],
       selectedComItems: [],
 
-      visibleCount: 3, // 초기에 보여줄 목록 개수\
+      visibleCount: 3, // 초기에 보여줄 목록 개수
       visiblerecentCount: 3,
       visibleLikeCount: 3,
       visibleCommentCount: 4,
+
+      activeTab: "myPage",
     };
   },
   created() {
@@ -436,6 +438,30 @@ export default {
     },
     cancelCommentEdit() {
       this.comment_editMode = false;
+    },
+    changeTab(tab) {
+      this.activeTab = tab;
+      if (tab === "recentCourse") {
+        this.showRecentCourseTab();
+      }
+    },
+    showRecentCourseTab() {
+      // 최근에 본 코스 탭을 보여주는 로직을 여기에 구현합니다.
+      // 최근에 본 코스 데이터를 불러와서 화면에 표시하는 등의 작업을 수행합니다.
+      // 예시로 최근에 본 코스 목록을 API를 통해 불러오고 해당 데이터를 화면에 바인딩하는 것을 보여드리겠습니다.
+      // 이 부분은 실제 데이터와 화면 구조에 맞게 수정하셔야 합니다.
+      // 최근에 본 코스 데이터를 불러오는 API 호출 (예시)
+      // axios
+      //   .post("/mypage/recentCourse", { userEmail: this.email })
+      //   .then((response) => {
+      //     const recentCourses = response.data;
+      //     // 최근에 본 코스 데이터를 화면에 바인딩하거나, 컴포넌트에 전달합니다.
+      //     this.recentCourses = recentCourses;
+      //     // 이후에는 컴포넌트나 화면에 최근에 본 코스 목록을 표시하는 등의 작업을 진행합니다.
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   });
     },
   },
 };
