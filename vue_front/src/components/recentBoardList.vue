@@ -11,6 +11,13 @@ export default {
         this.openBoardDetail(this.recentBoardList.BRD_ID);
       }
     },
+    processHashtags(hashtags) {
+      const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+      const leftReplaceData = hashtags.replace(reg, " ");
+      const leftReplaceData2 = leftReplaceData.split(" ");
+      const hashtagsWithoutEmpty = leftReplaceData2.filter((tag) => tag !== "");
+      return hashtagsWithoutEmpty;
+    },
   },
 };
 </script>
@@ -24,7 +31,13 @@ export default {
     >
       <div class="board-list">
         <div class="board_content">
-          <div class="hashtag">{{ recentBoardList.BRD_HASHTAG }}</div>
+          <div class="hashtag">
+            {{
+              processHashtags(recentBoardList.BRD_HASHTAG)
+                .map((tag) => `#${tag}`)
+                .join(" ")
+            }}
+          </div>
           <div class="brd_created_at">{{ recentBoardList.BRD_CREATED_AT }}</div>
           <div class="brd_title">{{ recentBoardList.BRD_TITLE }}</div>
           <div class="viewer">
