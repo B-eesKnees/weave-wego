@@ -364,7 +364,7 @@ router.put("/user/:userEmail/nickname", (req, res) => {
       return res.status(500).json({ error: "error" });
     }
 
-    const nickCount = results[0].nickCount;
+    const nickCount = results[0].count;
     if (nickCount > 0) {
       return res.status(400).json({ error: "중복된 닉네임 입니다." });
     }
