@@ -117,6 +117,10 @@ const locations = ref([]);
 const images = ref([]); // 이미지 업로드 하는 스크립트
 
 const createPost = () => {
+  if (!tags.value) {
+    alert("하나 이상의 지역, 테마를 선택해주세요.");
+    return;
+  }
   const formData = new FormData();
   formData.append(
     "postData",

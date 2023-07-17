@@ -54,16 +54,22 @@ const getUserEmail = () => {
 };
 
 const getBoard = () => {
-  console.log(userEmail.value);
+  let recentView = 'noWatch';
+
+  if(sessionStorage.getItem('recentViewPost')) {
+    recentView = 'watched';
+  }
   axios
     .get("http://127.0.0.1:3000/postdata/board", {
       params: {
         boardId: route.params.boardId, // router -> :boardId
         email: userEmail.value,
+        recentview: recentView
       },
     })
     .then((result) => {
       boardData.value = result.data.board;
+      sessionStorage.setItem('recentViewPost', route.params.boardId);
       try {
         boardData.value.BRD_HASHTAG = JSON.parse(boardData.value.BRD_HASHTAG);
       } catch {
@@ -416,7 +422,7 @@ setRecentView();
                 <a
                   class="dropdown-item"
                   type="button"
-                  v-if="boardData.BRD_ID == userEmail"
+                  v-if="boardData.BRD_WRITER == userEmail"
                   :href="`/detail/edit/${route.params.boardId}`"
                 >
                   수정
@@ -426,7 +432,7 @@ setRecentView();
                 <button
                   class="dropdown-item"
                   type="button"
-                  v-if="boardData.BRD_ID == userEmail"
+                  v-if="boardData.BRD_WRITER == userEmail"
                   @click="deletePost"
                 >
                   삭제

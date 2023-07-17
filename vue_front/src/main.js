@@ -13,6 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
+
 library.add(fas, far, fab);
 
 createApp(App)
