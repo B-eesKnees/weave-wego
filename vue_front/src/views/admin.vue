@@ -90,7 +90,7 @@
         >
           <p class="reportComment_content_num">{{ com.COM_ID }}</p>
           <p class="reportComment_content_title">{{ com.COM_COMMENT }}</p>
-          <p class="reportComment_content_writer">{{ com.COM_WRITER }}</p>
+          <p class="reportComment_content_writer">{{ com.COM_NICK }}</p>
         </div>
       </div>
     </div>
