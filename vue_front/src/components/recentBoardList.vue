@@ -5,14 +5,11 @@ export default {
     openBoardDetail: Function, // 추가: openBoardDetail 함수를 props로 받아옴
   },
   methods: {
-    handleOpenBoardDetailAndRefresh(event) {
-      // event.preventDefault(); // 기존 <a> 태그의 링크 동작을 막음
-
-      // 링크 동작 수행 (새 창 열림)
-      // window.open(event.target.href, "_blank");
-
-      // 기존 창 새로고침
-      window.location.reload();
+    handleOpenBoardDetailAndRefresh() {
+      // openBoardDetail 함수 호출하여 기존 탭 새로고침하기 (props로 전달된 함수)
+      if (this.openBoardDetail) {
+        this.openBoardDetail(this.recentBoardList.BRD_ID);
+      }
     },
   },
 };

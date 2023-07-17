@@ -100,7 +100,7 @@
             v-for="item in visiblerecentBoard"
             :recentBoardList="item"
             :key="item.BRD_ID"
-            :openBoardDetail="openBoardDetail"
+            :openBoardDetail="openBoardDetailFunc"
           />
         </div>
         <div
@@ -440,9 +440,28 @@ export default {
     cancelCommentEdit() {
       this.comment_editMode = false;
     },
-    openBoardDetail(boardId) {
-      // postMessage를 사용하여 부모 창에 메시지를 보냅니다.
-      window.parent.postMessage({ type: "refreshList", boardId }, "*");
+    async getRecentBoardList() {
+      // 최근에 본 코스 리스트를 다시 받아오는 함수
+      try {
+        const response = await axios.post("/mypage/recentCourse", {
+          userEmail: this.email,
+        });
+        this.recentBoardList = response.data;
+        if (this.recentBoardList.length != 0) {
+          this.norecentData = false;
+        } else {
+          this.norecentData = true;
+        }
+      } catch {
+        this.norecentData = true;
+      }
+    },
+
+    openBoardDetailFunc(boardId) {
+      // 최근에 본 코스 리스트를 다시 받아오는 함수 (이 부분은 필요 없을 수도 있습니다.)
+      this.getRecentBoardList();
+
+      // 기존 탭을 새로고침하도록 변경
       window.location.reload();
     },
   },
