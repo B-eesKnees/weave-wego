@@ -8,12 +8,15 @@ const fs = require("fs");
 router.get("/board", (req, res) => {
   const { boardId } = req.query;
   const userEmail = req.query.email;
-  const recentView = req.query.recentview; 
+  const recentView = req.query.recentview;
   //vue쪽에서 게시글 정보를 받아오고 난뒤 sessionStorage에 게시글 번호를 저장하게 하고
   //vue에서 게시글 정보를 받아올때 sessionStorage에 값이 있으면 (게시글 번호) watched를 없으면 noWatch를 보내도록 함
 
-  const updateViewQuery = (recentView=='noWatch') ? `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT + 1 WHERE BRD_ID=?` : `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT WHERE BRD_ID=?`;
-  //삼항연산자를 이용하여 vue에서 noWatch를 보내주면 조회수가 올라가도록 하고 
+  const updateViewQuery =
+    recentView == "noWatch"
+      ? `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT + 1 WHERE BRD_ID=?`
+      : `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT WHERE BRD_ID=?`;
+  //삼항연산자를 이용하여 vue에서 noWatch를 보내주면 조회수가 올라가도록 하고
   //아니면 조회수는 그대로 유지하게 하는 쿼리를 사용하게 함
   const selectBoardQuery = "SELECT * FROM board WHERE BRD_ID=?";
 

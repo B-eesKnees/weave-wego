@@ -54,22 +54,23 @@ const getUserEmail = () => {
 };
 
 const getBoard = () => {
-  let recentView = 'noWatch';
+  let recentView = "noWatch";
 
-  if(sessionStorage.getItem('recentViewPost')) {
-    recentView = 'watched';
+  if (sessionStorage.getItem("recentViewPost")) {
+    recentView = "watched";
   }
+  console.log(userEmail.value);
   axios
     .get("http://127.0.0.1:3000/postdata/board", {
       params: {
         boardId: route.params.boardId, // router -> :boardId
         email: userEmail.value,
-        recentview: recentView
+        recentview: recentView,
       },
     })
     .then((result) => {
       boardData.value = result.data.board;
-      sessionStorage.setItem('recentViewPost', route.params.boardId);
+      sessionStorage.setItem("recentViewPost", route.params.boardId);
       try {
         boardData.value.BRD_HASHTAG = JSON.parse(boardData.value.BRD_HASHTAG);
       } catch {
@@ -420,9 +421,9 @@ setRecentView();
             <ul class="dropdown-menu">
               <li>
                 <a
+                  v-if="boardData.BRD_WRITER == userEmail"
                   class="dropdown-item"
                   type="button"
-                  v-if="boardData.BRD_WRITER == userEmail"
                   :href="`/detail/edit/${route.params.boardId}`"
                 >
                   수정
@@ -430,9 +431,9 @@ setRecentView();
               </li>
               <li>
                 <button
+                  v-if="boardData.BRD_WRITER == userEmail"
                   class="dropdown-item"
                   type="button"
-                  v-if="boardData.BRD_WRITER == userEmail"
                   @click="deletePost"
                 >
                   삭제
@@ -523,6 +524,12 @@ setRecentView();
   </div>
 </template>
 
+<style>
+.carousel__track {
+  margin-bottom: 0;
+}
+</style>
+
 <style scoped>
 .gnb {
   margin-bottom: 8rem;
@@ -608,12 +615,12 @@ setRecentView();
   width: 70%;
   border: 1px solid black;
 }
+
 .carousel_item,
 .carousel_item > img {
   width: 100%;
   height: 450px;
   object-fit: fill;
-  object-position: center center;
 }
 .imageslider {
   display: flex;

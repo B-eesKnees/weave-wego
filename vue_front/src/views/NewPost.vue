@@ -1,7 +1,10 @@
 <template>
   <div class="wrapper">
     <gnbBar />
-    <div class="header">글 작성하기</div>
+    <div class="header">
+      글 작성하기
+      <div class="hashtags">{{ `${tags.map((h) => `#${h}`).join(" ")}` }}</div>
+    </div>
     <div class="page">
       <div class="filter">
         <FilterComponent @update-tag="(data) => updateTags(data)" />
@@ -107,7 +110,7 @@ const router = useRouter();
 const brdopen = ref(1);
 const title = ref("");
 const review = ref("");
-const tags = ref();
+const tags = ref([]);
 ///
 const map = ref(null);
 const infowindow = ref(null);
