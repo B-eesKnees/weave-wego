@@ -13,8 +13,9 @@
                 </a>
 
                 <div class="mainpage2_second_left_content">
-                    <h3 class="mainpage2_second_left_content_name">{{ recommendData.BRD_TITLE }}</h3>
-                    <p class="mainpage2_second_left_content_hashtag">{{ recommendData.BRD_HASHTAG }}</p>
+                    <h2 class="mainpage2_second_left_content_name">{{ recommendData.BRD_TITLE }}</h2>
+                    <span v-for="(item, i) in brdHashtags" :key="i" class="mainpage2_second_left_content_hashtag">#{{
+                        item }}</span>
                     <span class="mainpage2_second_left_content_user">{{ recommendData.BRD_NICK }}
                         <p>님의 코스</p>
                     </span>
@@ -30,7 +31,8 @@
                             </div>
                             <div class="mainpage2_second_right_row_content">
                                 <h3 class="mainpage2_second_right_row_content_name">{{ item.BRD_TITLE }}</h3>
-                                <p class="mainpage2_second_right_row_content_hashtag">{{ item.BRD_HASHTAG }}</p>
+                                <span v-for="(item2, i) in brdHashtags2" :key="i"
+                                    class="mainpage2_second_right_row_content_hashtag">#{{ item2 }}</span>
                                 <span class="mainpage2_second_right_row_content_user">{{ item.BRD_NICK }}
                                     <p class="nim">님의 코스</p>
                                 </span>
@@ -55,6 +57,8 @@ export default {
     data() {
         return {
             recommendData: [],
+            brdHashtags: [],
+            brdHashtags2: [],
             recommendData2: [],
             email: ''
         };
@@ -73,11 +77,34 @@ export default {
                 url: 'http://localhost:3000/getLikeCourse',
                 method: 'POST'
             }).then(res => {
-                this.recommendData = res.data[0];
+                this.recommendData = res.data[0]; // DB의 ["종로구","식사"]가 배열이 아닌 문자열임 
+                //1순위 게시물 해시태그 문자열 배열로 뽑는 코드
+                const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi; // 특수문자 모음을 reg변수에 저장
+                const leftReplaceData = this.recommendData.BRD_HASHTAG.replace(reg, ' '); //ex( 종로구  식사  )
+                const leftReplaceData2 = leftReplaceData.split(' '); // ["","종로구","","식사",""] <<배열
+                //배열의 모든 요소를 순회하며
+                //빈 배열 삭제
+                for (var i in leftReplaceData2) {
+                    if (leftReplaceData2[i] == '') {
+                        leftReplaceData2.splice(i, 2);
+                    }
+                }
+                this.brdHashtags = leftReplaceData2;//["종로구","식사"] 배열 << 결과값
+
                 for (let i = 1; i <= 3; i++) {
                     this.recommendData2.push(res.data[i]);
                 }
                 (this.recommendData, "recommendData");
+                //2,3,4순위 게시물 해시태그 문자열 배열로 뽑는 코드
+                const rightReplaceData = this.recommendData.BRD_HASHTAG.replace(reg, ' ');
+                const rightReplaceData2 = rightReplaceData.split(' ');
+                for (var i in rightReplaceData2) {
+                    if (rightReplaceData2[i] == '') {
+                        rightReplaceData2.splice(i, 2);
+                    }
+                }
+                this.brdHashtags2 = rightReplaceData2;
+
             })
         },
     }
@@ -96,14 +123,12 @@ export default {
 }
 
 .mainpage2 {
-
     padding: 5% 15% 10% 15%;
     width: 100%;
     height: 110vh;
 }
 
 .mainpage2_second {
-
     width: 100%;
     height: 100%;
 }
@@ -111,6 +136,7 @@ export default {
 .mainpage2_second p {
     font-size: small;
     line-height: 200%;
+    z-index: 5;
 }
 
 .mainpage2_second_left {
@@ -123,13 +149,10 @@ export default {
 
 .mainpage2_second_left_content {
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    align-self: flex-end;
     padding: 3%;
-
+    position: absolute;
+    width: 100%;
+    color: whitesmoke;
 }
 
 .mainpage2_second_left_img {
@@ -141,20 +164,26 @@ export default {
 .mainpage2_second_left_img img {
     width: 100%;
     height: 100%;
-    object-fit: scale-down;
+    object-fit: cover;
     z-index: 3;
 }
 
 .mainpage2_second_left_content_hashtag {
     margin-top: 5%;
+    margin-right: 1%;
     font-size: small;
+    z-index: 10;
+    color: #ccc;
 }
 
 .mainpage2_second_left_content_user {
-    margin-top: 70%;
+    margin-top: 90%;
     display: flex;
     align-self: flex-end;
     font-weight: bold;
+    font-size: large;
+    justify-content: end;
+    width: 100%;
 }
 
 .mainpage2_second_right {
@@ -189,7 +218,7 @@ export default {
 .mainpage2_second_right_row_img img {
     width: 100%;
     height: 100%;
-    object-fit: scale-down;
+    object-fit: cover;
     z-index: 3;
 }
 
@@ -199,11 +228,12 @@ export default {
     padding: 3%;
     float: right;
     box-sizing: border-box;
-    display: flex;
+    position: relative;
+    /* display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    align-self: flex-end;
+    align-self: flex-end; */
 
 }
 
@@ -215,17 +245,21 @@ export default {
 
 .mainpage2_second_right_row_content_hashtag {
     margin-top: -10%;
+    margin-right: 1%;
     font-size: small;
+    color: #ccc;
     font-weight: normal;
     z-index: 5;
 }
 
-.mainpage2_second_right_row_content_user,
-.mainpage2_second_left_content_user {
+.mainpage2_second_right_row_content_user {
+    width: 90%;
     display: flex;
-    align-self: flex-end;
     font-weight: bold;
+    justify-content: end;
     z-index: 5;
+    position: absolute;
+    bottom: 0;
 }
 
 .mainpage2_second_right_row_content_user p,
