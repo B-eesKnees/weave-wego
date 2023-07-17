@@ -35,7 +35,9 @@ router.get("/board", (req, res) => {
           } else {
             const board = results[0];
             if (!board) {
-              res.status(404).json({ error: "게시글을 찾을 수 없습니다. " });
+              res.status(404).json({
+                error: "게시글을 찾을 수 없습니다. ",
+              });
             } else {
               if (
                 board.BRD_OPEN === 1 ||
@@ -43,7 +45,9 @@ router.get("/board", (req, res) => {
               ) {
                 res.json({ board });
               } else {
-                res.status(403).json({ error: "비공개 게시글입니다." });
+                res.status(403).json({
+                  error: "비공개 게시글입니다.",
+                });
               }
             }
           }
@@ -395,23 +399,6 @@ router.put("/user/:userEmail/boardNick", (req, res) => {
       res.status(500).json({ error: "error" });
     } else {
       res.status(200).json({ message: " 작성자 닉네임 업데이트 완료" });
-    }
-  });
-});
-
-//댓글 닉네임 업데이트
-router.put("/user/:userEmail/commentNick", (req, res) => {
-  const { userEmail } = req.params;
-  const { newNick } = req.body;
-
-  const updateNick = "UPDATE comment SET com_nick=? WHERE com_writer=?";
-
-  db.query(updateNick, [newNick, userEmail], (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "error" });
-    } else {
-      res.status(200).json({ message: "댓글 작성자 닉네임 업데이트 완료" });
     }
   });
 });

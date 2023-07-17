@@ -223,23 +223,23 @@ const updatePost = () => {
       id: route.params.boardId,
       title: title.value,
       review: review.value,
-      hashtag: "해시태그",
+      hashtag: tags.value,
       open: open.value,
     })
   );
   formData.append("locationData", JSON.stringify(locations.value));
-  formData.append("deletedImages", deletedImages.value);
+  formData.append("deletedImages", JSON.stringify(deletedImages.value));
   images.value.map((i) => {
     formData.append("imageData", i.file);
   });
   axios({
     method: "put",
-    url: "http://127.0.0.1:3000/postdata/updateboard",
+    url: "http://127.0.0.1:3000/boardCreate/update",
     data: formData,
   })
     .then((result) => {
       router.push({
-        path: `/detail/${result.data.boardId}`,
+        path: `/detail/${route.params.boardId}`,
       });
     })
     .catch((error) => {
