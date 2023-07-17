@@ -103,6 +103,14 @@
 <script>
 export default {
   name: "FilterComponent",
+  props: {
+    initData: {
+      type: Array,
+      default(rawProps) {
+        return [];
+      },
+    },
+  },
   emits: ["updateTag"],
   data() {
     return {
@@ -288,6 +296,17 @@ export default {
       themes: ["카페", "식사", "체험", "전시", "쇼룸,편집샵", "등산"],
       selected: { locations: [], themes: [] },
     };
+  },
+  watch: {
+    initData() {
+      this.selected = { locations: [], themes: [] };
+      this.initData.map((d) => {
+        if (this.locations.some((l) => l.name === d))
+          this.selected.locations.push(d);
+        else if (this.themes.includes(d)) this.selected.themes.push(d);
+      });
+      console.log("b", this.selected);
+    },
   },
   methods: {
     selectTag(type, data) {

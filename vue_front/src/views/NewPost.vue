@@ -1,11 +1,9 @@
 <template>
   <div class="wrapper">
     <gnbBar />
-    <div class="header">
-      글 작성하기
-      <div class="hashtags">{{ `${tags.map((h) => `#${h}`).join(" ")}` }}</div>
-    </div>
+    <div class="header">글 작성하기</div>
     <div class="page">
+      <div class="hashtags">{{ `${tags.map((h) => `#${h}`).join(" ")}` }}</div>
       <div class="filter">
         <FilterComponent @update-tag="(data) => updateTags(data)" />
       </div>

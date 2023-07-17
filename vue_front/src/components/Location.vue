@@ -14,9 +14,11 @@ const props = defineProps({
       <div>{{ number }}</div>
       <div class="location-info">
         <div>
-          <a data-bs-toggle="offcanvas" :href="`#${location.LOC_NAME}`">{{
-            location.LOC_NAME
-          }}</a>
+          <a
+            data-bs-toggle="offcanvas"
+            :href="`#${location.LOC_NAME.replaceAll(' ', '')}`"
+            >{{ location.LOC_NAME }}</a
+          >
         </div>
         <div class="location-location">
           {{ location.LOC_ADD }}
@@ -28,7 +30,7 @@ const props = defineProps({
     </div>
     <!-- Off canvas -->
     <div
-      :id="location.LOC_NAME"
+      :id="location.LOC_NAME.replaceAll(' ', '')"
       class="offcanvas offcanvas-end canvas"
       tabindex="-1"
     >
