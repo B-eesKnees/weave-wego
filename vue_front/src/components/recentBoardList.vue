@@ -2,13 +2,29 @@
 export default {
   props: {
     recentBoardList: Object,
+    openBoardDetail: Function, // 추가: openBoardDetail 함수를 props로 받아옴
+  },
+  methods: {
+    handleOpenBoardDetailAndRefresh(event) {
+      // event.preventDefault(); // 기존 <a> 태그의 링크 동작을 막음
+
+      // 링크 동작 수행 (새 창 열림)
+      // window.open(event.target.href, "_blank");
+
+      // 기존 창 새로고침
+      window.location.reload();
+    },
   },
 };
 </script>
 
 <template>
   <div>
-    <a :href="`/detail/${recentBoardList.BRD_ID}`" target="_blank">
+    <a
+      @click="handleOpenBoardDetailAndRefresh"
+      :href="`/detail/${recentBoardList.BRD_ID}`"
+      target="_blank"
+    >
       <div class="board-list">
         <div class="board_content">
           <div class="hashtag">{{ recentBoardList.BRD_HASHTAG }}</div>
