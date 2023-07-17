@@ -458,13 +458,12 @@ export default {
     },
 
     openBoardDetailFunc(boardId) {
-      // 최근에 본 코스 리스트를 다시 받아오는 함수 (이 부분은 필요 없을 수도 있습니다.)
       this.getRecentBoardList();
 
       // 기존 탭을 새로고침하도록 변경
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 20);
     },
   },
 };
