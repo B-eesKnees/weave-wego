@@ -76,12 +76,7 @@
         <div class="gnbmypage">
           <div v-if="isButtonsVisible">
             <div v-for="button in buttonList" :key="button.tab">
-              <button
-                @click="selectTab(button.tab)"
-                :class="{ 'active-button': activeTab === button.tab }"
-              >
-                {{ button.name }}
-              </button>
+              <button @click="selectTab(button.tab)">{{ button.name }}</button>
             </div>
           </div>
         </div>
@@ -151,6 +146,8 @@
 </template>
 
 <script>
+import { app } from "../main";
+
 export default {
   data() {
     return {
@@ -187,8 +184,19 @@ export default {
         this.logout();
       } else if (tab === "myPage") {
         window.location.href = "/mypage";
+        sessionStorage.setItem("selectGnb", "myCourse");
       } else if (tab === "myCourse") {
         window.location.href = "/mypage";
+        sessionStorage.setItem("selectGnb", "myCourse");
+      } else if (tab === "myComment") {
+        window.location.href = "/mypage";
+        sessionStorage.setItem("selectGnb", "myComment");
+      } else if (tab === "recentCourse") {
+        window.location.href = "/mypage";
+        sessionStorage.setItem("selectGnb", "recentCourse");
+      } else if (tab === "likeList") {
+        window.location.href = "/mypage";
+        sessionStorage.setItem("selectGnb", "likeList");
       }
     },
     logout() {

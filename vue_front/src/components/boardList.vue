@@ -37,6 +37,13 @@ export default {
           alert(error);
         });
     },
+    processHashtags(hashtags) {
+      const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+      const leftReplaceData = hashtags.replace(reg, " ");
+      const leftReplaceData2 = leftReplaceData.split(" ");
+      const hashtagsWithoutEmpty = leftReplaceData2.filter((tag) => tag !== "");
+      return hashtagsWithoutEmpty;
+    },
   },
 };
 </script>
@@ -55,7 +62,13 @@ export default {
     <a :href="`/detail/${boardList.BRD_ID}`" target="_blank">
       <div class="board-list">
         <div class="board_content">
-          <div class="hashtag">{{ boardList.BRD_HASHTAG }}</div>
+          <div class="hashtag">
+            {{
+              processHashtags(boardList.BRD_HASHTAG)
+                .map((tag) => `#${tag}`)
+                .join(" ")
+            }}
+          </div>
           <div class="brd_created_at">{{ boardList.BRD_CREATED_AT }}</div>
           <div class="brd_title">{{ boardList.BRD_TITLE }}</div>
           <div class="viewer">

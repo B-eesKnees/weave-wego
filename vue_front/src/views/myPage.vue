@@ -100,6 +100,7 @@
             v-for="item in visiblerecentBoard"
             :recentBoardList="item"
             :key="item.BRD_ID"
+            :openBoardDetail="openBoardDetailFunc"
           />
         </div>
         <div
@@ -229,10 +230,12 @@ export default {
       selectedItems: [],
       selectedComItems: [],
 
-      visibleCount: 3, // 초기에 보여줄 목록 개수\
+      visibleCount: 3, // 초기에 보여줄 목록 개수
       visiblerecentCount: 3,
       visibleLikeCount: 3,
       visibleCommentCount: 4,
+
+      activeTab: "myPage",
     };
   },
   created() {
@@ -436,6 +439,30 @@ export default {
     },
     cancelCommentEdit() {
       this.comment_editMode = false;
+    },
+    async getRecentBoardList() {
+      // 최근에 본 코스 리스트를 다시 받아오는 함수
+      try {
+        const response = await axios.post("/mypage/recentCourse", {
+          userEmail: this.email,
+        });
+        this.recentBoardList = response.data;
+        if (this.recentBoardList.length != 0) {
+          this.norecentData = false;
+        } else {
+          this.norecentData = true;
+        }
+      } catch {
+        this.norecentData = true;
+      }
+    },
+
+    openBoardDetailFunc(boardId) {
+      // 최근에 본 코스 리스트를 다시 받아오는 함수 (이 부분은 필요 없을 수도 있습니다.)
+      this.getRecentBoardList();
+
+      // 기존 탭을 새로고침하도록 변경
+      window.location.reload();
     },
   },
 };
