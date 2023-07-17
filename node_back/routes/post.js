@@ -399,4 +399,21 @@ router.put("/user/:userEmail/boardNick", (req, res) => {
   });
 });
 
+//댓글 닉네임 업데이트
+router.put("/user/:userEmail/commentNick", (req, res) => {
+  const { userEmail } = req.params;
+  const { newNick } = req.body;
+
+  const updateNick = "UPDATE comment SET com_nick=? WHERE com_writer=?";
+
+  db.query(updateNick, [newNick, userEmail], (err, results) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "error" });
+    } else {
+      res.status(200).json({ message: "댓글 작성자 닉네임 업데이트 완료" });
+    }
+  });
+});
+
 module.exports = router;
