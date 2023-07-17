@@ -1,9 +1,19 @@
 <template>
   <div class="wrapper">
     <gnbBar />
-    <div class="header">글 수정하기</div>
+    <div class="header">
+      글 수정하기
+      <div class="hashtags">
+        {{ `${tags.map((h) => `#${h}`).join(" ")}` }}
+      </div>
+    </div>
     <div class="page">
-      <div class="filter">필터 구역</div>
+      <div class="filter">
+        <FilterComponent
+          :init-data="tags"
+          @update-tag="(data) => updateTags(data)"
+        />
+      </div>
       <!-- 필터 들어갈 곳 -->
       <div class="select">
         <input id="public" v-model="open" type="radio" :value="1" />
@@ -69,6 +79,14 @@
       <div>
         이미지 업로드
         <div class="images">
+          <div v-for="image in originalImages" class="image">
+            <button type="button" @click="() => removeOriginalImage(image)">
+              x
+            </button>
+            <img
+              :src="`http://127.0.0.1:3000/postdata/image/${image.IMG_PATH}`"
+            />
+          </div>
           <div v-for="image in images" class="image">
             <button type="button" @click="() => removeImage(image.id)">
               x
@@ -94,9 +112,11 @@
 </template>
 
 <script setup>
+import FilterComponent from "@/components/filterComponent.vue";
+
 import gnbBar from "@/components/gnbBar.vue";
 import axios from "axios";
-import { ref, onMounted, onActivated } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 ///
 const route = useRoute();
@@ -105,7 +125,7 @@ const router = useRouter();
 const open = ref(0);
 const title = ref("");
 const review = ref("");
-
+const tags = ref([]);
 ///
 const map = ref(null);
 const infowindow = ref(null);
@@ -113,10 +133,11 @@ const keyword = ref("경복궁");
 const markers = ref([]);
 const locations = ref([]);
 const locationRevData = ref([]);
-const images = ref([]); // 이미지 업로드 하는 스크립트
+const images = ref([]);
+const originalImages = ref([]);
+const deletedImages = ref([]);
 
 const getBoard = () => {
-  console.log("a");
   axios
     .get("http://127.0.0.1:3000/postdata/board", {
       params: {
@@ -125,6 +146,13 @@ const getBoard = () => {
     })
     .then((result) => {
       const BRD_TEMP = result.data.board;
+      console.log(BRD_TEMP);
+      try {
+        tags.value = JSON.parse(BRD_TEMP.BRD_HASHTAG);
+      } catch {
+        tags.value = [];
+      }
+      console.log("a", tags.value);
       title.value = BRD_TEMP.BRD_TITLE;
       review.value = BRD_TEMP.BRD_REV;
       open.value = BRD_TEMP.BRD_OPEN;
@@ -135,7 +163,6 @@ const getBoard = () => {
         BRD_TEMP.BRD_LOC_REV4,
         BRD_TEMP.BRD_LOC_REV5,
       ];
-      console.log(locationRevData.value);
       getLocations();
       getImages();
     })
@@ -155,7 +182,6 @@ const getLocations = () => {
     })
     .then((result) => {
       const temp = result.data.locations;
-      console.log("t", temp);
       for (let i = 0; i < JSON.parse(temp.LOC_ADD).length; i++) {
         locations.value.push({
           id: i,
@@ -168,7 +194,6 @@ const getLocations = () => {
           content: locationRevData.value[i],
         });
       }
-      console.log("l", locations.value);
     })
     .catch((error) => {
       console.log("locations_error", error);
@@ -183,9 +208,7 @@ const getImages = () => {
       },
     })
     .then((result) => {
-      images.value = result.data.images.map(
-        (i) => `http://127.0.0.1:3000/postdata/image/${i.IMG_PATH}`
-      );
+      originalImages.value = result.data.images;
     })
     .catch((error) => {
       console.log("images_error", error);
@@ -205,6 +228,7 @@ const updatePost = () => {
     })
   );
   formData.append("locationData", JSON.stringify(locations.value));
+  formData.append("deletedImages", deletedImages.value);
   images.value.map((i) => {
     formData.append("imageData", i.file);
   });
@@ -223,6 +247,10 @@ const updatePost = () => {
     });
 };
 
+const updateTags = (data) => {
+  tags.value = [...data.locations, ...data.themes];
+};
+
 const addImage = (e) => {
   images.value.push({
     id: Math.max(...images.value.map((i) => i.id), 0) + 1,
@@ -231,9 +259,17 @@ const addImage = (e) => {
   });
 };
 
+const removeOriginalImage = (image) => {
+  originalImages.value = originalImages.value.filter(
+    (i) => i.IMG_ID !== image.IMG_ID
+  );
+  deletedImages.value.push(image.IMG_ID);
+};
+
 const removeImage = (id) => {
   images.value = images.value.filter((i) => i.id !== id);
 };
+
 const prepareMap = () => {
   const script = document.createElement("script");
 
@@ -483,6 +519,7 @@ const drawMap = () => {
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
     drawMap();
+    getBoard();
   } else {
     prepareMap();
   }
@@ -537,7 +574,9 @@ input[type="radio"] {
   font-size: 1.125rem;
   font-weight: 600;
 }
-
+.filter {
+  z-index: 3;
+}
 .locations {
   display: flex;
   flex-direction: column;
