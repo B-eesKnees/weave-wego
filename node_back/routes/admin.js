@@ -5,11 +5,13 @@ const router = express.Router();
 //-----------------------------------신고된 게시글 보기
 router.post("/reportCourse", async (req, res) => {
   db.query(
-    `SELECT b.BRD_TITLE, b.BRD_NICK, b.BRD_WRITER, date_format(BRD_CREATED_AT, '%Y-%m-%d %H:%i') as BRD_CREATED, b.BRD_VIEWCOUNT, count(ll.LL_ID) as likecount, b.BRD_OPEN,b.BRD_ID,BRD_REPORT
+    `SELECT b.BRD_TITLE, (select u.USER_NICKNAME from user u where b.BRD_WRITER = u.USER_EMAIL)as BRD_NICK, b.BRD_WRITER, date_format(BRD_CREATED_AT, '%Y-%m-%d %H:%i') as BRD_CREATED, b.BRD_VIEWCOUNT, count(ll.LL_ID) as likecount, b.BRD_OPEN,b.BRD_ID,BRD_REPORT
     FROM board b 
     left join likelist ll on b.BRD_ID = ll.LL_NUM 
+    join user u on b.BRD_WRITER = u.USER_EMAIL
     where BRD_REPORT = 1
-    group by b.BRD_ID`,
+    group by b.BRD_ID
+    order by b.BRD_CREATED_AT DESC`,
     (err, results) => {
       //report가 1이면 출력시키는 쿼리
       if (err) {
@@ -30,7 +32,11 @@ router.post("/reportCourse", async (req, res) => {
 //-----------------------------------신고된 댓글 보기
 router.post("/reportComment", async (req, res) => {
   db.query(
-    `select * from weavewego.comment where COM_REPORT = 1`,
+    `select c.COM_NICK, c.COM_ID, c.COM_NUM, c.COM_COMMENT, date_format(COM_CREATED_AT, '%Y-%m-%d %H:%i') as COM_CREATED_AT, (select u.USER_NICKNAME from user u where c.COM_WRITER = u.USER_EMAIL), c.COM_WRITER, c.COM_REPORT, u.USER_EMAIL, u.USER_IMAGE
+    from comment c 
+    join user u on c.COM_WRITER = u.USER_EMAIL
+    where COM_REPORT = 1
+    order by c.COM_CREATED_AT DESC`,
     (err, results) => {
       if (err) {
         res.send({
@@ -93,10 +99,12 @@ router.post("/deleteComment", async (req, res) => {
   });
 //-----------글 목록 보기
 router.post(`/viewBoardlist`, async (req, res) => {
-  db.query(`SELECT b.BRD_TITLE, b.BRD_NICK, b.BRD_WRITER, date_format(BRD_CREATED_AT, '%Y-%m-%d %H:%i') as BRD_CREATED, b.BRD_VIEWCOUNT, count(ll.LL_ID) as likecount, b.BRD_OPEN,b.BRD_ID 
+  db.query(`SELECT b.BRD_TITLE, (select u.USER_NICKNAME from user u where b.BRD_WRITER = u.USER_EMAIL) as BRD_NICK, b.BRD_WRITER, date_format(BRD_CREATED_AT, '%Y-%m-%d %H:%i') as BRD_CREATED, b.BRD_VIEWCOUNT, count(ll.LL_ID) as likecount, b.BRD_OPEN,b.BRD_ID 
             FROM board b 
             left join likelist ll on b.BRD_ID = ll.LL_NUM 
-            group by b.BRD_ID;`, (err, results) => {
+            join user u on b.BRD_WRITER = u.USER_EMAIL
+            group by b.BRD_ID
+            order by b.BRD_CREATED_AT DESC;`, (err, results) => {
     if (err) {
       res.send({
         // 에러 발생 시
