@@ -10,11 +10,11 @@
         <div class="mainpage_first_right">
           <div class="image-slide">
             <img
-              src="../assets/img/eljiro.jpg"
+              src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80"
               alt="image-1" /><img
-              src="../assets/img/gwangjang.jpg"
+              src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80"
               alt="img-2" /><img
-              src="../assets/img/gyeongbokgung.jpg"
+              src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=974&q=80"
               alt="img-3" /><img
               src="https://images.unsplash.com/photo-1586348943529-beaae6c28db9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=415&q=80"
               alt="img-4" /><img
@@ -126,7 +126,6 @@
     overflow: hidden;
     position: relative;
     animation: slide 40s infinite alternate 1s ;
-    object-fit: fill;
   }
   
   @keyframes slide {
