@@ -119,7 +119,7 @@ router.post(`/viewBoardlist`, async (req, res) => {
 });
 //-----------회원 정보 보기
 router.post(`/viewUserlist`, async (req, res) => {
-  db.query(`select USER_IMAGE, USER_NICKNAME, USER_EMAIL, USER_AGEGROUP, DATE_FORMAT(USER_REGDATE, "%Y-%m-%d %H:%i") AS USER_REGDATE, USER_PHONE, USER_PROVIDER from weavewego.user`, (err, results) => {
+  db.query(`select USER_IMAGE, USER_NICKNAME, USER_EMAIL, USER_AGEGROUP, DATE_FORMAT(USER_REGDATE, "%Y-%m-%d %H:%i") AS USER_REGDATE, USER_PHONE, USER_PROVIDER from weavewego.user order by USER_REGDATE DESC`, (err, results) => {
     if (err) {
       res.send({
         // 에러 발생 시
