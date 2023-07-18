@@ -345,7 +345,9 @@ const displayPlaces = (places) => {
     // 마커를 생성하고 지도에 표시합니다
     const placePosition = new maps.LatLng(places[i].y, places[i].x);
     const marker = addMarker(placePosition, i);
-    const address = places[i].road_address_name;
+    const address = places[i].road_address_name.length
+      ? places[i].road_address_name
+      : places[i].address_name;
     const itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
     // LatLngBounds 객체에 좌표를 추가합니다
