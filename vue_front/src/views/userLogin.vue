@@ -131,7 +131,6 @@ export default {
         .then((res) => {
           if (res.data.code == 200) {
             //로그인 성공시
-            alert(res.data.success);
             localStorage.setItem("userID", res.data.email);
             localStorage.setItem("userNick", res.data.nick);
             localStorage.setItem("userImage", res.data.image);
@@ -169,7 +168,6 @@ export default {
           const kakao_account = res.kakao_account;
           console.log(kakao_account);
           this.login(kakao_account);
-          alert("로그인 성공");
         },
       });
     },
