@@ -291,7 +291,7 @@ input {
 }
 
 .admin_board:nth-child(2n-1) {
-  background-color: #f2f0f9;
+  background-color: #d7e6e0;
 }
 
 .admin_boardlist_page {
