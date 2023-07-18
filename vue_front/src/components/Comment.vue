@@ -34,7 +34,7 @@ if (props.comment.COM_WRITER == localStorage.getItem("userID")) {
       </div>
       <div class="comment-body">
         <div class="comment-nickname">
-          <div>{{ comment.COM_NICK }}</div>
+          <div>{{ comment.USER_NICKNAME }}</div>
           <div class="comment-date">
             <div>
               {{
@@ -55,9 +55,9 @@ if (props.comment.COM_WRITER == localStorage.getItem("userID")) {
               <ul class="dropdown-menu">
                 <li>
                   <button
+                    v-if="userCheck"
                     class="dropdown-item"
                     type="button"
-                    v-if="userCheck"
                     @click="setUpdate()"
                   >
                     수정
@@ -65,9 +65,9 @@ if (props.comment.COM_WRITER == localStorage.getItem("userID")) {
                 </li>
                 <li>
                   <a
+                    v-if="userCheck"
                     class="dropdown-item"
                     type="button"
-                    v-if="userCheck"
                     @click="() => emit('delete', comment.COM_ID)"
                     >삭제</a
                   >
@@ -88,7 +88,7 @@ if (props.comment.COM_WRITER == localStorage.getItem("userID")) {
         <div>{{ comment.COM_COMMENT }}</div>
       </div>
     </div>
-    <div class="comment_update" v-if="updateButton">
+    <div v-if="updateButton" class="comment_update">
       ㄴ
       <input
         v-model="updatedComment"
