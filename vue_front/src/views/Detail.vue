@@ -318,7 +318,7 @@ setRecentView();
 </script>
 
 <template>
-  <div>
+  <div class="wrapper">
     <div class="gnb">
       <gnb-bar />
     </div>
@@ -525,28 +525,31 @@ setRecentView();
 </template>
 
 <style>
-.imageslider {
+.carousel {
+  width: 70%;
   border: 1px solid black;
 }
 
-.carousel__item {
-  width: 100%;
-  max-width: 800px;
-  aspect-ratio: 4 / 3;
-}
-
+.carousel__item,
 .carousel__item > img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: 500px;
+  object-fit: cover;
 }
-
+.imageslider {
+  display: flex;
+  justify-content: center;
+}
 .carousel__track {
   margin-bottom: 0;
 }
 </style>
 
 <style scoped>
+body {
+  background-color: rgba(250, 250, 250, 1);
+  font-family: "Noto Sans KR", sans-serif;
+}
 .gnb {
   margin-bottom: 8rem;
 }
