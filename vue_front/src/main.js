@@ -28,4 +28,4 @@ createApp(App)
 // SDK 초기화 여부를 확인하자.
 // console.log(window.Kakao.isInitialized());
 // }
-//window.Kakao.init("be3591e5eb435becf923984f4b447ac2");
+window.Kakao.init("be3591e5eb435becf923984f4b447ac2");
