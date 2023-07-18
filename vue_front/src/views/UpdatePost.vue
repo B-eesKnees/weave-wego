@@ -216,6 +216,26 @@ const getImages = () => {
 };
 
 const updatePost = () => {
+  if (tags.value.length == 0) {
+    alert("하나 이상의 지역, 테마를 선택해주세요.");
+    return;
+  }
+  if (!title.value) {
+    alert("제목을 입력해주세요.");
+    return;
+  }
+  if (!review.value) {
+    alert("본문을 입력해주세요.");
+    return;
+  }
+  if (locations.value.length < 2) {
+    alert("두 개 이상의 장소를 선택해주세요.");
+    return;
+  }
+  if (images.value.length + originalImages.value.length == 0) {
+    alert("한 장 이상의 이미지를 업로드 해 주세요.");
+    return;
+  }
   const formData = new FormData();
   formData.append(
     "postData",
@@ -252,11 +272,13 @@ const updateTags = (data) => {
 };
 
 const addImage = (e) => {
-  images.value.push({
-    id: Math.max(...images.value.map((i) => i.id), 0) + 1,
-    preview: URL.createObjectURL(e.target.files[0]),
-    file: e.target.files[0],
-  });
+  if (e.target.files[0]) {
+    images.value.push({
+      id: Math.max(...images.value.map((i) => i.id), 0) + 1,
+      preview: URL.createObjectURL(e.target.files[0]),
+      file: e.target.files[0],
+    });
+  }
 };
 
 const removeOriginalImage = (image) => {
@@ -527,6 +549,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+body {
+  background-color: rgba(250, 250, 250, 1);
+  font-family: "Noto Sans KR", sans-serif;
+}
 .wrapper {
   padding-top: 5rem;
 }

@@ -18,7 +18,8 @@ router.get("/board", (req, res) => {
       : `UPDATE board SET BRD_VIEWCOUNT = BRD_VIEWCOUNT WHERE BRD_ID=?`;
   //삼항연산자를 이용하여 vue에서 noWatch를 보내주면 조회수가 올라가도록 하고
   //아니면 조회수는 그대로 유지하게 하는 쿼리를 사용하게 함
-  const selectBoardQuery = "SELECT * FROM board WHERE BRD_ID=?";
+  const selectBoardQuery =
+    "SELECT * FROM board b JOIN user u ON b.BRD_WRITER = u.USER_EMAIL WHERE b.BRD_ID=?";
 
   db.query(updateViewQuery, [boardId], (err, updateResult) => {
     if (err) {
@@ -75,7 +76,8 @@ router.get("/likes", (req, res) => {
 //댓글 받아오기
 router.get("/comments", (req, res) => {
   const { boardId } = req.query;
-  const query = "SELECT * FROM comment WHERE COM_NUM=?";
+  const query =
+    "SELECT * FROM comment c JOIN user u ON c.COM_WRITER = u.USER_EMAIL WHERE COM_NUM=?";
 
   db.query(query, [boardId], (err, results) => {
     if (err) {

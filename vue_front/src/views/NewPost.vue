@@ -1,8 +1,9 @@
 <template>
   <div class="wrapper">
     <gnbBar />
-    <div class="header">글 작성하기</div>
+
     <div class="page">
+      <div class="header">글 작성하기</div>
       <div class="hashtags">{{ `${tags.map((h) => `#${h}`).join(" ")}` }}</div>
       <div class="filter">
         <FilterComponent @update-tag="(data) => updateTags(data)" />
@@ -118,9 +119,24 @@ const locations = ref([]);
 const images = ref([]); // 이미지 업로드 하는 스크립트
 
 const createPost = () => {
-  if (!tags.value) {
+  if (tags.value.length == 0) {
     alert("하나 이상의 지역, 테마를 선택해주세요.");
     return;
+  }
+  if (!title.value) {
+    alert("제목을 입력해주세요.");
+    return;
+  }
+  if (!review.value) {
+    alert("본문을 입력해주세요.");
+    return;
+  }
+  if (locations.value.length < 2) {
+    alert("두 개 이상의 장소를 선택해주세요.");
+    return;
+  }
+  if (images.value.length == 0) {
+    alert("한 장 이상의 이미지를 업로드 해 주세요.");
   }
   const formData = new FormData();
   formData.append(
@@ -159,11 +175,13 @@ const updateTags = (data) => {
 };
 
 const addImage = (e) => {
-  images.value.push({
-    id: Math.max(...images.value.map((i) => i.id), 0) + 1,
-    preview: URL.createObjectURL(e.target.files[0]),
-    file: e.target.files[0],
-  });
+  if (e.target.files[0]) {
+    images.value.push({
+      id: Math.max(...images.value.map((i) => i.id), 0) + 1,
+      preview: URL.createObjectURL(e.target.files[0]),
+      file: e.target.files[0],
+    });
+  }
 };
 
 const removeImage = (id) => {
@@ -426,10 +444,13 @@ onMounted(() => {
 .wrapper {
   padding-top: 5rem;
 }
+body {
+  background-color: rgba(250, 250, 250, 1);
+  font-family: "Noto Sans KR", sans-serif;
+}
 
 .header {
-  margin-left: 3rem;
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: 600;
 }
 .page {
@@ -469,6 +490,10 @@ input[type="radio"] {
 
 .filter {
   z-index: 3;
+}
+.hashtags {
+  color: rgb(201, 201, 201);
+  font-size: 1.5rem;
 }
 .map > p {
   font-size: 1.125rem;

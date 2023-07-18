@@ -16,6 +16,22 @@ const requireLogin = () => (to, from, next) => {
   next("/login"); //localStorage에 데이터 없으면 로그인창으로 리다이렉트
 };
 
+const isAdmin = (to, from, next) => {
+  requireLogin()(to, from, () => {
+    const userEmail = localStorage.getItem("userID");
+    if (userEmail === "admin@admin.com") {
+      next(); // 관리자 계정으로 로그인한 경우, 다음 미들웨어 또는 라우트 핸들러로 이동합니다.
+    } else {
+      // 관리자 계정이 아닌 경우, 메인 페이지로 리다이렉트하지 않고 경고 알림만 보여줍니다.
+
+      next("/");
+      setTimeout(() => {
+        alert("관리자 권한이 필요합니다.");
+      }, 200);
+    }
+  });
+};
+
 const routes = [
   {
     path: "/",
@@ -112,7 +128,7 @@ const routes = [
     name: "admin",
     component: () =>
       import(/* webpackChunkName: "admin" */ "../views/admin.vue"),
-    beforeEnter: requireLogin(),
+    beforeEnter: isAdmin
   },
 ];
 

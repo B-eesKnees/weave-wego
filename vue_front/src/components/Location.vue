@@ -77,13 +77,12 @@ const props = defineProps({
   margin-bottom: 4rem;
 }
 .location-left {
-  display: flex;
-  margin-right: 3rem;
-
-  height: 4rem;
-  border-bottom: 1px solid black;
-  justify-content: space-between;
   width: 17rem;
+  height: fit-content;
+  margin-right: 3rem;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: space-between;
 }
 
 .location-left > :first-of-type {
@@ -93,6 +92,7 @@ const props = defineProps({
   align-items: flex-end;
 }
 .location-info {
+  max-width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -106,14 +106,13 @@ const props = defineProps({
 }
 .location-info > div:first-of-type {
   font-size: 1.5rem;
-  margin-bottom: 0.35rem;
-  text-align: end;
-  margin-right: 0.25rem;
+  text-align: right;
+  word-break: keep-all;
 }
 .location-location {
-  text-align: flex-end;
-  margin-right: 0.25rem;
   font-size: 0.9rem;
+  text-align: right;
+  word-break: keep-all;
 }
 
 .test {
