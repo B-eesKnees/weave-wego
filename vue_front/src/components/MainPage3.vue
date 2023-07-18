@@ -307,8 +307,6 @@ export default {
                     },
                 })
                     .then((res) => {
-                        console.log(res.data, "res데이터");
-
                         this.newhashtags = [];
                         for (var i in res.data) {
                             this.newhashtags.push(res.data[i]);
@@ -328,8 +326,6 @@ export default {
                     },
                 })
                     .then((res) => {
-                        console.log(res.data, "res데이터");
-
                         this.newhashtags = [];
                         for (var i in res.data) {
                             this.newhashtags.push(res.data[i]);
@@ -348,8 +344,6 @@ export default {
                     },
                 })
                     .then((res) => {
-                        console.log(res.data, "res데이터");
-
                         this.newhashtags = [];
                         for (var i in res.data) {
                             this.newhashtags.push(res.data[i]);
@@ -402,12 +396,10 @@ export default {
                 if (event.target.classList.contains('fill_location')) {
                     event.target.classList.remove("fill_location");
                     this.hashtags.pop(event.target.id);
-                    console.log(this.hashtags, "hashtags");
                     this.locationSelectCount -= 1;
                 } else {
                     event.target.classList.add("fill_location");
                     this.hashtags.push(event.target.id);
-                    console.log(this.hashtags, "hashtags");
                     this.locationSelectCount += 1;
 
                 }
@@ -424,18 +416,15 @@ export default {
                     event.target.classList.remove("fill_theme");
                     this.hashtags.pop(event.target.innerText);
                     this.themeSelectCount -= 1;
-                    console.log(this.hashtags, "결과");
                 } else {
                     event.target.classList.add("fill_theme");
                     this.hashtags.push(event.target.innerText);
                     this.themeSelectCount += 1;
-                    console.log(this.hashtags, "결과");
                 }
             } else if (this.themeSelectCount == 5) {
                 if (event.target.classList.contains('fill_theme')) {
                     event.target.classList.remove("fill_theme");
                     this.themeSelectCount -= 1;
-                    console.log(this.themeSelectCount);
                 }
             }
         },
@@ -456,17 +445,12 @@ export default {
 
                         this.OriginData = res.data; // 원본데이터
 
-                        console.log(this.OriginData, "오리지날데이터");
-                        console.log(this.newhashtags, "백에서 받은 데이터");
-
                         if (this.hashtags.length >= 1 || this.search) { // 선택 하나라도했고 또는 검색창에 입력했으면
                             this.OriginData = [];
 
                             for (var i in this.newhashtags) {
                                 this.OriginData.push(this.newhashtags[i]);
                             }
-
-                            console.log(this.OriginData, "백에서 받은 오리지날");
                         }
 
                         // 게시물 6개씩 출력하는 부분
@@ -476,8 +460,9 @@ export default {
                         for (var i = 0; i <= this.result[0].length - 1; i++) { // 게시물 6개 출력
                             this.Data.push(this.result[0][i]);
                         }
-
-                        console.log(this.Data, "데이터");
+                        if(this.Data.length < 6){
+                            this.nodata = true;
+                        }
                     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
                         this.nodata = true; // "데이터가 없습니다 출력"
                     }
@@ -502,17 +487,12 @@ export default {
 
                         this.OriginData = res.data; // 원본데이터
 
-                        console.log(this.OriginData, "오리지날데이터");
-                        console.log(this.newhashtags, "백에서 받은 데이터");
-
                         if (this.hashtags.length >= 1 || this.search) { // 선택 하나라도 했으면
                             this.OriginData = [];
 
                             for (var i in this.newhashtags) {
                                 this.OriginData.push(this.newhashtags[i]);
                             }
-
-                            console.log(this.OriginData, "백에서 받은 오리지날");
                         }
 
                         // 게시물 6개씩 출력하는 부분
@@ -521,6 +501,9 @@ export default {
                         }
                         for (var i = 0; i <= this.result[0].length - 1; i++) { // 게시물 6개 출력
                             this.Data.push(this.result[0][i]);
+                        }
+                        if(this.Data.length < 6){
+                            this.nodata = true;
                         }
                     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
                         this.nodata = true; // "데이터가 없습니다 출력"
@@ -546,17 +529,12 @@ export default {
 
                         this.OriginData = res.data; // 원본데이터
 
-                        console.log(this.OriginData, "오리지날데이터");
-                        console.log(this.newhashtags, "백에서 받은 데이터");
-
                         if (this.hashtags.length >= 1 || this.search) { // 선택 하나라도 했으면
                             this.OriginData = [];
 
                             for (var i in this.newhashtags) {
                                 this.OriginData.push(this.newhashtags[i]);
                             }
-
-                            console.log(this.OriginData, "백에서 받은 오리지날");
                         }
 
                         // 게시물 6개씩 출력하는 부분
@@ -565,6 +543,9 @@ export default {
                         }
                         for (var i = 0; i <= this.result[0].length - 1; i++) { // 게시물 6개 출력
                             this.Data.push(this.result[0][i]);
+                        }
+                        if(this.Data.length < 6){
+                            this.nodata = true;
                         }
                     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
                         this.nodata = true; // "데이터가 없습니다 출력"
@@ -582,6 +563,7 @@ export default {
             if (remainData < 6) { // 출력해야할 나머지 글 갯수가 6개 미만이면
                 for (var i = 0; i <= remainData - 1; i++) {
                     this.Data.push(this.result[this.dataCount][i]);
+                    this.nodata = true;
                 }
             } else { // 출력해야할 나머지 글 갯수가 6개 이상이면
                 for (var i = 0; i <= this.result[0].length - 1; i++) {
@@ -604,13 +586,9 @@ export default {
                 }
             }).then((res) => {
                 this.likelist = res.data;
-                console.log(this.likelist);
             })
         },
         likeToggle(brdID) { //받아온 brdID //좋아요버튼 클릭시 발생하는 이벤트 2
-            console.log(brdID);
-            console.log(this.likelist);
-            console.log(this.email);
             if (this.likelist.includes(brdID)) { //좋아요 누른 게시글이면 
                 axios({
                     url: '/dislikeCourse', //좋아요 취소 요청
@@ -621,7 +599,6 @@ export default {
                     }
                 }).then((res) => { //실행성공하면
                     if (res.data.code == 200) {
-                        console.log('좋아요 취소');
                         this.postLoginUser(); //좋아요한 게시글 리스트 초기화
                     }
                 }).catch((error) => {
@@ -637,7 +614,6 @@ export default {
                     }
                 }).then((res) => {
                     if (res.data.code == 200) {
-                        console.log('좋아요');
                         this.postLoginUser(); //좋아요한 게시글 리스트 초기화
                     }
                 }).catch((error) => {
@@ -897,7 +873,7 @@ export default {
     -webkit-box-orient: vertical;
     word-wrap: break-word;
     white-space: wrap;
-    line-height: 1.2;
+    line-height: 1.1;
     overflow: hidden;
 }
 
@@ -963,7 +939,7 @@ svg {
     overflow: visible;
     position: absolute;
     z-index: 50;
-    top: 70%;
+    top: 67%;
     left: -162%;
     box-shadow: 0 0 5px #ccc;
 }

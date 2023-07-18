@@ -48,8 +48,8 @@
                 <p id="error" v-if="nickname_check2">닉네임을 입력해주세요.</p>
                 <div class="gender">
                     <label for="sex">성별</label>
-                    <input v-model="sex" type='radio' name='gender' value='male' class="input_sex" />남자
-                    <input v-model="sex" type='radio' name='gender' value='female' class="input_sex" />여자
+                    <input v-model="sex" type='radio' name='gender' value='m' class="input_sex" />남자
+                    <input v-model="sex" type='radio' name='gender' value='f' class="input_sex" />여자
                 </div>
                 <p id="error" v-if="sex_check">성별을 선택하세요.</p>
                 <div class="age_range">
@@ -64,8 +64,8 @@
                 <p id="error" v-if="age_range_check">나이대를 선택하세요.</p>
                 <label for="phone_num">전화번호</label>
                 <input v-model="phone_num" type="text" id="phone_num" placeholder="전화번호 입력"
-                    :class="{ error_border: phone_check }" maxlength="11"><br />
-                <p id="error" v-if="phone_check">전화번호를 정확히 입력해주세요. 예)01066090043</p>
+                    :class="{ error_border: phone_check }" maxlength="13"><br />
+                <p id="error" v-if="phone_check">전화번호를 정확히 입력해주세요. 예)010-1234-5678</p>
                 <a href="/auth/join"><input type="submit" :class="{ 'error_submit': allcheck, 'submit': !allcheck }"
                         :disabled="allcheck" id="login" value="가입하기"></a>
 
@@ -125,24 +125,34 @@ export default {
     },
     watch: {
         'email': function () {
+            this.checkEmail()
+
             this.funcWatch()
         },
         'password': function () {
+            this.checkPassword()
             this.funcWatch()
+
         },
         'password2': function () {
+            this.checkPassword2()
             this.funcWatch()
         },
         'nickname': function () {
+            this.checknickname()
+
             this.funcWatch()
         },
         'sex': function () {
+            this.checksex()
             this.funcWatch()
         },
         'agegroup': function () {
+            this.checkage_range()
             this.funcWatch()
         },
         'phone_num': function () {
+            this.checkphone()
             this.funcWatch()
         }
 
@@ -150,16 +160,11 @@ export default {
     methods: {
 
         funcWatch() {
-            this.checkEmail()
-            this.checkPassword()
-            this.checkPassword2()
-            this.checknickname()
-            this.checksex()
-            this.checkage_range()
-            this.checkphone()
-            this.inputAllCheck()
             this.emailCheckForm()
+            this.inputAllCheck()
             this.nicknameCheckForm()
+
+
 
         },
         movetomain() {
@@ -194,19 +199,19 @@ export default {
             }
         },
         checkPassword2() {
-            if (this.password !== this.password2) {
-                this.password_check2 = true;
-                this.error_border_check = true;
-                this.allcheck3 = true;
-            } else {
+            if (this.password === this.password2) {
                 this.password_check2 = false;
                 this.error_border_check = false;
                 this.allcheck3 = false;
+            } else {
+                this.password_check2 = true;
+                this.error_border_check = true;
+                this.allcheck3 = true;
             }
         },
         checknickname() {
-
             const validateNickname = /^.{1,10}$/;
+
             if (!this.nickname || !validateNickname.test(this.nickname)) {
                 this.nickname_check2 = true;
                 this.error_border_check = true;
@@ -232,7 +237,7 @@ export default {
             }
         },
         checkphone() {
-            const validatephone = /^\d{3}\d{3,4}\d{4}$/;
+            const validatephone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 
             if (this.phone_num === '' || !validatephone.test(this.phone_num) || !this.phone_num) {
                 this.phone_check = true;
@@ -268,7 +273,6 @@ export default {
                 } else if (res.data.message == '존재하는 이메일입니다.') {
                     this.emailcheck = 1;
                     this.allcheck = true;
-                    console.log(this.allcheck);
                 } else if (!this.email) {
                     this.emailcheck = 3;
                 }
@@ -298,11 +302,7 @@ export default {
             })
         },
         joinForm() { //백엔드로 회원가입 정보 전달
-            if (this.sex === 'female') {
-                this.sex = 'f';
-            } else {
-                this.sex = 'm';
-            }
+
 
             axios({
                 url: "http://localhost:3000/auth/join",
@@ -318,7 +318,7 @@ export default {
             }).then(async (res) => {
                 alert(res.data.message);
                 if (this.image) {
-                    await this.uploadFile(this.image).then(()=>{
+                    await this.uploadFile(this.image).then(() => {
                         this.autoLogin();
                     });
                 } else {
@@ -330,25 +330,25 @@ export default {
         },
         async autoLogin() {
             await axios({
-                        url: "http://localhost:3000/auth/login",
-                        method: "POST",
-                        data: {
-                        email: this.email,
-                        password: this.password,
-                        },
-                }).then(async (res) => {
-                    if (res.data.code == 200) {
-                        
-                        localStorage.setItem("userID", res.data.email);
-                        localStorage.setItem("userNick", res.data.nick);
-                        localStorage.setItem("userImage", res.data.image);
-                        localStorage.setItem("userProvider", res.data.provider);
+                url: "http://localhost:3000/auth/login",
+                method: "POST",
+                data: {
+                    email: this.email,
+                    password: this.password,
+                },
+            }).then(async (res) => {
+                if (res.data.code == 200) {
 
-                        window.location.href = "/";
-                    }
-                }).catch((error) => {
-                    alert(error);
-                });
+                    localStorage.setItem("userID", res.data.email);
+                    localStorage.setItem("userNick", res.data.nick);
+                    localStorage.setItem("userImage", res.data.image);
+                    localStorage.setItem("userProvider", res.data.provider);
+
+                    window.location.href = "/";
+                }
+            }).catch((error) => {
+                alert(error);
+            });
         },
         async uploadFile(files) {
             if (!files) {
@@ -364,7 +364,7 @@ export default {
                     "data": data
                 }
             }).then(res => {
-                console.log('이미지 db 넣기 성공')
+
             }).catch(error => {
                 alert(error);
             })
@@ -375,7 +375,6 @@ export default {
 
             if (files && files.length > 0) {
                 this.image = files[0]; // 사용자가 올린 이미지
-                console.log(this.image);
                 // URL.createObjectURL로 사용자가 올린 이미지를 URL로 만들어서 화면에 표시할 수 있게 한다. img 태그의 src값에 바인딩해준다
                 this.imageUploaded = URL.createObjectURL(this.image);
 
@@ -582,4 +581,5 @@ input.submit:hover {
     color: darkgray;
     margin-top: 25px;
     transition: all .2s ease-in-out;
-}</style>
+}
+</style>
