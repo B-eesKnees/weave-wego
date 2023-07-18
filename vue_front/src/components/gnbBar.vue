@@ -25,7 +25,7 @@
         ></div>
         <div class="gnbmypage">
           <div v-if="isButtonsVisible">
-            <div v-for="button in buttonList" :key="button.tab">
+            <div v-for="button in buttonList" :key="button.tab" class="gnbmypage_btns">
               <button
                 @click="selectTab(button.tab)"
                 :class="{ 'active-button': activeTab === button.tab }"
@@ -48,7 +48,7 @@
         />
         <div class="gnbmypage">
           <div v-if="isButtonsVisible">
-            <div v-for="button in buttonList" :key="button.tab">
+            <div v-for="button in buttonList" :key="button.tab" class="gnbmypage_btns">
               <button
                 @click="selectTab(button.tab)"
                 :class="{ 'active-button': activeTab === button.tab }"
@@ -75,7 +75,7 @@
 
         <div class="gnbmypage">
           <div v-if="isButtonsVisible">
-            <div v-for="button in buttonList" :key="button.tab">
+            <div v-for="button in buttonList" :key="button.tab" class="gnbmypage_btns">
               <button @click="selectTab(button.tab)">{{ button.name }}</button>
             </div>
           </div>
@@ -177,6 +177,7 @@ export default {
     // 생략
     toggleButtons() {
       this.isButtonsVisible = !this.isButtonsVisible;
+
     },
     selectTab(tab) {
       this.activeTab = tab;
