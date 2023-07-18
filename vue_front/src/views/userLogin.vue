@@ -20,7 +20,8 @@
           *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
         </p>
         <div class="user_login_btns">
-          <a href="/auth/login" class="login_btn"><input :class="{ error_submit: allcheck, submit: !allcheck }"
+          <a href="/auth/login">
+            <input :class="{ error_submit: allcheck, submit: !allcheck }"
               :disabled="allcheck" type="submit" id="login" value="로그인" /></a>
           <a class="join_btn" href="/join">회원가입</a>
         </div>
@@ -304,7 +305,7 @@ input:focus {
 
 input.submit {
   width: 100%;
-  padding: 5%;
+  padding: 6%;
   border-radius: 6px;
   border: 1px solid #388265;
   font-size: 15px;
@@ -328,7 +329,7 @@ input.submit {
 
 input.submit:hover {
   width: 100%;
-  padding: 5%;
+  padding: 6%;
   border-radius: 6px;
   font-size: 15px;
   color: #fff;
@@ -375,7 +376,7 @@ input.submit2:hover {
 
 .social_btn {
   width: 100%;
-  padding: 5%;
+  padding: 3%;
   text-decoration: none;
   border-radius: 6px;
   border: 1px solid #388265;
@@ -416,6 +417,7 @@ input.submit2:hover {
   box-shadow: 0 0 5px #ccc;
   font-weight: bold;
   line-height: normal;
+  cursor: pointer;
 }
 
 .naver {
