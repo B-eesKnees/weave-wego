@@ -20,7 +20,7 @@
           *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
         </p>
         <div class="user_login_btns">
-          <a href="/auth/login">
+          <a href="#">
             <input :class="{ error_submit: allcheck, submit: !allcheck }"
               :disabled="allcheck" type="submit" id="login" value="로그인" /></a>
           <a class="join_btn" href="/join">회원가입</a>

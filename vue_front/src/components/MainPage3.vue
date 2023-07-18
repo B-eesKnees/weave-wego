@@ -643,6 +643,9 @@ export default {
     width: 100%;
     height: 100%;
 }
+.mainpage3 button{
+    border: none;
+}
 
 .mainpage3_third {
     width: 100%;
@@ -671,7 +674,6 @@ export default {
 .filter_btn {
     padding: 20px 80px;
     background-color: white;
-    border: none;
     box-shadow: 0 0 5px #ccc;
 }
 
@@ -683,6 +685,7 @@ export default {
     padding: 1%;
     font-size: x-large;
     color: black;
+    background: none;
 }
 
 .theme_close {
@@ -693,6 +696,7 @@ export default {
     padding: 1%;
     font-size: x-large;
     color: black;
+    background: none;
 }
 
 .show_map {
@@ -794,7 +798,6 @@ export default {
     width: 100%;
     height: 100%;
     display: inline-flex;
-
     flex-wrap: wrap;
 }
 
@@ -990,6 +993,7 @@ svg {
     display: inline-block;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
+    background: none;
 }
     
 .like-button img {

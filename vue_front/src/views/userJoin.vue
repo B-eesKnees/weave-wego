@@ -68,7 +68,6 @@
                 <p id="error" v-if="phone_check">전화번호를 정확히 입력해주세요. 예)010-1234-5678</p>
                 <a href="/auth/join"><input type="submit" :class="{ 'error_submit': allcheck, 'submit': !allcheck }"
                         :disabled="allcheck" id="login" value="가입하기"></a>
-
             </form>
         </div>
     </div>
