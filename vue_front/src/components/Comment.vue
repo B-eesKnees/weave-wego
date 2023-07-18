@@ -39,8 +39,8 @@ if (props.comment.COM_WRITER == localStorage.getItem("userID")) {
             <div>
               {{
                 comment.COM_UPDATED_AT
-                  ? comment.COM_UPDATED_AT.slice(0, 16).replace("T", " ")
-                  : comment.COM_CREATED_AT.slice(0, 16).replace("T", " ")
+                  ? comment.COM_UPDATED_AT.slice(0, 10).replace("T", " ")
+                  : comment.COM_CREATED_AT.slice(0, 10).replace("T", " ")
               }}
             </div>
             <div>
