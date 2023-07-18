@@ -333,7 +333,7 @@ setRecentView();
         </div>
       </div>
       <div class="name-info">
-        <div>{{ boardData.BRD_NICK }}</div>
+        <div>{{ boardData.USER_NICKNAME }}</div>
         <div class="name-info-right">
           <div>
             <input
@@ -469,7 +469,7 @@ setRecentView();
         <div v-if="images.length" class="imageslider">
           <carousel :items-to-show="1" :wrap-around="false">
             <slide v-for="image in images" :key="image">
-              <div class="carousel_item">
+              <div class="carousel__item">
                 <img :src="image" />
               </div>
             </slide>
@@ -488,12 +488,12 @@ setRecentView();
           <div>
             <div>댓글</div>
             <div class="comment-write">
-              <input
+              <textarea
                 v-model="newComment"
-                type="text"
                 placeholder="좋은 댓글을 씁시다"
                 font-size="2rem"
-                style="flex-grow: 1; height: 5rem"
+                style="flex-grow: 1; height: 5rem; padding: 0.5rem"
+                maxlength="200"
               />
 
               <div>
@@ -525,6 +525,22 @@ setRecentView();
 </template>
 
 <style>
+.imageslider {
+  border: 1px solid black;
+}
+
+.carousel__item {
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 4 / 3;
+}
+
+.carousel__item > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .carousel__track {
   margin-bottom: 0;
 }
@@ -611,26 +627,10 @@ setRecentView();
   display: flex;
   justify-content: center;
 }
-.carousel {
-  width: 70%;
-  border: 1px solid black;
-}
 
-.carousel_item,
-.carousel_item > img {
-  width: 100%;
-  height: 450px;
-  object-fit: cover;
-}
-.imageslider {
-  display: flex;
-  justify-content: center;
-}
 .dropdown {
   border: 0;
   background-color: transparent;
-}
-.dropdown-item {
 }
 
 #heart-svg {
