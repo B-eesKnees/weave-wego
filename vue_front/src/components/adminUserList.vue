@@ -23,8 +23,15 @@
       </div>
       <div v-for="(item, i) in showBoard" :key="i" class="admin_board">
         <img
+          v-if="item.USER_IMAGE && item.USER_IMAGE != 'default'"
           class="admin_userimg"
           :src="`http://localhost:3000/downloadProfile/${item.USER_EMAIL}/${item.USER_IMAGE}`"
+          alt=""
+        />
+        <img
+          v-if="item.USER_IMAGE == null || item.USER_IMAGE == 'default'"
+          class="admin_userimg"
+          src="../assets/img/profileExample.png"
           alt=""
         />
         <p>{{ item.USER_NICKNAME }}</p>
@@ -242,11 +249,12 @@ input {
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
-.admin_boards_info p:nth-child(1),
-.admin_board p:nth-child(1) {
+.admin_boards_info p:nth-child(1) {
   width: 10%;
 }
-
+.admin_userimg {
+  margin-right: 100px;
+}
 .admin_boards_info p:nth-child(2),
 .admin_board p:nth-child(2) {
   width: 10%;
@@ -276,11 +284,19 @@ input {
 .admin_board p:nth-child(7) {
   width: 5%;
 }
+.admin_board p:nth-child(2),
+.admin_board p:nth-child(3),
+.admin_board p:nth-child(4),
+.admin_board p:nth-child(5),
+.admin_board p:nth-child(6),
+.admin_board p:nth-child(7) {
+  height: 50px;
+  padding: 2% 0;
+}
 .admin_userimg {
-  width: 10%;
-  max-width: 50px;
-  max-height: 50px;
-  padding: 10px;
+  width: 50px;
+  height: 50px;
+  max-width: 10%;
 }
 
 .admin_board {
@@ -289,6 +305,11 @@ input {
   justify-content: space-between;
   align-items: center;
   padding: 0 1%;
+}
+.admin_board p {
+  display: flex;
+  align-items: center;
+  margin: 0;
 }
 
 .admin_board:nth-child(2n-1) {

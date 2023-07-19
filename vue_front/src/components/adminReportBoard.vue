@@ -13,7 +13,7 @@
     <div class="admin_boards">
       <div class="admin_boards_info">
         <p>제목</p>
-        <p>글쓴이</p>
+        <p>작성자(이메일)</p>
         <p>날짜</p>
         <p>신고여부</p>
         <p>조회수</p>
@@ -269,7 +269,14 @@ input {
 .admin_board p:nth-child(6) {
   width: 7%;
 }
-
+.admin_board p:nth-child(2),
+.admin_board p:nth-child(3),
+.admin_board p:nth-child(4),
+.admin_board p:nth-child(5),
+.admin_board p:nth-child(6),
+.admin_board p:nth-child(7) {
+  height: 50px;
+}
 .admin_board {
   max-width: 100%;
   display: flex;
@@ -277,7 +284,11 @@ input {
   align-items: center;
   padding: 0 1%;
 }
-
+.admin_board p {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
 .admin_board:nth-child(2n-1) {
   background-color: #d7e6e0;
 }
