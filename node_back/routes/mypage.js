@@ -45,7 +45,7 @@ const queries = {
   order by ll.LL_TIME desc;`,
 
   myCommentQuery:
-    `select b.BRD_ID, b.BRD_TITLE, com COM_ID, com.COM_COMMENT, date_format(com.COM_CREATED_AT, '%Y-%m-%d') as COM_CREATED_AT
+    `select b.BRD_ID, b.BRD_TITLE, com.COM_ID, com.COM_COMMENT, date_format(com.COM_CREATED_AT, '%Y-%m-%d') as COM_CREATED_AT
     from comment com
     left join board b on com.COM_NUM = b.BRD_ID
     where com.COM_WRITER = ?

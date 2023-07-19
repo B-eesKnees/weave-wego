@@ -47,7 +47,6 @@ export default {
       <div class="comment_content">
         <div class="com_brd_title">{{ commentList.BRD_TITLE }}</div>
         <div class="com_created_at">{{ commentList.COM_CREATED_AT }}</div>
-        <p>{{ commentList.COM_ID }}</p>
         <img
           class="com_list_icon"
           src="../assets/img/commentList.png"
