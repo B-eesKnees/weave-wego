@@ -31,8 +31,8 @@
     <div class="wrap2">
       <form method="post">
         <div class="user_social_btns">
-          <a class="social_btn kakao" @click="kakaoLogin">카카오로 시작하기</a>
-          <a class="social_btn naver" href="/naverlogin">네이버로 시작하기</a>
+          <a class="social_btn kakao" @click="kakaoLogin"><img class="social_btn_kakao" src="../assets/img/kakao_login.png" alt=""></a>
+          <a class="social_btn naver" href="/naverlogin"><img class="social_btn_naver" src="../assets/img/naver_login.png" alt=""></a>
         </div>
       </form>
     </div>
@@ -162,12 +162,10 @@ export default {
       });
     },
     getProfile(autoObj) {
-      console.log(autoObj);
       window.Kakao.API.request({
         url: "/v2/user/me",
         success: (res) => {
           const kakao_account = res.kakao_account;
-          console.log(kakao_account);
           this.login(kakao_account);
         },
       });
@@ -369,22 +367,22 @@ input.submit2:hover {
 .user_social_btns {
   display: flex;
   width: 100%;
-  flex-direction: column;
   justify-content: center;
   text-align: center;
+  margin-top: 5%;
 }
 
 .social_btn {
+  width: 90%;
+}
+.social_btn_kakao {
   width: 100%;
-  padding: 3%;
-  text-decoration: none;
-  border-radius: 6px;
-  border: 1px solid #388265;
-  font-size: 15px;
-  background-color: #388265;
-  color: #fff;
-  margin-top: 10px;
-  transition: all 0.2s ease-in-out;
+  height: 100%;
+  padding: 1%;
+}
+.social_btn_naver {
+  width: 100%;
+  padding: 1%;
 }
 
 #error {
@@ -410,22 +408,9 @@ input.submit2:hover {
   transition: all 0.2s ease-in-out;
 }
 
+.naver,
 .kakao {
-  background-color: #f7e600;
-  color: #3a1d1d;
-  border: 1px solid #f7e600;
-  box-shadow: 0 0 5px #ccc;
-  font-weight: bold;
-  line-height: normal;
+  width: 50%;
   cursor: pointer;
-}
-
-.naver {
-  background-color: #2db400;
-  color: white;
-  border: 1px solid #2db400;
-  box-shadow: 0 0 5px #ccc;
-  font-weight: bold;
-  line-height: normal;
 }
 </style>

@@ -51,7 +51,6 @@ const router = useRouter();
 
 const getUserEmail = () => {
   userEmail.value = localStorage.getItem("userID");
-  // console.log(userEmail);
 };
 
 const getBoard = () => {
@@ -60,7 +59,6 @@ const getBoard = () => {
   if (sessionStorage.getItem("recentViewPost")) {
     recentView = "watched";
   }
-  console.log(userEmail.value);
   axios
     .get("http://127.0.0.1:3000/postdata/board", {
       params: {
@@ -203,7 +201,6 @@ const getPopTimes = () => {
     })
     .then((result) => {
       popTimeData.value = result.data.locationpoptime[0];
-      console.log(popTimeData.value);
     })
     .catch((error) => {
       console.log("locationpoptimeerror", error);
@@ -287,7 +284,6 @@ const deletePost = () => {
       router.push({
         path: "/",
       });
-      console.log("삭제 성공");
     })
     .catch((error) => {
       console.log("삭제 에러", error);
@@ -295,7 +291,6 @@ const deletePost = () => {
 };
 
 const setRecentView = () => {
-  console.log(userEmail.value);
   axios
     .post("http://127.0.0.1:3000/recentView", {
       brdID: route.params.boardId,

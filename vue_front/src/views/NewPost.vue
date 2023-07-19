@@ -201,7 +201,6 @@ const prepareMap = () => {
 };
 
 const addLocation = (marker, title, address) => {
-  console.log("geo", address);
   if (locations.value.length < 5) {
     if (!locations.value.some((l) => l.title === title))
       locations.value.push({

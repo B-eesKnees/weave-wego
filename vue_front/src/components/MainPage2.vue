@@ -1,8 +1,6 @@
 <template>
     <div class="mainpage2">
-
-        
-        <h2><span>⭐️</span>추천 코스</h2>
+        <h3><span>🥇</span>추천 코스</h3>
         <div class="mainpage2_second">
             <div class="mainpage2_second_left">
                 <div class="mainpage2_second_left_img">
@@ -126,8 +124,8 @@ export default {
     font-size: xx-large;
 }
 
-.mainpage2>h2 {
-    font-size: xxx-large;
+.mainpage2>h3 {
+    font-size: xx-large;
     font-weight: bold;
     padding: 2% 0;
 }

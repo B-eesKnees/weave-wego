@@ -58,10 +58,12 @@
       </form>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import gnbBar from '../components/gnbBar.vue'
+import Footer from '../components/footer.vue'
 
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:3000';
@@ -69,7 +71,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 export default {
-  components: { gnbBar },
+  components: { gnbBar, Footer },
   data() {
     return {
 
@@ -133,7 +135,6 @@ export default {
     funcWatch() {
       this.inputAllCheck()
       // this.nicknameCheckForm()
-      console.log(this.allcheck);
     },
     userData() {
       axios({
@@ -177,7 +178,6 @@ export default {
       }
     },
     checknickname() {
-      console.log(this.nicknamecheck, "aaa")
       const validateNickname = /^.{1,10}$/;
       if (!this.nickname || !validateNickname.test(this.nickname)) {
         this.nickname_check2 = true;
@@ -233,15 +233,9 @@ export default {
           this.emailcheck = 2;
         } else if (res.data.message == '존재하는 이메일입니다.') {
           this.emailcheck = 1;
-          console.log(this.allcheck);
         } else if (!this.email) {
           this.emailcheck = 3;
         }
-
-
-
-        console.log(this.emailcheck);
-
       }).catch(error => {
         alert(error);
       })
@@ -255,7 +249,6 @@ export default {
         },
       }).then(async (res) => {
         if (res.data.message == '사용가능한 닉네임입니다.' && this.nickname) {
-          console.log(res.data.message);
           this.nicknamecheck = 2;
         } else if (!this.nickname) {
           this.nicknamecheck = 3;
@@ -267,7 +260,6 @@ export default {
       })
     },
     updateForm() { //
-      console.log(this.nickname);
       if (this.sex === 'female') {
         this.sex = 'f';
       } else {
@@ -317,7 +309,6 @@ export default {
       })
     },
     resetUser() {
-      console.log(this.email);
       localStorage.removeItem("userNick");
       localStorage.removeItem("userImage");
       localStorage.removeItem("userProvider");
@@ -343,7 +334,6 @@ export default {
 
       if (files && files.length > 0) {
         this.image = files[0]; // 사용자가 올린 이미지
-        console.log(this.image);
         // URL.createObjectURL로 사용자가 올린 이미지를 URL로 만들어서 화면에 표시할 수 있게 한다. img 태그의 src값에 바인딩해준다
         this.imageUploaded = URL.createObjectURL(this.image);
 
@@ -360,6 +350,7 @@ export default {
   width: 100%;
   height: 100%;
   margin: 0;
+  margin-bottom: 7%;
   background-color: white;
   font-family: arial;
   font-size: 14px;
@@ -383,38 +374,40 @@ export default {
 
 input[type="file"] {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  left: 50%;
-  top: 70%;
-  line-height: 20x;
+  width: 40px;
+  height: 40px;
+  left: 51%;
+  top: 78%;
+  line-height: 38px;
   border: 2px solid black;
   color: white;
-  font-size: 22px;
+  font-size: 42px;
   background-color: #388265;
   border-radius: 50%;
 }
-
+.title-bar > form {
+  margin-bottom: 2%;
+}
 .title-bar {
   text-align: center;
   color: #333333;
   font-size: 30px;
-  padding-bottom: 10px;
   position: relative;
 }
 
 .title-bar-btn {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  left: 50%;
-  top: 70%;
+  width: 40px;
+  height: 40px;
+  left: 51%;
+  top: 78%;
   text-align: center;
-  line-height: 20px;
+  line-height: 38px;
   border: 2px solid black;
   color: white;
-  font-size: 22px;
-
+  font-size: 42px;
+  text-align: center;
+  ;
   background-color: #388265;
   border-radius: 50%;
 }
@@ -424,8 +417,8 @@ input[type="file"] {
 }
 
 .title-bar img {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
 }
 
 .wrap {
@@ -564,4 +557,5 @@ input.submit:hover {
   color: darkgray;
   margin-top: 25px;
   transition: all .2s ease-in-out;
-}</style>
+}
+</style>

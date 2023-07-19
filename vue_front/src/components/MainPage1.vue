@@ -1,5 +1,4 @@
 <template>
-  <gnbBar />
   <div class="mainpage">
     <div class="mainpage_first">
       <div class="mainpage_first_left">
@@ -15,14 +14,6 @@
           <img @click="link4" src="../assets/img/main_img4.png" alt="image-4" />
           <img @click="link5" src="../assets/img/main_img5.png" alt="image-5" />
         </div>
-        <ul class="img_nav">
-          <li>
-            <a @click="imgNavSelect(event)" ref="imgnav1" href=""></a>
-            <a ref="imgnav2" href=""></a>
-            <a ref="imgnav3" href=""></a>
-            <a ref="imgnav4" href=""></a>
-          </li>
-        </ul>
       </div>
     </div>
   </div>
@@ -48,11 +39,6 @@ export default {
     },
     link5() {
       window.location.href = "/detail/";
-    },
-    imgNavSelect(event) {
-      var img1class = event.target.classList;
-      event.preventdefault();
-      console.log(img1class)
     }
   }
 }
@@ -202,11 +188,6 @@ background-color: rgba(102, 102, 102, 0.4);
   }
 
   100% {
-    right: 0%;
-  }
-}
-@keyframes slideSelect {
-  0% {
     right: 0%;
   }
 }

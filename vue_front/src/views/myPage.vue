@@ -272,10 +272,7 @@ export default {
           userEmail: this.email,
         });
 
-        // console.log(this.nodata);
-
         this.boardList = response.data;
-        console.log(response.data);
         if (this.boardList.length != 0) {
           this.nodata = false;
         } else {
@@ -283,7 +280,6 @@ export default {
         }
       } catch {
         this.nodata = true;
-        console.log(this.nodata);
       }
     },
     showMoreContent() {
@@ -360,35 +356,29 @@ export default {
     addToselectedItems(id) {
       //selectedItems 배열에 받아온 BRD_ID push
       this.selectedItems.push(id);
-      console.log(this.selectedItems);
     },
     deleteToselectedItems(id) {
       //selectedItems 배열에서 받아온 BRD_ID 필터로 제거 아마? 삭제되긴함
       this.selectedItems = this.selectedItems.filter((item) => item !== id);
-      console.log(this.selectedItems);
     },
     addToselectedComItems(comment) {
       if (!this.selectedComItems) {
         this.selectedComItems = []; // 배열 초기화
       }
       this.selectedComItems.push(comment);
-      console.log(this.selectedComItems);
     },
     deleteToselectedComItems(id) {
       this.selectedComItems = this.selectedComItems.filter(
         (item) => item !== id
       );
-      console.log(this.selectedComItems);
     },
 
     async deleteContent() {
       if (this.selectedItems.length === 0) {
-        console.log(this.selectedItems);
         alert("삭제 할 게시글 없음");
         return; // 선택된 항목이 없으면 종료합니다.
       } else {
         // 선택된 항목을 서버에 삭제 요청합니다.
-        console.log(this.selectedItems);
         axios({
           url: "/mypage/delMyCourse",
           method: "POST",
@@ -397,7 +387,6 @@ export default {
           .then(async (res) => {
             alert(res.data.message);
             this.selectedItems = []; //삭제후 배열 비우기 안비우면 계속 남아있음
-            console.log(this.selectedItems);
             await this.boardListData(); //삭제후 새롭게 게시글 받아오기
           })
           .catch((error) => {
@@ -415,12 +404,10 @@ export default {
     },
     deleteComment() {
       if (this.selectedComItems.length === 0) {
-        console.log(this.selectedComItems);
         alert("삭제 할 댓글 없음");
         return; // 선택된 항목이 없으면 종료합니다.
       } else {
         // 선택된 항목을 서버에 삭제 요청합니다. ??
-        console.log(this.selectedComItems);
         axios({
           url: "/mypage/delmyComment",
           method: "POST",
@@ -429,7 +416,6 @@ export default {
           .then(async (res) => {
             alert(res.data.message);
             this.selectedComItems = []; //삭제후 배열 비우기 안비우면 계속 남아있음
-            console.log(this.selectedComItems);
             await this.commentListData(); //삭제후 새롭게 게시글 받아오기
           })
           .catch((error) => {
