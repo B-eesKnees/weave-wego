@@ -279,6 +279,7 @@ input {
 .admin_userimg {
   width: 10%;
   max-width: 50px;
+  max-height: 50px;
   padding: 10px;
 }
 
