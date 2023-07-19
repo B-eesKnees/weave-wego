@@ -422,7 +422,7 @@ export default {
         // 선택된 항목을 서버에 삭제 요청합니다.
         console.log(this.selectedComItems);
         axios({
-          url: "/mypage/delMyCourse",
+          url: "/mypage/delmyComment",
           method: "POST",
           data: this.selectedComItems,
         })
