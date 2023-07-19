@@ -18,7 +18,7 @@
             class="form__input-text"
             maxlength="20"
           />
-          <button type="submit" class="button__submit" id="gochecking4personal">
+          <button type="submit" class="check_button__submit" id="gochecking4personal">
             확인
           </button>
         </div>
@@ -71,7 +71,6 @@ export default {
         });
     },
     checkLogin() {
-      console.log(this.email);
       if (this.email == null) {
         window.location.href = "/login";
       }
@@ -136,7 +135,7 @@ export default {
   overflow: hidden;
   text-indent: -5000em;
 }
-.box__social-login .button__submit {
+.box__social-login .check_button__submit {
   position: relative;
   display: block;
   margin-top: 16px;
@@ -144,6 +143,7 @@ export default {
   height: 65px;
   background-color: #388265;
   border-radius: 2px;
+  border: none;
   color: #fff;
   font-size: 22px;
   font-weight: 700;

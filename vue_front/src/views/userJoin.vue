@@ -420,14 +420,14 @@ export default {
 
 input[type="file"] {
     position: absolute;
-    width: 22px;
-    height: 22px;
-    left: 50%;
-    top: 70%;
-    line-height: 20x;
+    width: 40px;
+    height: 40px;
+    left: 50.5%;
+    top: 80%;
+    line-height: 38px;
     border: 2px solid black;
     color: white;
-    font-size: 22px;
+    font-size: 42px;
     background-color: #388265;
     border-radius: 50%;
 }
@@ -445,16 +445,16 @@ input[type="file"] {
 
 .title-bar-btn {
     position: absolute;
-    width: 22px;
-    height: 22px;
+    width: 40px;
+    height: 40px;
     left: 50.5%;
     top: 80%;
     text-align: center;
-    line-height: 20px;
+    line-height: 38px;
     border: 2px solid black;
     color: white;
-    font-size: 22px;
-
+    font-size: 42px;
+    text-align: center;;
     background-color: #388265;
     border-radius: 50%;
 }
@@ -466,8 +466,8 @@ input[type="file"] {
 }
 
 .title-bar img {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
 }
 
 .wrap {

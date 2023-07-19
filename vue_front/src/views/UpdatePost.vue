@@ -146,13 +146,11 @@ const getBoard = () => {
     })
     .then((result) => {
       const BRD_TEMP = result.data.board;
-      console.log(BRD_TEMP);
       try {
         tags.value = JSON.parse(BRD_TEMP.BRD_HASHTAG);
       } catch {
         tags.value = [];
       }
-      console.log("a", tags.value);
       title.value = BRD_TEMP.BRD_TITLE;
       review.value = BRD_TEMP.BRD_REV;
       open.value = BRD_TEMP.BRD_OPEN;
