@@ -38,20 +38,14 @@ const props = defineProps({
         <!-- 오프캔버스 내부 내용-->
         <div class="test">
           <div>
-            <img
-              src="https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg"
-            />
+            <img src="../assets/img/deli1.jpeg" />
           </div>
           <div>
             <div>
-              <img
-                src="https://cdn.pixabay.com/photo/2016/02/17/23/03/usa-1206240_1280.jpg"
-              />
+              <img src="../assets/img/deli2.jpeg" />
             </div>
             <div>
-              <img
-                src="https://cdn.pixabay.com/photo/2016/12/04/19/30/berlin-cathedral-1882397_1280.jpg"
-              />
+              <img src="../assets/img/deli3.jpeg" />
             </div>
           </div>
         </div>
@@ -144,6 +138,7 @@ const props = defineProps({
 }
 
 .canvas {
+  z-index: 10000 !important;
   width: 36rem !important;
 }
 .canvas-body {
