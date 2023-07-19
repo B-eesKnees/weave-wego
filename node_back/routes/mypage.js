@@ -45,7 +45,7 @@ const queries = {
   order by ll.LL_TIME desc;`,
 
   myCommentQuery:
-    `select b.BRD_ID, b.BRD_TITLE, com.COM_COMMENT, date_format(com.COM_CREATED_AT, '%Y-%m-%d') as COM_CREATED_AT
+    `select b.BRD_ID, b.BRD_TITLE, com COM_ID, com.COM_COMMENT, date_format(com.COM_CREATED_AT, '%Y-%m-%d') as COM_CREATED_AT
     from comment com
     left join board b on com.COM_NUM = b.BRD_ID
     where com.COM_WRITER = ?
@@ -201,7 +201,7 @@ router.post('/delmyComment', async (req, res) => { //07.07 성공..
   // console.log(req.body);
   console.log(deleteComments);
 
-  db.query(`delete from weavewego.comment where BRD_ID in (?)`, [deleteComments], (err) => { //반복문 안쓰고 가능
+  db.query(`delete from weavewego.comment where COM_ID in (?)`, [deleteComments], (err) => { //반복문 안쓰고 가능
     if (err) {
       res.send({ // 에러 발생 시
         'code': 400,
