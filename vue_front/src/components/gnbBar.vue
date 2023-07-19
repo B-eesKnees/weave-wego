@@ -68,7 +68,7 @@
         <div
           class="local_img"
           :style="{
-            'background-image': `url(http://localhost:3000/downloadProfile/${email}/${image})`,
+            'background-image': `url('http://localhost:3000/downloadProfile/${email}/${image}')`,
           }"
           @click="toggleButtons"
         ></div>

@@ -105,7 +105,7 @@
       <!-- 사진 첨부하는 버튼 들어갈 곳-->
       <div class="buttons">
         <button @click="updatePost">수정완료</button>
-        <button>취소</button>
+        <button @click="returnPost">취소</button>
       </div>
     </div>
   </div>
@@ -539,6 +539,14 @@ const drawMap = () => {
   map.value = new maps.Map(container, options);
   infowindow.value = new maps.InfoWindow({ zIndex: 1 });
 };
+
+const returnPost = () => {
+    if(confirm('수정 취소하시겠습니까?')) {
+      window.location.href = `/detail/${route.params.boardId}`;
+    } else {
+      return;
+    }
+}
 
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {

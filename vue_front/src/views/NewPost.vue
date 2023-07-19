@@ -91,7 +91,7 @@
       <!-- 사진 첨부하는 버튼 들어갈 곳-->
       <div class="buttons">
         <button @click="createPost">작성완료</button>
-        <button>취소</button>
+        <button @click="returnHome">취소</button>
       </div>
     </div>
   </div>
@@ -432,6 +432,19 @@ const drawMap = () => {
   map.value = new maps.Map(container, options);
   infowindow.value = new maps.InfoWindow({ zIndex: 1 });
 };
+
+const returnHome = () => {
+  if(title.value || review.value || images.value || locations.value || tags.value) {
+    if(confirm('경고: 작성 중인 글이 사라집니다!')) {
+      window.location.href = '/';
+    } else {
+      return;
+    }
+  } else {
+    window.location.href = '/';
+  }
+  
+}
 
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
