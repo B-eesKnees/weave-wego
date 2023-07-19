@@ -8,6 +8,7 @@ import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import KakaoMap from "@/components/KakaoMap.vue";
 import gnbBar from "@/components/gnbBar.vue";
+import ToUp from "@/components/ToUp.vue";
 
 const newComment = ref("");
 
@@ -522,17 +523,19 @@ setRecentView();
       </div>
     </div>
   </div>
+  <to-up />
 </template>
 
 <style>
 .carousel {
-  width: 70%;
+  width: 60%;
   border: 1px solid black;
 }
 
 .carousel__item,
 .carousel__item > img {
   width: 100%;
+
   height: 500px;
   object-fit: cover;
 }
