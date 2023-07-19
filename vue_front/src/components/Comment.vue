@@ -14,10 +14,10 @@ const setUpdate = () => {
   updateButton.value = true;
 };
 
-if (props.comment.COM_WRITER == localStorage.getItem("userID")) {
+if (props.comment.COM_WRITER === localStorage.getItem("userID")) {
   userCheck.value = true;
 }
-if (!props.comment.USER_IMAGE) {
+if (props.comment.USER_IMAGE === "default") {
   imageCheck.value = false;
 }
 console.log(imageCheck.value);
