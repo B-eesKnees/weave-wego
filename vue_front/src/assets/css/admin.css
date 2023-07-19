@@ -70,16 +70,26 @@
 }
 
 .reportCourse_info {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1% 4%;
+    padding: 1% 2%;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.reportCourse_info p:nth-child(1) {
+    width: 15%;
+    padding-left: 2%;
+}
 .reportCourse_info p:nth-child(2) {
-    margin-left: -47%;
+    width: 65%;
+    padding-left: 2%;
+}
+.reportCourse_info p:nth-child(3) {
+    width: 30%;
+    padding-left: 2%;
 }
 
 
@@ -89,24 +99,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 5% 0 5%;
+    padding: 20px 2% 0 2%;
 }
 
 .reportCourse_content_num {
-    font-size: 1em;
-    width: 12%;
+    width: 15%;
     overflow: hidden;
+    white-space:nowrap;
+    padding-left: 2%;
 }
 
 .reportCourse_content_title {
-    width: 20%;
-    padding-right: 60%;
+    width: 65%;
     overflow: hidden;
     white-space:nowrap;
+    padding-left: 2%;
 }
 
 .report_writer, .reportCourse_content_writer  {
-    display: inline-block;
+    width: 30%;
+    overflow: hidden;
+    white-space:nowrap;
+    padding-left: 2%;
 }
 /* {
     width: 30%;
@@ -120,13 +134,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2% 4%;
+    width: 100%;
+    padding: 1% 2%;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.reportComment_info p:nth-child(1) {
+    width: 15%;
+    padding-left: 2%
+}
 .reportComment_info p:nth-child(2) {
-    margin-left: -50%;
+    width: 70%;
+    padding-left: 2%
+}
+.reportComment_info p:nth-child(3) {
+    width: 15%;
+    padding-left: 2%
 }
 
 .reportComment_content {
@@ -134,31 +158,34 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 5% 0 5%;
+    padding: 20px 2% 0 2%;
 }
 
 .reportComment_content_num {
-    font-size: small;
-    width: 22%;
+    width: 15%;
     overflow: hidden;
+    white-space:nowrap;
+    padding-left: 2%
 }
 
 .reportComment_content_title {
     width: 70%;
-    padding-left: 1%;
     overflow: hidden;
+    white-space:nowrap;
+    padding-left: 2%
 }
 
 .reportComment_content_writer {
-    width: 20%;
-    padding-left: 10%;
+    width: 15%;
     overflow: hidden;
-    font-size: small;
+    white-space:nowrap;
+    padding-left: 2%
 }
 
 
 /* 유저목록 */
 .user_info {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -167,8 +194,17 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.user_info p:nth-child(1) {
+    width: 30%;
+    padding-left: 2%
+}
 .user_info p:nth-child(2) {
-    margin-left: -15%;
+    width: 40%;
+    padding-left: 2%
+}
+.user_info p:nth-child(3) {
+    width: 15%;
+    padding-left: 2%
 }
 
 .user_content {
@@ -176,28 +212,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2% 2%;
+    padding: 1% 2%;
 }
 
 .user_content_num {
-    font-size: small;
     width: 30%;
-    height: 22px;
     overflow: hidden;
+    white-space:nowrap;
+    padding-left: 2%
 }
 
 .user_content_title {
-    width: 45%;
-    height: 22px;
-    padding-right: 5%;
+    width: 40%;
     overflow: hidden;
+    white-space:nowrap;
+    padding-left: 2%
 }
 
 .user_content_writer {
-    width: 10%;
-    height: 22px;
+    width: 15%;
     overflow: hidden;
-    font-size: small;
+    white-space:nowrap;
+    padding-left: 2%
 }
 
 
