@@ -529,12 +529,11 @@ setRecentView();
 <style>
 .carousel {
   width: 60%;
-  border: 1px solid black;
 }
 
 .carousel__item,
 .carousel__item > img {
-  width: 100%;
+  width: 92%;
 
   height: 500px;
   object-fit: cover;
