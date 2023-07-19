@@ -225,6 +225,10 @@ const updateLike = () => {
 };
 
 const createComment = () => {
+  if (!newComment.value) {
+    alert("댓글 내용을 작성해주세요.");
+    return;
+  }
   axios
     .post("http://127.0.0.1:3000/boardCreate/comment", {
       boardId: route.params.boardId,
@@ -497,17 +501,15 @@ setRecentView();
                 maxlength="200"
               />
 
-              <div>
-                <button
-                  id="comment-submit"
-                  class="comment-submit"
-                  type="submit"
-                  width="100px"
-                  @click="createComment"
-                >
-                  댓글 달기
-                </button>
-              </div>
+              <button
+                id="comment-submit"
+                class="comment-submit"
+                type="submit"
+                width="100px"
+                @click="createComment"
+              >
+                댓글 달기
+              </button>
             </div>
             <!--댓글 컴포넌트 -->
             <comment
@@ -616,10 +618,9 @@ body {
   padding-right: 1rem;
 }
 .comment-submit {
-  width: 70px;
-  height: 30px;
-  margin-top: 1.5rem;
   margin-left: 1rem;
+  border: none;
+  background-color: transparent;
 }
 
 .map {

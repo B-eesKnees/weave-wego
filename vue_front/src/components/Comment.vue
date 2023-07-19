@@ -7,7 +7,7 @@ const props = defineProps({
 const emit = defineEmits(["delete", "edit", "report"]);
 
 const userCheck = ref(false);
-
+const imageCheck = ref(true);
 const updateButton = ref(false);
 
 const setUpdate = () => {
@@ -17,20 +17,27 @@ const setUpdate = () => {
 if (props.comment.COM_WRITER == localStorage.getItem("userID")) {
   userCheck.value = true;
 }
+if (!props.comment.USER_IMAGE) {
+  imageCheck.value = false;
+}
+console.log(imageCheck.value);
 </script>
 
 <template>
   <div>
     <div class="comment">
-      <div class="profile">
+      <div class="profile" v-if="imageCheck">
         <img
           class="profile_icon"
           :src="
-            comment.COM_IMAGE.startsWith('http')
-              ? comment.COM_IMAGE
-              : `http://localhost:3000/downloadProfile/${comment.COM_WRITER}/${comment.COM_IMAGE}`
+            comment.USER_IMAGE.startsWith('http')
+              ? comment.USER_IMAGE
+              : `http://localhost:3000/downloadProfile/${comment.COM_WRITER}/${comment.USER_IMAGE}`
           "
         />
+      </div>
+      <div class="profile" v-else>
+        <img class="profile_icon" src="../assets/img/profileExample.png" />
       </div>
       <div class="comment-body">
         <div class="comment-nickname">

@@ -541,12 +541,12 @@ const drawMap = () => {
 };
 
 const returnPost = () => {
-    if(confirm('수정 취소하시겠습니까?')) {
-      window.location.href = `/detail/${route.params.boardId}`;
-    } else {
-      return;
-    }
-}
+  if (confirm("수정 취소하시겠습니까?")) {
+    window.location.href = `/detail/${route.params.boardId}`;
+  } else {
+    return;
+  }
+};
 
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
@@ -640,6 +640,11 @@ input[type="radio"] {
   border-bottom: 1px solid darkgray;
   background-color: #f1f1f1;
   resize: none;
+}
+
+.location button {
+  border: 0;
+  background-color: transparent;
 }
 
 hr {

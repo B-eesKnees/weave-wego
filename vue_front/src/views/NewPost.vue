@@ -4,7 +4,9 @@
 
     <div class="page">
       <div class="header">글 작성하기</div>
-      <div class="hashtags">{{ `${tags.map((h) => `#${h}`).join(" ")}` }}</div>
+      <div class="hashtags">
+        {{ `${tags.map((h) => `#${h}`).join(" ")}` }}
+      </div>
       <div class="filter">
         <FilterComponent @update-tag="(data) => updateTags(data)" />
       </div>
@@ -432,19 +434,23 @@ const drawMap = () => {
   map.value = new maps.Map(container, options);
   infowindow.value = new maps.InfoWindow({ zIndex: 1 });
 };
-
 const returnHome = () => {
-  if(title.value || review.value || images.value || locations.value || tags.value) {
-    if(confirm('경고: 작성 중인 글이 사라집니다!')) {
-      window.location.href = '/';
+  if (
+    title.value ||
+    review.value ||
+    images.value ||
+    locations.value ||
+    tags.value
+  ) {
+    if (confirm("경고: 작성 중인 글이 사라집니다!")) {
+      window.location.href = "/";
     } else {
       return;
     }
   } else {
-    window.location.href = '/';
+    window.location.href = "/";
   }
-  
-}
+};
 
 onMounted(() => {
   if (window.kakao && window.kakao.maps) {
@@ -544,6 +550,11 @@ input[type="radio"] {
   resize: none;
 }
 
+.location button {
+  border: 0;
+  background-color: transparent;
+}
+
 hr {
   margin: 0 -2rem;
   padding: 0 2rem;
@@ -580,6 +591,7 @@ hr {
 
 .buttons > button {
   padding: 0.5rem;
+  border: none;
 }
 
 .buttons > button:first-of-type {
