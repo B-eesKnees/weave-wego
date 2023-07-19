@@ -6,6 +6,7 @@ const db = {
   user: "root",
   password: "12345678",
   timezone: "GMT",
+  charset: 'utf8mb4'
 };
 const dbPool = require("mysql").createPool(db);
 
