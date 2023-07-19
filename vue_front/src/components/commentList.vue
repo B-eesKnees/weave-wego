@@ -23,9 +23,9 @@ export default {
   methods: {
     sendSelectedComItems() {
       if (this.comIsChecked) {
-        this.$emit("addcomlist", this.commentList.BRD_ID);
+        this.$emit("addcomlist", this.commentList.COM_ID);
       } else {
-        this.$emit("removecomlist", this.commentList.BRD_ID);
+        this.$emit("removecomlist", this.commentList.COM_ID);
       }
     },
   },
@@ -37,7 +37,7 @@ export default {
     class="comment_checkbox"
     type="checkbox"
     v-if="comment_editMode"
-    :value="commentList.BRD_ID"
+    :value="commentList.COM_ID"
     v-model="comIsChecked"
     @change="sendSelectedComItems"
   />
@@ -47,6 +47,7 @@ export default {
       <div class="comment_content">
         <div class="com_brd_title">{{ commentList.BRD_TITLE }}</div>
         <div class="com_created_at">{{ commentList.COM_CREATED_AT }}</div>
+        <p>{{ commentList.COM_ID }}</p>
         <img
           class="com_list_icon"
           src="../assets/img/commentList.png"
