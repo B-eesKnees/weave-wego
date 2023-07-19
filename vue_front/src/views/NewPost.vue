@@ -436,11 +436,11 @@ const drawMap = () => {
 };
 const returnHome = () => {
   if (
-    title.value ||
-    review.value ||
-    images.value ||
-    locations.value ||
-    tags.value
+    title.value.length !== 0 ||
+    review.value.length !== 0  ||
+    images.value.length !== 0  ||
+    locations.value.length !== 0  ||
+    tags.value.length !== 0 
   ) {
     if (confirm("경고: 작성 중인 글이 사라집니다!")) {
       window.location.href = "/";
