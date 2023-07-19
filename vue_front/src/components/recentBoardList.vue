@@ -4,6 +4,16 @@ export default {
     recentBoardList: Object,
     openBoardDetail: Function, // 추가: openBoardDetail 함수를 props로 받아옴
   },
+  computed: {
+    truncatedContents() {
+      const maxChars = 30;
+      if (this.recentBoardList.BRD_TITLE.length > maxChars) {
+        return this.recentBoardList.BRD_TITLE.substring(0, maxChars) + "...";
+      } else {
+        return this.recentBoardList.BRD_TITLE;
+      }
+    },
+  },
   methods: {
     handleOpenBoardDetailAndRefresh() {
       // openBoardDetail 함수 호출하여 기존 탭 새로고침하기 (props로 전달된 함수)
@@ -39,7 +49,7 @@ export default {
             }}
           </div>
           <div class="brd_created_at">{{ recentBoardList.BRD_CREATED_AT }}</div>
-          <div class="brd_title">{{ recentBoardList.BRD_TITLE }}</div>
+          <div class="brd_title">{{ truncatedContents }}</div>
           <div class="viewer">
             <img src="../assets/img/view.png" alt="view" />
             {{ recentBoardList.BRD_VIEWCOUNT }}

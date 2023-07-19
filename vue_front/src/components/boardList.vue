@@ -7,6 +7,16 @@ export default {
     editMode: Boolean,
     email: String, // email prop 추가
   },
+  computed: {
+    truncatedContents() {
+      const maxChars = 30;
+      if (this.boardList.BRD_TITLE.length > maxChars) {
+        return this.boardList.BRD_TITLE.substring(0, maxChars) + "...";
+      } else {
+        return this.boardList.BRD_TITLE;
+      }
+    },
+  },
   data() {
     return {
       isChecked: false,
@@ -70,7 +80,7 @@ export default {
             }}
           </div>
           <div class="brd_created_at">{{ boardList.BRD_CREATED_AT }}</div>
-          <div class="brd_title">{{ boardList.BRD_TITLE }}</div>
+          <div class="brd_title">{{ truncatedContents }}</div>
           <div class="viewer">
             <img src="../assets/img/view.png" alt="view" />
             {{ boardList.BRD_VIEWCOUNT }}

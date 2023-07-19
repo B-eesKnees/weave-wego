@@ -3,6 +3,16 @@ export default {
   props: {
     likeBoardList: Object,
   },
+  computed: {
+    truncatedContents() {
+      const maxChars = 30;
+      if (this.likeBoardList.BRD_TITLE.length > maxChars) {
+        return this.likeBoardList.BRD_TITLE.substring(0, maxChars) + "...";
+      } else {
+        return this.likeBoardList.BRD_TITLE;
+      }
+    },
+  },
   methods: {
     processHashtags(hashtags) {
       const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
@@ -28,7 +38,7 @@ export default {
             }}
           </div>
           <div class="brd_created_at">{{ likeBoardList.BRD_CREATED_AT }}</div>
-          <div class="brd_title">{{ likeBoardList.BRD_TITLE }}</div>
+          <div class="brd_title">{{ truncatedContents }}</div>
           <div class="viewer">
             <img src="../assets/img/view.png" alt="view" />
             {{ likeBoardList.BRD_VIEWCOUNT }}
