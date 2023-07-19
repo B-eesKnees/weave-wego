@@ -73,8 +73,15 @@ a {
     left: -100px;
     top: -3px;
     line-height: 1.7;
-    border: 1px solid #000;
+    border: 2px solid #388265;
+    border-radius: 4px;
+    background-color: white;
     padding: 2px 10px;
+    font-weight: bold;
+  }
+  .adminbtn:hover {
+    background-color: #388265;
+    color: white;
   }
 
   

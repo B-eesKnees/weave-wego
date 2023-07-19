@@ -8,7 +8,8 @@
           <div v-if="provider === 'local'" class="title-bar-btn">+</div>
           <div v-else-if="provider === 'naver' || provider === 'kakao'"></div>
           <img v-if="type" class="img_style" :src="imageUploaded" alt="올린 이미지" />
-          <img v-else-if="provider === 'local' && image !== 'default'" class="img_style" :src="`http://localhost:3000/downloadProfile/${email}/${image}`" alt="올린 이미지" />
+          <img v-else-if="provider === 'local' && image !== 'default'" class="img_style"
+            :src="`http://localhost:3000/downloadProfile/${email}/${image}`" alt="올린 이미지" />
           <img v-else-if="provider === 'kakao' || provider === 'naver'" class="img_style" :src="image">
           <img v-else-if="image === 'default'" id="img_style" src="../assets/img/profileExample.png" alt="올린 이미지" />
           <br />
@@ -24,30 +25,30 @@
         <label for="email">아이디</label>
         <input v-model="email" type="text" id="email" placeholder="유저아이디" disabled maxlength="25">
         <label for="password">비밀번호</label>
-        <input v-if="provider === 'local'" v-model="password" type="password" id="password" :class="{ error_border: password_check }"
-          placeholder="비밀번호 입력" maxlength="15">
+        <input v-if="provider === 'local'" v-model="password" type="password" id="password"
+          :class="{ error_border: password_check }" placeholder="비밀번호 입력" maxlength="15">
         <input v-else v-model="password" type="password" id="password" :class="{ error_border: password_check }"
           placeholder="" disabled maxlength="15"><br />
-        <p id="error" v-if="password_check && provider === 'local'">비밀번호를 정확히 입력해주세요.<br /> *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상</p>
+        <p id="error" v-if="password_check && provider === 'local'">비밀번호를 정확히 입력해주세요.<br /> *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각
+          1개 이상</p>
         <label for="password_check2">비밀번호 확인</label>
-        <input v-if="provider === 'local'" v-model="password2" type="password" id="password_check" :class="{ error_border: password_check2 }"
-          placeholder="비밀번호 확인 입력">
+        <input v-if="provider === 'local'" v-model="password2" type="password" id="password_check"
+          :class="{ error_border: password_check2 }" placeholder="비밀번호 확인 입력">
         <input v-else v-model="password2" type="password" id="password_check" :class="{ error_border: password_check2 }"
           placeholder="" disabled><br />
         <p id="error" v-if="password_check2">비밀번호가 일치하지 않습니다.</p>
-        <label for="nickname">별명</label>
-        <input @input="nickname = $event.target.value" type="text" id="nickname" :placeholder="nickname"
-          :class="{ error_border: nickname_check2 || nicknamecheck != 2 }" maxlength="10">
+        <label for="nickname">닉네임</label>
+        <input @input="nickname = $event.target.value" @keyup="nicknameCheckForm" type="text" id="nickname"
+          :placeholder="nickname" :class="{ error_border: nickname_check2 || nicknamecheck != 2 }" maxlength="10">
         <form @submit.prevent="nicknameCheckForm">
           <a href="/auth/checknick"><button type="submit" id="nickname_check" class="username_submit">중복확인</button></a>
         </form>
+        <p id="error" v-show="nickname_check2">닉네임을 입력해주세요.</p>
         <p id="error" v-show="nicknamecheck == 1">존재하는 닉네임입니다.</p>
-        <p id="complete" v-show="nicknamecheck == 2">사용가능한 닉네임입니다.</p>
-        <p id="error" v-if="nickname_check2">닉네임을 입력해주세요.</p>
         <label for="phone_num">전화번호</label>
-        <input @input="phone_num = $event.target.value" type="text" id="phone_num" :placeholder="phone_num" :class="{ error_border: phone_check }"
-          maxlength="11"><br />
-        <p id="error" v-if="phone_check">전화번호를 정확히 입력해주세요. 예)01066090043</p>
+        <input v-model="phone_num" @input="formatPhoneNumber()" @keyup="checkphone" type="text" id="phone_num"
+          :placeholder="phone_num" :class="{ error_border: phone_check }" maxlength="13"><br />
+        <p id="error" v-if="phone_check">전화번호를 정확히 입력해주세요.</p>
         <div class="user_update_btn">
           <a href="/auth/join"><input type="submit" :class="{ 'error_submit': allcheck, 'submit': !allcheck }"
               :disabled="allcheck" id="login" value="수정하기"></a>
@@ -97,34 +98,43 @@ export default {
       allcheck6: false,
       allcheck7: false,
       emailcheck: 3,
-      nicknamecheck: 3,
+      nicknamecheck: null,
 
 
     };
   },
   watch: {
     'password': function () {
+      this.checkPassword()
       this.funcWatch()
     },
     'password2': function () {
+      this.checkPassword2()
       this.funcWatch()
     },
     'nickname': function () {
+      this.checknickname()
       this.funcWatch()
     },
     'phone_num': function () {
+
       this.funcWatch()
     }
 
   },
   mounted() {
     this.email = localStorage.getItem("userID"),
-    this.nickname = localStorage.getItem("userNick"),
-    this.image = localStorage.getItem("userImage"),
-    this.provider = localStorage.getItem("userProvider");
+      this.nickname = localStorage.getItem("userNick"),
+      this.image = localStorage.getItem("userImage"),
+      this.provider = localStorage.getItem("userProvider");
     this.userData()
   },
   methods: {
+    funcWatch() {
+      this.inputAllCheck()
+      // this.nicknameCheckForm()
+      console.log(this.allcheck);
+    },
     userData() {
       axios({
         url: '/profile/pullUserData',
@@ -132,20 +142,11 @@ export default {
         data: {
           email: this.email
         }
-      }).then((res)=>{
+      }).then((res) => {
         this.phone_num = res.data.phone
-      }).catch((err)=>{
+      }).catch((err) => {
         console.error(err);
       })
-    },
-    funcWatch() {
-      this.checkPassword()
-      this.checkPassword2()
-      this.checknickname()
-      this.checkphone()
-      this.inputAllCheck()
-      this.nicknameCheckForm()
-      console.log(this.allcheck);
     },
     movetoMypage() {
       window.location.href = '/mypage';
@@ -176,7 +177,7 @@ export default {
       }
     },
     checknickname() {
-
+      console.log(this.nicknamecheck, "aaa")
       const validateNickname = /^.{1,10}$/;
       if (!this.nickname || !validateNickname.test(this.nickname)) {
         this.nickname_check2 = true;
@@ -189,7 +190,7 @@ export default {
       }
     },
     checkphone() {
-      const validatephone = /^\d{3}\d{3,4}\d{4}$/;
+      const validatephone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 
       if (this.phone_num === '' || !validatephone.test(this.phone_num) || !this.phone_num) {
         this.phone_check = true;
@@ -199,6 +200,14 @@ export default {
         this.phone_check = false;
         this.error_border_check = false;
 
+      }
+    },
+    formatPhoneNumber() {
+      // 숫자 이외의 문자 제거
+      this.phone_num = this.phone_num.replace(/[^\d-]/g, '');
+      // 하이픈(-) 삽입
+      if (this.phone_num.length > 2) {
+        this.phone_num = this.phone_num.replace(/^01([0|1|6|7|8|9])-?(\d{4})-?(\d{4})$/, '01$1-$2-$3');
       }
     },
     inputAllCheck() {
@@ -248,10 +257,10 @@ export default {
         if (res.data.message == '사용가능한 닉네임입니다.' && this.nickname) {
           console.log(res.data.message);
           this.nicknamecheck = 2;
-        } else if (res.data.message == '존재하는 닉네임입니다.') {
-          this.nicknamecheck = 1;
         } else if (!this.nickname) {
           this.nicknamecheck = 3;
+        } else if (res.data.message == '존재하는 닉네임입니다.') {
+          this.nicknamecheck = 1;
         }
       }).catch(error => {
         alert(error);
@@ -276,12 +285,12 @@ export default {
         },
       }).then(async (res) => {
         alert(res.data.message);
-        if(typeof this.image === 'string') {
+        if (typeof this.image === 'string') {
           this.resetUser();
         } else {
           this.uploadFile(this.image);
         }
-        
+
         // await this.uploadFile(this.image);
       }).catch(error => {
         alert(error);
@@ -320,7 +329,7 @@ export default {
           email: this.email,
         },
       }).then(async (res) => {
-        
+
         localStorage.setItem("userNick", res.data.nick);
         localStorage.setItem("userImage", res.data.image);
         localStorage.setItem("userProvider", res.data.provider);
@@ -513,16 +522,19 @@ input.submit:hover {
   width: 100%;
   height: 100%;
 }
-.user_update_btn  a:first-child {
+
+.user_update_btn a:first-child {
   width: 100%;
   height: auto;
   padding-right: 1%;
 }
-.user_update_btn  a:last-child {
+
+.user_update_btn a:last-child {
   width: 100%;
   height: auto;
   padding-left: 1%;
 }
+
 #error {
   color: red;
   margin-bottom: 2%;
@@ -552,6 +564,4 @@ input.submit:hover {
   color: darkgray;
   margin-top: 25px;
   transition: all .2s ease-in-out;
-}
-
-</style>
+}</style>

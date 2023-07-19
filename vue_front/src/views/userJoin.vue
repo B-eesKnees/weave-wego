@@ -63,9 +63,9 @@
                 </div>
                 <p id="error" v-if="age_range_check">나이대를 선택하세요.</p>
                 <label for="phone_num">전화번호</label>
-                <input v-model="phone_num" type="text" id="phone_num" placeholder="전화번호 입력"
+                <input v-model="phone_num" @input="formatPhoneNumber" type="text" id="phone_num" placeholder="전화번호 입력"
                     :class="{ error_border: phone_check }" maxlength="13"><br />
-                <p id="error" v-if="phone_check">전화번호를 정확히 입력해주세요. 예)010-1234-5678</p>
+                <p id="error" v-if="phone_check">전화번호를 정확히 입력해주세요.</p>
                 <a href="/auth/join"><input type="submit" :class="{ 'error_submit': allcheck, 'submit': !allcheck }"
                         :disabled="allcheck" id="login" value="가입하기"></a>
             </form>
@@ -157,7 +157,6 @@ export default {
 
     },
     methods: {
-
         funcWatch() {
             this.emailCheckForm()
             this.inputAllCheck()
@@ -246,6 +245,14 @@ export default {
                 this.phone_check = false;
                 this.error_border_check = false;
                 this.allcheck7 = false;
+            }
+        },
+        formatPhoneNumber() {
+            // 숫자 이외의 문자 제거
+            this.phone_num = this.phone_num.replace(/[^\d-]/g, '');
+            // 하이픈(-) 삽입
+            if (this.phone_num.length > 2) {
+                this.phone_num = this.phone_num.replace(/^01([0|1|6|7|8|9])-?(\d{4})-?(\d{4})$/, '01$1-$2-$3');
             }
         },
         inputAllCheck() {

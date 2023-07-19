@@ -3,7 +3,7 @@
 <template>
   <gnbBar />
   <SideBar />
-  <h2 class="admin_h2">관리자 페이지</h2>
+  <h2 class="admin_h2">관리자 화면</h2>
   <div class="admin">
     <div class="reportCourse">
       <div class="reportCourse_titles">
@@ -108,9 +108,9 @@
         </div>
       </div>
       <div class="user_info">
-        <p>유저이메일</p>
-        <p>유저닉네임</p>
+        <p>이메일</p>
         <p>가입경로</p>
+        <p>닉네임</p>
       </div>
       <div class="reportCourse_contents">
         <div
@@ -119,8 +119,8 @@
           class="user_content"
         >
           <p class="user_content_num">{{ user.USER_EMAIL }}</p>
-          <p class="user_content_title">{{ user.USER_NICKNAME }}</p>
           <p class="user_content_writer">{{ user.USER_PROVIDER }}</p>
+          <p class="user_content_title">{{ user.USER_NICKNAME }}</p>
         </div>
       </div>
     </div>

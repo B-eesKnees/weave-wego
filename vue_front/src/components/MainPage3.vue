@@ -178,10 +178,13 @@
                             전시</h4>
                         <h4
                             @click="themeSelect($event), PostHashtagsNewes(), showSortRecent(), showSortViews(), showSortLikes()">
-                            쇼룸,편집샵</h4>
+                            쇼룸/편집샵</h4>
                         <h4
                             @click="themeSelect($event), PostHashtagsNewes(), showSortRecent(), showSortViews(), showSortLikes()">
-                            등산</h4>
+                            야외</h4>
+                        <h4
+                            @click="themeSelect($event), PostHashtagsNewes(), showSortRecent(), showSortViews(), showSortLikes()">
+                            술집</h4>
                     </div>
                 </div>
                 <div class="mainpage3_third_filters_keyword_filter">
@@ -198,7 +201,8 @@
                 </select>
             </div>
             <div class="mainpage3_third_contents">
-                <a v-for="(item, i) in Data" :key="i" class="mainpage3_third_content" :href="`/detail/${item.BRD_ID}`" target="_blank"> <!-- a 태그 삭제 -->
+                <a v-for="(item, i) in Data" :key="i" class="mainpage3_third_content" :href="`/detail/${item.BRD_ID}`"
+                    target="_blank"> <!-- a 태그 삭제 -->
                     <div class="mainpage3_third_content_img">
                         <!--이미지 클릭시 상세페이지로 이동 이벤트-->
                         <img :src="`http://localhost:3000/downloadCourse/${item.BRD_ID}/${item.IMG_PATH}`" alt="">
@@ -206,11 +210,10 @@
                         <div class="mainpage3_third_content_like">
                             <button type="button" @click="[handleClick($event), likeToggle(item.BRD_ID)]"
                                 class="like-button" :class="{ clicked: this.likelist.includes(item.BRD_ID) }">
-                                 <!--버튼 추가/ 이벤트 2개 실행 handleClick에는 이벤트자체 likeToggle에는 BRD_ID -->
-                                 <img class="heart" :id="`content${i}`" v-if="this.likelist.includes(item.BRD_ID)" :src="imgsrc[0]"
-                                    alt="" />
-                                <img class="heart-overlay" :id="`content${i}`" :src="imgsrc[0]"
-                                    alt="" />
+                                <!--버튼 추가/ 이벤트 2개 실행 handleClick에는 이벤트자체 likeToggle에는 BRD_ID -->
+                                <img class="heart" :id="`content${i}`" v-if="this.likelist.includes(item.BRD_ID)"
+                                    :src="imgsrc[0]" alt="" />
+                                <img class="heart-overlay" :id="`content${i}`" :src="imgsrc[0]" alt="" />
                                 <img v-if="!this.likelist.includes(item.BRD_ID)" :src="imgsrc[1]" alt="" />
                             </button>
                         </div>
@@ -460,7 +463,7 @@ export default {
                         for (var i = 0; i <= this.result[0].length - 1; i++) { // 게시물 6개 출력
                             this.Data.push(this.result[0][i]);
                         }
-                        if(this.Data.length < 6){
+                        if (this.Data.length < 6) {
                             this.nodata = true;
                         }
                     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
@@ -502,7 +505,7 @@ export default {
                         for (var i = 0; i <= this.result[0].length - 1; i++) { // 게시물 6개 출력
                             this.Data.push(this.result[0][i]);
                         }
-                        if(this.Data.length < 6){
+                        if (this.Data.length < 6) {
                             this.nodata = true;
                         }
                     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
@@ -544,7 +547,7 @@ export default {
                         for (var i = 0; i <= this.result[0].length - 1; i++) { // 게시물 6개 출력
                             this.Data.push(this.result[0][i]);
                         }
-                        if(this.Data.length < 6){
+                        if (this.Data.length < 6) {
                             this.nodata = true;
                         }
                     } catch { // 해당 지역 데이터가 없을시 에러 핸들링
@@ -643,7 +646,8 @@ export default {
     width: 100%;
     height: 100%;
 }
-.mainpage3 button{
+
+.mainpage3 button {
     border: none;
 }
 
@@ -660,10 +664,12 @@ export default {
 }
 
 .filters_btn {
-    background-color: #A5C2B6;
+    background-color: #388265;
+    color: white;
     padding: 20px 80px;
     border: none;
     box-shadow: 0 0 5px #ccc;
+    font-weight: bold;
 }
 
 .mainpage3_third_filters_location_filter {
@@ -675,6 +681,10 @@ export default {
     padding: 20px 80px;
     background-color: white;
     box-shadow: 0 0 5px #ccc;
+}
+
+.filter_btn:hover {
+    background-color: #A5C2B6;
 }
 
 .location_close {
@@ -730,9 +740,10 @@ export default {
 
 .show_theme h4 {
     padding: 2% 12%;
-    border: 1px solid black;
+    border: 1px solid #ccc;
     cursor: pointer;
     user-select: none;
+    box-shadow: 0 0 5px #ccc;
 }
 
 .show_theme h4:nth-child(5) {
@@ -903,6 +914,15 @@ export default {
     background-color: white;
 }
 
+.more_btn button:hover {
+    background-color: #A5C2B6;
+}
+
+.more_btn button:focus {
+    background-color: #388265;
+    color: white;
+}
+
 .fill_like {
     filter: invert(50%) sepia(100%) saturate(9999%) hue-rotate(354deg) brightness(89%) contrast(500%);
 }
@@ -987,53 +1007,56 @@ svg {
     pointer-events: none;
 }
 
-    /* 애니메이션 스타일 설정 */
-    .like-button {
+/* 애니메이션 스타일 설정 */
+.like-button {
     position: relative;
     display: inline-block;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
     background: none;
 }
-    
+
 .like-button img {
     width: 36px;
     height: 31px;
 }
+
 .like-button .heart-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
+
 .like-button.clicked .heart-overlay {
-  opacity: 1;
+    opacity: 1;
 }
-    
+
 .like-button.clicked .heart {
-        animation: fireworks 1s ease-in-out;
-    }
-    
-    @keyframes fireworks {
-        0% {
-            opacity: 0;
-            transform: translateY(0) translateX(0) scale(1);
-        }
-        50% {
-            opacity: 1;
-        }
-        100% {
-            opacity: 0;
-            transform: translateY(-15px) translateX(-15px) rotate(45deg) scale(0.5);
-        }
+    animation: fireworks 1s ease-in-out;
+}
+
+@keyframes fireworks {
+    0% {
+        opacity: 0;
+        transform: translateY(0) translateX(0) scale(1);
     }
 
-a {
-  text-decoration-line: none;
-/*   text-decoration-line: underline; */
-/*   text-decoration-line: overline; */
-/*   text-decoration-line: line-through; */
-/*   text-decoration-line: underline line-through overline; */
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-15px) translateX(-15px) rotate(45deg) scale(0.5);
+    }
 }
-</style>
+
+a {
+    text-decoration-line: none;
+    /*   text-decoration-line: underline; */
+    /*   text-decoration-line: overline; */
+    /*   text-decoration-line: line-through; */
+    /*   text-decoration-line: underline line-through overline; */
+}</style>
