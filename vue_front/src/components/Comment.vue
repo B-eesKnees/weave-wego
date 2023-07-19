@@ -17,7 +17,7 @@ const setUpdate = () => {
 if (props.comment.COM_WRITER === localStorage.getItem("userID")) {
   userCheck.value = true;
 }
-if (props.comment.USER_IMAGE === "default") {
+if (props.comment.USER_IMAGE === "default" || !props.comment.USER_IMAGE) {
   imageCheck.value = false;
 }
 console.log(imageCheck.value);
