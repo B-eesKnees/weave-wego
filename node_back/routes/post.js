@@ -227,21 +227,32 @@ router.get("/report/comment/:commentId", (req, res) => {
 //게시글 신고 당함
 router.put("/updateReport/board/:boardId", (req, res) => {
   const { boardId } = req.params;
+  const { userEmail } = req.body;
 
-  const updateReport = `UPDATE board SET BRD_REPORT =1 WHERE BRD_ID=?;`;
-
-  db.query(updateReport, [boardId], (err, results) => {
+  const getBrdWriterId = `SELECT BRD_WRITER FROM board WHERE BRD_ID=?;`;
+  db.query(getBrdWriterId, [boardId], (err, results) => {
     if (err) {
       console.error(err);
-      res.status(500).json({ error: "서버 에러" });
+      res.status(500).json({ error: "서버에러" });
     } else {
-      if (results.affectedRows === 0) {
-        res.status(404).json({
-          error: "해당 게시글을 찾을 수 없습니다.",
-        });
+      const brdWriterId = results[0].BRD_WRITER;
+      if (brdWriterId === userEmail) {
+        res.status(403).json({ error: "작성자 신고 불가" });
       } else {
-        res.json({
-          message: "게시글이 정상적으로 신고 처리되었습니다.",
+        const updateReport = `UPDATE board SET BRD_REPORT = 1 WHERE BRD_ID = ?;`;
+        db.query(updateReport, [boardId], (err, results) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ error: "서버에러" });
+          } else {
+            if (results.affectedRows === 0) {
+              res
+                .status(404)
+                .json({ error: "해당 게시글을 찾을 수 없습니다." });
+            } else {
+              res.json({ message: "게시글이 정상적으로 신고되었습니다." });
+            }
+          }
         });
       }
     }
@@ -251,20 +262,34 @@ router.put("/updateReport/board/:boardId", (req, res) => {
 //댓글 신고당함
 router.put("/updateReport/comment/:commentId", (req, res) => {
   const { commentId } = req.params;
+  const { userEmail } = req.body; // 사용자의 ID를 요청의 body에서 받아온다고 가정합니다.
 
-  const updateReport = `UPDATE comment SET COM_REPORT =1 WHERE COM_ID=?;`;
-
-  db.query(updateReport, [commentId], (err, results) => {
+  const getComWriter = `SELECT COM_WRITER FROM comment WHERE COM_ID = ?;`;
+  db.query(getComWriter, [commentId], (err, results) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: "서버 에러" });
     } else {
-      if (results.affectedRows === 0) {
-        res.status(404).json({
-          error: "해당 댓글을 찾을 수 없습니다.",
-        });
+      const comWriter = results[0].COM_WRITER;
+
+      if (comWriter === userEmail) {
+        res
+          .status(403)
+          .json({ error: "작성자는 해당 댓글을 신고할 수 없습니다." });
       } else {
-        res.json({ message: "댓글이 정상적으로 신고 처리되었습니다." });
+        const updateReport = `UPDATE comment SET COM_REPORT = 1 WHERE COM_ID = ?;`;
+        db.query(updateReport, [commentId], (err, results) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ error: "서버 에러" });
+          } else {
+            if (results.affectedRows === 0) {
+              res.status(404).json({ error: "해당 댓글을 찾을 수 없습니다." });
+            } else {
+              res.json({ message: "댓글이 정상적으로 신고 처리되었습니다." });
+            }
+          }
+        });
       }
     }
   });
