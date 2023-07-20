@@ -194,7 +194,7 @@
                 </div>
             </div>
             <div class="mainpage3_third_sort">
-                <select v-model="sortvalue" name="items1">
+                <select @change="PostHashtagsNewes()" v-model="sortvalue" name="items1">
                     <option :value="'최근순'">최근순</option>
                     <option :value="'인기순'">인기순</option>
                     <option :value="'조회순'">조회수순</option>
