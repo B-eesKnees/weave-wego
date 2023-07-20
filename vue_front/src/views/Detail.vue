@@ -440,7 +440,12 @@ setRecentView();
                 </button>
               </li>
               <li>
-                <button class="dropdown-item" type="button" @click="reportPost">
+                <button
+                  v-if="boardData.BRD_WRITER != userEmail"
+                  class="dropdown-item"
+                  type="button"
+                  @click="reportPost"
+                >
                   신고
                 </button>
               </li>

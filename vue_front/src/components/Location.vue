@@ -108,6 +108,9 @@ const props = defineProps({
   text-align: right;
   word-break: keep-all;
 }
+.location-comment {
+  width: 800px;
+}
 
 .test {
   width: 100%;

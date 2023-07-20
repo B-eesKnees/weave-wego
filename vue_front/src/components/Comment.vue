@@ -9,6 +9,10 @@ const emit = defineEmits(["delete", "edit", "report"]);
 const userCheck = ref(false);
 const imageCheck = ref(true);
 const updateButton = ref(false);
+const reportCheck = ref(false);
+if (props.comment.COM_WRITER != localStorage.getItem("userID")) {
+  reportCheck.value = true;
+}
 
 const setUpdate = () => {
   updateButton.value = true;
@@ -81,6 +85,7 @@ console.log(imageCheck.value);
                 </li>
                 <li>
                   <button
+                    v-if="reportCheck"
                     class="dropdown-item"
                     type="button"
                     @click="() => emit('report', comment.COM_ID)"
