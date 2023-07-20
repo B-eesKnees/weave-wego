@@ -23,13 +23,18 @@
       </div>
       <div v-for="(item, i) in showBoard" :key="i" class="admin_board">
         <img
-          v-if="item.USER_IMAGE && item.USER_IMAGE != 'default'"
+          v-if="item.USER_PROVIDER === 'kakao' || item.USER_PROVIDER === 'naver'"
+          class="admin_userimg"
+          :src="`${item.USER_IMAGE}`"
+        />
+        <img
+          v-else-if="item.USER_IMAGE && item.USER_IMAGE != 'default'"
           class="admin_userimg"
           :src="`http://localhost:3000/downloadProfile/${item.USER_EMAIL}/${item.USER_IMAGE}`"
           alt=""
         />
         <img
-          v-if="item.USER_IMAGE == null || item.USER_IMAGE == 'default'"
+          v-else-if="item.USER_IMAGE == null || item.USER_IMAGE == 'default'"
           class="admin_userimg"
           src="../assets/img/profileExample.png"
           alt=""
@@ -105,7 +110,7 @@ export default {
         this.totalCourse = res.data;
 
         for (var i = 0; i < this.totalCourse.length; i += 10) {
-          //게시글 총 갯수를 10개씩 나눠서 묶음
+          //유저목록 총 갯수를 10개씩 나눠서 묶음
           this.result.push(this.totalCourse.slice(i, i + 10));
         }
         for (i in this.result[0]) {
