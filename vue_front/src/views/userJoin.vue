@@ -46,10 +46,12 @@
                 <p id="error" v-show="nicknamecheck == 1">존재하는 닉네임입니다.</p>
                 <p id="complete" v-show="nicknamecheck == 2">사용가능한 닉네임입니다.</p>
                 <p id="error" v-if="nickname_check2">닉네임을 입력해주세요.</p>
-                <div class="gender">
+                <div id="gender" class="btn-group">
                     <label for="sex">성별</label>
-                    <input v-model="sex" type='radio' name='gender' value='m' class="input_sex" />남자
-                    <input v-model="sex" type='radio' name='gender' value='f' class="input_sex" />여자
+                    <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" checked />
+                    <label class="btn btn-secondary" for="option1">남자</label>
+                    <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off" />
+                    <label class="btn btn-secondary" for="option2">여자</label>
                 </div>
                 <p id="error" v-if="sex_check">성별을 선택하세요.</p>
                 <div class="age_range">

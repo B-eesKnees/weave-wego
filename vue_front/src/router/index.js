@@ -38,6 +38,13 @@ const routes = [
     name: "MainPage",
     component: MainPage,
   },
+
+  {
+    path: "/test2",
+    name: "testpage2",
+    component: () =>
+      import(/* webpackChunkName: "naverlogin" */ "../views/cart.vue"),
+  },
   {
     path: "/login",
     name: "userLogin",
@@ -128,7 +135,13 @@ const routes = [
     name: "admin",
     component: () =>
       import(/* webpackChunkName: "admin" */ "../views/admin.vue"),
-    beforeEnter: isAdmin
+    beforeEnter: isAdmin,
+  },
+  {
+    path: "/test",
+    name: "test",
+    component: () =>
+      import(/* webpackChunkName: "test" */ "../views/bookTest.vue"),
   },
 ];
 

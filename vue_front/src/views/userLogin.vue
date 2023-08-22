@@ -7,22 +7,37 @@
 
     <div class="wrap">
       <form @submit.prevent="loginForm">
-        <input v-model="email" type="text" id="username" :class="{ error_border: error_border_check }"
-          placeholder="이메일" />
+        <input
+          v-model="email"
+          type="text"
+          id="username"
+          :class="{ error_border: error_border_check }"
+          placeholder="이메일"
+        />
         <p id="error" v-if="email_check">
           이메일주소를 정확히 입력해주세요. 예)abcd@naver.com
         </p>
 
-        <input v-model="password" type="password" id="password" :class="{ error_border: error_border_check }"
-          placeholder="비밀번호" />
+        <input
+          v-model="password"
+          type="password"
+          id="password"
+          :class="{ error_border: error_border_check }"
+          placeholder="비밀번호"
+        />
         <p id="error" v-if="password_check">
           비밀번호를 정확히 입력해주세요.<br />
           *8자리 이상 영문 대소문자, 숫자, 특수문자가 각각 1개 이상
         </p>
         <div class="user_login_btns">
           <a href="#">
-            <input :class="{ error_submit: allcheck, submit: !allcheck }"
-              :disabled="allcheck" type="submit" id="login" value="로그인" /></a>
+            <input
+              :class="{ error_submit: allcheck, submit: !allcheck }"
+              :disabled="allcheck"
+              type="submit"
+              id="login"
+              value="로그인"
+          /></a>
           <a class="join_btn" href="/join">회원가입</a>
         </div>
       </form>
@@ -31,8 +46,18 @@
     <div class="wrap2">
       <form method="post">
         <div class="user_social_btns">
-          <a class="social_btn kakao" @click="kakaoLogin"><img class="social_btn_kakao" src="../assets/img/kakao_login.png" alt=""></a>
-          <a class="social_btn naver" href="/naverlogin"><img class="social_btn_naver" src="../assets/img/naver_login.png" alt=""></a>
+          <a class="social_btn kakao" @click="kakaoLogin"
+            ><img
+              class="social_btn_kakao"
+              src="../assets/img/kakao_login.png"
+              alt=""
+          /></a>
+          <a class="social_btn naver" href="/naverlogin"
+            ><img
+              class="social_btn_naver"
+              src="../assets/img/naver_login.png"
+              alt=""
+          /></a>
         </div>
       </form>
     </div>
@@ -42,7 +67,7 @@
 
 <script>
 import gnbBar from "../components/gnbBar.vue";
-import Footer from '../components/footer.vue'
+import Footer from "../components/footer.vue";
 
 import axios from "axios";
 axios.defaults.baseURL = "http://localhost:3000";
@@ -179,7 +204,6 @@ export default {
         data: {
           email: kakao_account.email,
           nick: kakao_account.profile.nickname,
-          image: kakao_account.profile.profile_image_url,
           sex: kakao_account.gender,
           agegroup: kakao_account.age_range,
           provider: "kakao",

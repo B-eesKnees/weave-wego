@@ -14,6 +14,10 @@ module.exports = defineConfig({
       },
       '/oauth2.0': {
         target: 'http://nid.naver.com'
+      },
+      '/ttb/api/ItemSearch.aspx': {
+        target: 'http://www.aladin.co.kr',
+        changeOrigin: true,
       }
     },
     headers: { "Access-Control-Allow-Origin": "*" },

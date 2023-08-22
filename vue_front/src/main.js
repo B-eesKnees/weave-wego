@@ -22,6 +22,8 @@ createApp(App)
   .mixin(mixins)
   .mount("#app");
 
+
+  
 //if (!window.Kakao.isInitialized()) {
 // JavaScript key를 인자로 주고 SDK 초기화
 // window.Kakao.init("be3591e5eb435becf923984f4b447ac2");
@@ -29,3 +31,4 @@ createApp(App)
 // console.log(window.Kakao.isInitialized());
 // }
 window.Kakao.init("be3591e5eb435becf923984f4b447ac2");
+

@@ -3,7 +3,7 @@
   <form @submit.prevent="checkPW">
     <div id="wrap" class="gbank_login box__social-login">
       <div class="login_box pwChk_box">
-        <h2 class="pwcheck">비밀번호 확인</h2>
+        <h2 class="pwcheck">{{ test }}</h2>
         <div class="box_check_pw">
           <p class="txt">
             회원님의 정보를 보호하기 위해 비밀번호를 다시 확인합니다.
@@ -35,6 +35,8 @@ axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
+var convert = require('xml-js')
+
 export default {
   components: { gnbBar },
   data() {
@@ -42,41 +44,29 @@ export default {
       email: "",
       password: "",
       provider: "",
+      test: ""
     };
   },
   mounted() {
     (this.email = localStorage.getItem("userID")),
-      (this.provider = localStorage.getItem("userProvider")),
-      this.checkLogin();
+      (this.provider = localStorage.getItem("userProvider"))
+      
   },
   methods: {
     checkPW() {
       axios({
-        url: "http://localhost:3000/auth/checkPW",
-        method: "POST",
-        data: {
-          email: this.email,
-          password: this.password,
-        },
+        url: '/getAladin',
+        method: 'POST'
+      }).then((res)=>{
+        // console.log(res.data);
+        let aladinXml = res.data;
+        console.log(aladinXml.object.item[0].title);
+        this.test = aladinXml.object.item[0].title._text;
+        
+        
+      }).catch((err)=> {
+        console.log(err);
       })
-        .then(async (res) => {
-          if (res.data.code == 200) {
-            window.location.href = "/updateprofile";
-          } else {
-            alert("일치하지않는 비밀번호입니다.");
-          }
-        })
-        .catch((error) => {
-          alert(error);
-        });
-    },
-    checkLogin() {
-      if (this.email == null) {
-        window.location.href = "/login";
-      }
-      if (this.provider == "kakao" || this.provider == "naver") {
-        window.location.href = "/updateprofile";
-      }
     },
   },
 };
